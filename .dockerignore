@@ -1,0 +1,15 @@
+**/node_modules
+**/.next
+**/next-env.d.ts
+**/.venv
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+**/.env
+**/.env.*
+!**/.env.example
+**/*.db
+**/*.sqlite*
+.git
+.github
+docs

@@ -1,0 +1,15 @@
+# HTTPS for the web app. Caddy gets and renews the certificate for $DOMAIN
+# by itself; the domain's DNS must point at this server first.
+{$DOMAIN} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	reverse_proxy web:3000
+}

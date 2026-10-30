@@ -1,0 +1,27 @@
+# Secrets and local settings - never committed (scripts/check_public_data.py checks)
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Node / Next.js
+node_modules/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+
+# Local databases and backups
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/

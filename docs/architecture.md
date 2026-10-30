@@ -1,0 +1,86 @@
+# Architecture
+
+Job Hunter is two apps and a database, deployed as one Docker Compose stack.
+
+```mermaid
+flowchart LR
+    B[Browser] -- "session cookie" --> W
+    subgraph stack [Docker Compose]
+        W["web<br/>Next.js 16 + Auth.js v5"]
+        A["api<br/>FastAPI"]
+        K["worker<br/>python -m app.worker"]
+        M["migrate<br/>alembic upgrade head"]
+        D[(Postgres 17)]
+    end
+    W -- "/api/backend/* forwarded<br/>with a signed token" --> A
+    W -- "users, sessions" --> D
+    A --> D
+    K -- "task queue" --> D
+    M -. "runs first" .-> D
+```
+
+## The pieces
+
+| Service | What it does | Code |
+| --- | --- | --- |
+| `web` | Pages, sign-in, and the only door to the API | `apps/web` |
+| `api` | Every feature's logic and data, per user | `apps/api/app` |
+| `worker` | Runs slow jobs (searches, AI scoring, PDF builds) from the queue | `apps/api/app/worker.py` |
+| `migrate` | Brings the schema up to date, then exits; the others wait for it | `apps/api/alembic` |
+| `db` | Postgres: users, sessions, profiles, tasks - everything | |
+| `mailpit` | Development only: catches outgoing email | |
+| `caddy` | Production only: HTTPS in front of `web` | `deploy/Caddyfile` |
+
+## A request, end to end
+
+1. The browser asks the web app for `/api/backend/me`.
+2. `app/api/backend/[...path]/route.ts` checks the Auth.js session (stored in
+   Postgres). No session: `401`.
+3. It checks the path is plain segments only (`src/lib/backendPath.ts`), then
+   signs a JWT - HS256, `sub` = the user's id, 60-second expiry - with
+   `BACKEND_JWT_SECRET` (`src/lib/backend.ts`).
+4. The API verifies the token's signature, issuer, audience and expiry
+   (`app/auth.py`), loads the user, and runs the endpoint. Endpoints read and
+   write only that user's rows.
+
+Server components skip the hop and call the API directly with the same token
+(`src/lib/session.ts`). The API is never exposed outside the stack.
+
+## Sign-in
+
+Auth.js v5 with database sessions (`@auth/pg-adapter`). Providers switch on
+from the environment: an emailed link when `EMAIL_SERVER` is set, GitHub and
+Google when their client id and secret are. `src/proxy.ts` (Next.js 16's
+name for middleware) sends signed-out visitors to `/signin`.
+
+Alembic owns every table, including the four Auth.js ones (`users`,
+`accounts`, `sessions`, `verification_token`), so one migration history
+describes the whole database.
+
+## Background work
+
+`app/tasks/queue.py` is a queue on Postgres. A worker claims the oldest due
+task with `SELECT ... FOR UPDATE SKIP LOCKED`, so several workers never take
+the same task. A task whose worker died is claimed again once its lease
+(`TASK_LEASE_SECONDS`, 10 minutes) runs out. Failures retry after 30 s, 2 min,
+8 min..., until the task's attempts are used up.
+
+Handlers register by kind in `app/tasks/handlers.py`. `python -m app.worker
+--check` queues a `ping` and waits for an answer - a quick way to see that a
+worker is running.
+
+## Industries and markets
+
+A profile names an industry and a job market from `app/presets.py`
+(`GET /presets`). They're keys for now; each preset will carry its own search
+terms, title rules and scoring rubric, so supporting a new field is data, not
+code.
+
+## Where the rest goes
+
+See [roadmap.md](roadmap.md). Job sources become **connectors** behind one
+interface, run by the worker on a schedule. Postings are stored once and
+shared; each user's view of a posting (score, status, notes) is a separate
+per-user row. AI scoring, the applications tracker, the CV workbench and
+billing all follow the same rules: data scoped to the user, slow work on the
+worker, every call through the API.

@@ -1,0 +1,13 @@
+Job Hunter
+Copyright (C) 2026 the Job Hunter contributors
+
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, version 3 (see LICENSE).
+
+This project includes work from ai-job-search
+(https://github.com/MadsLorentzen/ai-job-search),
+Copyright (c) 2026 Mads Lorentzen, used under the MIT License.
+The full MIT notice is in LICENSES/ai-job-search-MIT.txt.
+
+Third-party software used by this project is listed in docs/third-party.md.

@@ -1,0 +1,10 @@
+#!/bin/sh
+# Refuses a commit that would publish personal data or a secret.
+# Turn the hooks on once per clone:  git config core.hooksPath .githooks
+set -e
+python3 scripts/check_public_data.py --staged
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks git --pre-commit --staged --redact --no-banner
+else
+  echo "note: gitleaks isn't installed, so secrets weren't scanned here - CI scans them (github.com/gitleaks/gitleaks)" >&2
+fi

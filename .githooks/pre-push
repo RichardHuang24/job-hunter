@@ -1,0 +1,4 @@
+#!/bin/sh
+# Checks what is about to be pushed: the files, the commit messages and the
+# author emails. git passes the refs on stdin, which the script reads.
+exec python3 scripts/check_public_data.py --push

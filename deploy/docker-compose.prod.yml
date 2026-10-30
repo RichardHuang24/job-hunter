@@ -1,0 +1,55 @@
+# Production on one server: Caddy in front with automatic HTTPS, and nothing
+# else reachable from outside. Used on top of the main file:
+#
+#   docker compose -f docker-compose.yml -f deploy/docker-compose.prod.yml up -d --build
+#
+# Needs Docker Compose 2.24 or newer (for !reset). See docs/self-hosting.md.
+
+services:
+  db:
+    ports: !reset []
+
+  migrate:
+    environment:
+      ENVIRONMENT: production
+
+  api:
+    ports: !reset []
+    environment:
+      ENVIRONMENT: production
+
+  worker:
+    environment:
+      ENVIRONMENT: production
+
+  web:
+    ports: !reset []
+    environment:
+      AUTH_URL: https://${DOMAIN:?set DOMAIN in .env}
+      EMAIL_SERVER: ${EMAIL_SERVER:?set EMAIL_SERVER in .env to your SMTP server}
+
+  # Mailpit is for development; it only starts with --profile dev.
+  mailpit:
+    profiles: ["dev"]
+    ports: !reset []
+
+  caddy:
+    image: caddy:2.11-alpine
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN in .env}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      web:
+        condition: service_healthy
+
+volumes:
+  caddy-data:
+  caddy-config:
