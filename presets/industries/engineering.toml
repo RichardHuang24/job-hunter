@@ -1,0 +1,47 @@
+# Format: presets/README.md
+label = "Engineering (civil, mechanical, electrical)"
+description = "Civil, structural, mechanical, electrical, process and building services engineering."
+
+skills = ["AutoCAD", "SolidWorks", "Revit", "CAD", "Finite element analysis", "MATLAB", "Technical drawings", "Project engineering", "Health and safety", "CDM regulations", "Eurocodes", "PLC programming", "Root cause analysis", "Site supervision", "Chartership"]
+
+[scoring]
+skills = 35
+experience = 30
+culture = 10
+career = 25
+
+[[roles]]
+key = "civil-structural"
+label = "Civil or structural engineer"
+titles = ["civil engineer", "structural engineer", "geotechnical engineer", "highways engineer", "water engineer", "bridge engineer"]
+search = ["civil engineer", "structural engineer"]
+
+[[roles]]
+key = "mechanical"
+label = "Mechanical engineer"
+titles = ["mechanical engineer", "design engineer", "manufacturing engineer", "maintenance engineer", "mechanical design engineer"]
+search = ["mechanical engineer", "design engineer"]
+
+[[roles]]
+key = "electrical"
+label = "Electrical or electronics engineer"
+titles = ["electrical engineer", "electronics engineer", "control systems engineer", "controls engineer", "hardware engineer", "embedded engineer"]
+search = ["electrical engineer", "electronics engineer"]
+
+[[roles]]
+key = "process-chemical"
+label = "Process or chemical engineer"
+titles = ["process engineer", "chemical engineer"]
+search = ["process engineer", "chemical engineer"]
+
+[[roles]]
+key = "building-services"
+label = "Building services engineer"
+titles = ["building services engineer", "mep engineer", "hvac engineer", "mechanical and electrical engineer"]
+search = ["building services engineer", "mep engineer"]
+
+[[roles]]
+key = "technician"
+label = "Engineering technician or CAD"
+titles = ["engineering technician", "cad technician", "cad designer", "draughtsperson", "draughtsman", "technical draughtsman"]
+search = ["cad technician", "engineering technician"]

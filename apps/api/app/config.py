@@ -29,6 +29,10 @@ class Settings(BaseSettings):
     worker_poll_seconds: float = 1.0
     task_lease_seconds: int = 600
 
+    # Where the industry and market presets are. Empty: the presets/ folder
+    # found above the code (the repo's, or /app/presets in Docker).
+    presets_dir: str = ""
+
 
 @lru_cache
 def get_settings() -> Settings:

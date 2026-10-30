@@ -1,0 +1,41 @@
+# Format: presets/README.md
+label = "Product & design"
+description = "Product management, UX and UI design, research and visual design."
+
+skills = ["Figma", "User research", "Prototyping", "Wireframing", "Design systems", "Usability testing", "Accessibility (WCAG)", "Roadmapping", "Stakeholder management", "Agile", "Jira", "Product analytics", "Adobe Creative Cloud"]
+
+[scoring]
+skills = 30
+experience = 25
+culture = 20
+career = 25
+
+[[roles]]
+key = "product-manager"
+label = "Product manager"
+titles = ["product manager", "product owner", "technical product manager"]
+search = ["product manager", "product owner"]
+
+[[roles]]
+key = "product-designer"
+label = "Product or UX designer"
+titles = ["product designer", "ux designer", "ui designer", "ux ui designer", "ui ux designer", "interaction designer", "service designer"]
+search = ["product designer", "ux designer"]
+
+[[roles]]
+key = "ux-researcher"
+label = "UX researcher"
+titles = ["ux researcher", "user researcher", "design researcher"]
+search = ["ux researcher", "user researcher"]
+
+[[roles]]
+key = "graphic-designer"
+label = "Graphic or visual designer"
+titles = ["graphic designer", "visual designer", "brand designer", "digital designer", "motion designer"]
+search = ["graphic designer", "visual designer"]
+
+[[roles]]
+key = "content-designer"
+label = "Content designer"
+titles = ["content designer", "ux writer", "content strategist"]
+search = ["content designer", "ux writer"]

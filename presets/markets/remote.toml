@@ -1,0 +1,10 @@
+# Format: presets/README.md
+# Remote work from anywhere: no home country, so the profile's work permits
+# come from the other markets' countries.
+label = "Remote (anywhere)"
+currency = "USD"
+salary_period = "year"
+locations = ["Remote", "Remote (Europe)", "Remote (Americas)", "Remote (Asia-Pacific)"]
+arrangements = ["remote"]
+
+[countries]

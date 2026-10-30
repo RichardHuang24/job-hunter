@@ -27,7 +27,7 @@ flowchart LR
 | `api` | Every feature's logic and data, per user | `apps/api/app` |
 | `worker` | Runs slow jobs (searches, AI scoring, PDF builds) from the queue | `apps/api/app/worker.py` |
 | `migrate` | Brings the schema up to date, then exits; the others wait for it | `apps/api/alembic` |
-| `db` | Postgres: users, sessions, profiles, tasks - everything | |
+| `db` | Postgres: users, sessions, profiles, target roles, tasks - everything | |
 | `mailpit` | Development only: catches outgoing email | |
 | `caddy` | Production only: HTTPS in front of `web` | `deploy/Caddyfile` |
 
@@ -69,12 +69,26 @@ Handlers register by kind in `app/tasks/handlers.py`. `python -m app.worker
 --check` queues a `ping` and waits for an answer - a quick way to see that a
 worker is running.
 
-## Industries and markets
+## Profiles, presets and job titles
 
-A profile names an industry and a job market from `app/presets.py`
-(`GET /presets`). They're keys for now; each preset will carry its own search
-terms, title rules and scoring rubric, so supporting a new field is data, not
-code.
+Industries and markets live in [`presets/`](../presets/README.md) as TOML
+files, loaded and cross-checked once by `app/presets` (`GET /presets`,
+`/presets/industries/{key}`, `/presets/markets/{key}`). Each industry brings
+its roles (the job titles each covers and the terms to search for), suggested
+skills, scoring weights and seniority words, so supporting a new field is a
+new file, not code.
+
+A profile (`profiles`) holds the person's industry and market, the levels
+they want, skills and languages, and the deal-breakers: locations, work
+arrangements, the countries they can work in without a visa, and a minimum
+salary. Their **target roles** (`profile_targets`) start from the industry's
+preset roles in onboarding (`POST /me/onboarding`) and can be edited freely
+(`PUT /me/targets`).
+
+`app/matching/titles.py` reads a job title against those target roles: which
+role it is (the longest matching phrase wins; exclusions knock a role out)
+and how senior it is. `POST /me/title-check` runs it for one title, so people
+can see how job search will read a posting before job search exists.
 
 ## Where the rest goes
 

@@ -6,16 +6,23 @@
 Find, rank and track jobs, and build a tailored CV for each one - for any
 industry, not just tech. Self-hosted, multi-user, open source.
 
-> **Status: early development.** The foundation is in place - accounts,
-> profiles, the API and the background worker. Job search, ranking, the
-> applications tracker and the CV workbench arrive next; see the
+> **Status: early development.** Accounts, profiles with industry presets,
+> onboarding, the API and the background worker are in place. Job search,
+> ranking, the applications tracker and the CV workbench arrive next; see the
 > [roadmap](docs/roadmap.md).
 
 ## What works today
 
 - **Sign-in** by emailed link, or with GitHub or Google if you configure them (Auth.js).
-- **Profiles** with an industry and a job market, chosen from shared presets
-  that later drive search terms and scoring.
+- **Onboarding in four steps**: pick an industry and job market, the roles
+  you're after, where and how you'll work, and a little about you.
+- **Presets for twelve industries and seven job markets** - from nursing and
+  teaching to software and finance - as plain data files anyone can extend
+  ([`presets/`](presets/README.md)).
+- **A full profile**: levels, skills, languages, locations, work arrangements,
+  work permits and minimum salary, editable any time.
+- **Job-title rules** that tell which of your target roles a title is and how
+  senior it is - try any title under Settings → Check a job title.
 - **One API** that every feature goes through, scoped to the signed-in user.
 - **A background worker** on a Postgres-backed queue - no Redis to run.
 - **One command to run it all** with Docker Compose, and a production setup with
@@ -57,6 +64,7 @@ nothing else. More in [docs/architecture.md](docs/architecture.md).
 | --- | --- |
 | [`apps/web`](apps/web) | Next.js 16 app: pages, sign-in, the `/api/backend` door to the API |
 | [`apps/api`](apps/api) | FastAPI service, SQLAlchemy models, Alembic migrations, the worker |
+| [`presets`](presets) | Industries and job markets, as data files |
 | [`deploy`](deploy) | Dockerfiles, the production Compose file, Caddy |
 | [`scripts`](scripts) | `.env` setup, the end-to-end smoke test, the personal-data check |
 | [`docs`](docs) | Architecture, roadmap, self-hosting, third-party notices |

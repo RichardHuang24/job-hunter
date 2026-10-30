@@ -1,0 +1,8 @@
+# Format: presets/README.md
+label = "United Kingdom"
+currency = "GBP"
+salary_period = "year"
+locations = ["London", "Manchester", "Birmingham", "Leeds", "Glasgow", "Edinburgh", "Bristol", "Liverpool", "Cardiff", "Belfast", "Newcastle", "Sheffield", "Nottingham", "Cambridge", "Oxford", "Remote (UK)"]
+
+[countries]
+GB = "United Kingdom"

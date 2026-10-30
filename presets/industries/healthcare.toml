@@ -1,0 +1,56 @@
+# Format: presets/README.md
+label = "Healthcare"
+description = "Nursing, allied health, medicine, pharmacy, midwifery and care."
+
+skills = ["Patient assessment", "Medication administration", "Care planning", "Infection prevention and control", "Clinical documentation", "Basic life support", "Wound care", "Safeguarding", "Electronic patient records", "Phlebotomy", "Manual handling", "Mental health awareness", "Professional registration"]
+
+[scoring]
+skills = 30
+experience = 35
+culture = 15
+career = 20
+
+# Some of these are UK NHS pay bands, which often appear in job titles.
+[seniority]
+entry = ["preceptorship", "band 5"]
+senior = ["band 6"]
+lead = ["band 7", "charge nurse", "sister", "advanced practitioner"]
+manager = ["band 8a", "band 8b", "band 8c", "band 8d", "matron", "ward manager"]
+
+[[roles]]
+key = "registered-nurse"
+label = "Registered nurse"
+titles = ["registered nurse", "staff nurse", "nurse", "rgn", "rmn"]
+exclude = ["student nurse", "nurse educator", "nursery nurse"]
+search = ["registered nurse", "staff nurse"]
+
+[[roles]]
+key = "healthcare-assistant"
+label = "Healthcare or care assistant"
+titles = ["healthcare assistant", "health care assistant", "care assistant", "nursing assistant", "support worker", "care worker", "hca"]
+search = ["healthcare assistant", "care assistant", "support worker"]
+
+[[roles]]
+key = "allied-health"
+label = "Allied health professional"
+titles = ["physiotherapist", "occupational therapist", "radiographer", "speech and language therapist", "dietitian", "paramedic", "operating department practitioner"]
+search = ["physiotherapist", "occupational therapist", "radiographer"]
+
+[[roles]]
+key = "doctor"
+label = "Doctor"
+titles = ["doctor", "physician", "general practitioner", "gp", "medical officer", "clinical fellow"]
+search = ["doctor", "general practitioner"]
+
+[[roles]]
+key = "pharmacy"
+label = "Pharmacy"
+titles = ["pharmacist", "pharmacy technician", "pharmacy assistant", "dispenser"]
+search = ["pharmacist", "pharmacy technician"]
+
+[[roles]]
+key = "midwife"
+label = "Midwife"
+titles = ["midwife", "midwifery"]
+exclude = ["student midwife"]
+search = ["midwife"]

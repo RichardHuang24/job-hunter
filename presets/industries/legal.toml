@@ -1,0 +1,45 @@
+# Format: presets/README.md
+label = "Legal"
+description = "Solicitors and lawyers, paralegals, barristers, compliance and contracts."
+
+skills = ["Legal research", "Drafting", "Contract review", "Due diligence", "Litigation", "Case management", "Client care", "Commercial awareness", "Employment law", "Corporate law", "Property law", "Conveyancing", "Data protection (GDPR)", "Regulatory compliance"]
+
+[scoring]
+skills = 30
+experience = 35
+culture = 15
+career = 20
+
+[seniority]
+entry = ["nq", "pupil", "pupillage"]
+executive = ["partner", "general counsel"]
+
+[[roles]]
+key = "solicitor"
+label = "Solicitor or lawyer"
+titles = ["solicitor", "lawyer", "attorney", "legal counsel", "in house counsel", "counsel"]
+search = ["solicitor", "legal counsel"]
+
+[[roles]]
+key = "paralegal"
+label = "Paralegal or legal assistant"
+titles = ["paralegal", "legal assistant", "legal secretary", "legal executive", "legal administrator"]
+search = ["paralegal", "legal assistant"]
+
+[[roles]]
+key = "barrister"
+label = "Barrister"
+titles = ["barrister"]
+search = ["barrister"]
+
+[[roles]]
+key = "compliance"
+label = "Compliance"
+titles = ["compliance officer", "compliance analyst", "compliance manager", "regulatory affairs", "regulatory compliance"]
+search = ["compliance officer", "compliance analyst"]
+
+[[roles]]
+key = "contracts"
+label = "Contracts"
+titles = ["contract manager", "contracts manager", "contract administrator", "commercial contracts", "contracts executive"]
+search = ["contracts manager", "contract administrator"]

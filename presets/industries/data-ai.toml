@@ -1,0 +1,44 @@
+# Format: presets/README.md
+label = "Data & AI"
+description = "Analysing data, building data pipelines, and machine learning and AI systems."
+
+skills = ["Python", "SQL", "R", "pandas", "scikit-learn", "PyTorch", "Statistics", "Machine learning", "Data visualisation", "Power BI", "Tableau", "Spark", "dbt", "Airflow", "A/B testing", "LLMs", "Cloud data platforms"]
+
+[scoring]
+skills = 35
+experience = 25
+culture = 15
+career = 25
+
+[seniority]
+lead = ["staff"]
+
+[[roles]]
+key = "data-analyst"
+label = "Data analyst"
+titles = ["data analyst", "analytics analyst", "bi analyst", "business intelligence analyst", "reporting analyst", "insight analyst", "insights analyst", "product analyst"]
+search = ["data analyst", "business intelligence analyst"]
+
+[[roles]]
+key = "data-scientist"
+label = "Data scientist"
+titles = ["data scientist", "applied scientist", "decision scientist"]
+search = ["data scientist"]
+
+[[roles]]
+key = "data-engineer"
+label = "Data engineer"
+titles = ["data engineer", "analytics engineer", "etl developer", "big data engineer", "data platform engineer"]
+search = ["data engineer", "analytics engineer"]
+
+[[roles]]
+key = "ml-engineer"
+label = "Machine learning or AI engineer"
+titles = ["machine learning engineer", "ml engineer", "mlops engineer", "ai engineer", "deep learning engineer", "llm engineer"]
+search = ["machine learning engineer", "ai engineer"]
+
+[[roles]]
+key = "research-scientist"
+label = "Research scientist"
+titles = ["research scientist", "ai researcher", "machine learning researcher", "research engineer"]
+search = ["research scientist", "machine learning researcher"]

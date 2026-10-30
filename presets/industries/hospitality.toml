@@ -1,0 +1,52 @@
+# Format: presets/README.md
+label = "Hospitality & retail"
+description = "Kitchens, restaurants and bars, hotels, events, shops and store management."
+
+skills = ["Customer service", "Food hygiene certificate", "Cash handling", "EPOS and till systems", "Food preparation", "Stock control", "Visual merchandising", "Upselling", "Team leadership", "Rota planning", "Health and safety", "Bar service", "Barista skills", "Allergen awareness"]
+
+[scoring]
+skills = 25
+experience = 35
+culture = 25
+career = 15
+
+[seniority]
+entry = ["commis chef", "commis"]
+lead = ["head chef", "sous chef", "head waiter", "head bartender"]
+manager = ["general manager", "assistant manager"]
+
+[[roles]]
+key = "chef"
+label = "Chef or cook"
+titles = ["chef", "cook", "chef de partie", "kitchen porter", "kitchen assistant"]
+search = ["chef", "cook"]
+
+[[roles]]
+key = "front-of-house"
+label = "Front of house and bar"
+titles = ["waiter", "waitress", "waiting staff", "front of house", "bartender", "bar staff", "barista", "host", "sommelier"]
+search = ["waiter", "bartender", "barista"]
+
+[[roles]]
+key = "hotel"
+label = "Hotels and guest services"
+titles = ["hotel receptionist", "front desk", "guest services", "concierge", "housekeeper", "housekeeping", "night auditor", "reservations"]
+search = ["hotel receptionist", "guest services"]
+
+[[roles]]
+key = "retail"
+label = "Retail"
+titles = ["retail assistant", "sales assistant", "shop assistant", "store assistant", "customer assistant", "cashier", "visual merchandiser", "stock assistant"]
+search = ["retail assistant", "sales assistant"]
+
+[[roles]]
+key = "management"
+label = "Restaurant, hotel or store management"
+titles = ["restaurant manager", "store manager", "shop manager", "hotel manager", "bar manager", "duty manager", "general manager"]
+search = ["restaurant manager", "store manager"]
+
+[[roles]]
+key = "events"
+label = "Events"
+titles = ["event coordinator", "events coordinator", "events manager", "event planner", "wedding coordinator", "banqueting"]
+search = ["events coordinator", "events manager"]

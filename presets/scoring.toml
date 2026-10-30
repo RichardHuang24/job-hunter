@@ -1,0 +1,51 @@
+# How a job's fit score is put together (AI matching, roadmap stage 3).
+#
+# Each job gets a score from 0 to 100 on each dimension below. The overall
+# score is their weighted average, with the weights set per industry in
+# presets/industries/<industry>.toml ([scoring]). The bands then turn the
+# overall score into a verdict.
+#
+# Location, salary, work permits and the like are not scored: they are
+# pass/fail checks against the person's profile.
+
+[dimensions.skills]
+label = "Skills"
+description = "The skills, tools, qualifications and registrations the job asks for."
+
+[dimensions.experience]
+label = "Experience"
+description = "Years and kind of experience, compared with what the job needs."
+
+[dimensions.culture]
+label = "Ways of working"
+description = "The team, the pace and the working style the posting describes."
+
+[dimensions.career]
+label = "Career direction"
+description = "Whether the role moves the person where they want to go."
+
+# Highest first; the first band whose min the score reaches is the verdict.
+[[bands]]
+min = 75
+label = "Strong fit"
+advice = "Apply, and tailor your CV and letter to it."
+
+[[bands]]
+min = 60
+label = "Good fit"
+advice = "Apply, and address the gaps in your letter."
+
+[[bands]]
+min = 45
+label = "Possible fit"
+advice = "Worth a closer look before you decide."
+
+[[bands]]
+min = 30
+label = "Weak fit"
+advice = "Probably skip, unless there's a reason it matters to you."
+
+[[bands]]
+min = 0
+label = "Poor fit"
+advice = "Skip."

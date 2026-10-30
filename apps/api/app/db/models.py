@@ -14,7 +14,7 @@ from __future__ import annotations
 import datetime as dt
 import uuid
 
-from sqlalchemy import JSON, BigInteger, DateTime, ForeignKey, Index, Integer, String, Text, UniqueConstraint
+from sqlalchemy import JSON, BigInteger, Boolean, DateTime, ForeignKey, Index, Integer, String, Text, UniqueConstraint, false, text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -46,6 +46,9 @@ class User(Base):
     image: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     profile: Mapped["Profile | None"] = relationship(back_populates="user", cascade="all, delete-orphan")
+    targets: Mapped[list["ProfileTarget"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan", order_by="ProfileTarget.position"
+    )
 
 
 class Account(Base):
@@ -86,21 +89,60 @@ class VerificationToken(Base):
 # --- The product --------------------------------------------------------------------------
 
 
+def _list_column() -> Mapped[list]:
+    return mapped_column(JSON, default=list, server_default=text("'[]'"))
+
+
 class Profile(Base):
-    """A user's profile: who they are and what they are looking for. Grows as
-    the matching, search and CV features move in (docs/roadmap.md)."""
+    """Who a user is and what they're looking for. The deal-breakers here -
+    locations, work arrangements, work permits, salary - become pass/fail
+    checks on each job; the rest feeds matching and the CV."""
 
     __tablename__ = "profiles"
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
     display_name: Mapped[str] = mapped_column(String(255), default="")
     headline: Mapped[str] = mapped_column(String(255), default="")  # "Registered nurse", "Marketing manager"
+    summary: Mapped[str] = mapped_column(Text, default="", server_default="")  # in their own words
     industry: Mapped[str] = mapped_column(String(64), default="")  # a preset key, presets/industries/
     market: Mapped[str] = mapped_column(String(64), default="")  # a preset key, presets/markets/
+    years_experience: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    seniority_levels: Mapped[list[str]] = _list_column()  # the levels wanted (presets/seniority.toml); [] = any
+    skills: Mapped[list[str]] = _list_column()
+    languages: Mapped[list[dict]] = _list_column()  # [{"name": "Spanish", "level": "professional"}]
+    locations: Mapped[list[str]] = _list_column()  # places they'd work: "Manchester", "Remote (UK)"
+    work_arrangements: Mapped[list[str]] = _list_column()  # onsite / hybrid / remote; [] = any
+    authorized_countries: Mapped[list[str]] = _list_column()  # ISO codes where no visa is needed
+    open_to_sponsorship: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
+    salary_min: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    salary_currency: Mapped[str] = mapped_column(String(3), default="", server_default="")
+    salary_period: Mapped[str] = mapped_column(String(8), default="year", server_default="year")
+    onboarded_at: Mapped[dt.datetime | None] = mapped_column(UtcDateTime, nullable=True)
     created_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
     updated_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
 
     user: Mapped[User] = relationship(back_populates="profile")
+
+
+class ProfileTarget(Base):
+    """A role the user is after: which job titles count as it (and which
+    don't), and what to search for. Usually starts from an industry preset's
+    role (presets/industries/), then the user edits it."""
+
+    __tablename__ = "profile_targets"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    position: Mapped[int] = mapped_column(Integer, default=0)
+    label: Mapped[str] = mapped_column(String(80))
+    titles: Mapped[list[str]] = _list_column()  # a job title containing one of these is this role
+    exclude: Mapped[list[str]] = _list_column()  # ...unless it contains one of these
+    search: Mapped[list[str]] = _list_column()  # what to type into job boards
+    preset_role: Mapped[str] = mapped_column(String(130), default="", server_default="")  # "healthcare/registered-nurse"
+    created_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+    updated_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+
+    user: Mapped[User] = relationship(back_populates="targets")
 
 
 TASK_STATUSES = ("queued", "running", "succeeded", "failed")

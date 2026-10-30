@@ -1,0 +1,43 @@
+# Format: presets/README.md
+label = "Operations & supply chain"
+description = "Operations, procurement and supply chain, logistics, project delivery and administration."
+
+skills = ["Process improvement", "Lean", "Six Sigma", "Inventory management", "Procurement", "Supplier management", "ERP systems", "SAP", "Excel", "Project management", "PRINCE2", "Logistics planning", "Health and safety", "Stakeholder management", "Data analysis"]
+
+[scoring]
+skills = 30
+experience = 30
+culture = 15
+career = 25
+
+[[roles]]
+key = "operations"
+label = "Operations"
+titles = ["operations coordinator", "operations manager", "operations analyst", "operations executive", "operations assistant", "operations"]
+search = ["operations coordinator", "operations manager"]
+
+[[roles]]
+key = "supply-chain"
+label = "Supply chain and procurement"
+titles = ["supply chain", "procurement", "buyer", "purchasing", "category manager", "demand planner", "supply planner"]
+search = ["supply chain", "procurement", "buyer"]
+
+[[roles]]
+key = "logistics"
+label = "Logistics and warehousing"
+titles = ["logistics", "warehouse", "transport planner", "distribution", "fulfilment", "inventory"]
+search = ["logistics coordinator", "warehouse"]
+
+[[roles]]
+key = "project-delivery"
+label = "Project and programme delivery"
+titles = ["project manager", "project coordinator", "programme manager", "program manager", "pmo", "delivery manager", "project officer"]
+exclude = ["software project"]
+search = ["project manager", "project coordinator"]
+
+[[roles]]
+key = "administration"
+label = "Administration"
+titles = ["office manager", "administrator", "administrative assistant", "admin assistant", "office administrator", "executive assistant", "personal assistant", "receptionist"]
+exclude = ["database administrator", "system administrator", "systems administrator"]
+search = ["administrator", "office administrator", "executive assistant"]

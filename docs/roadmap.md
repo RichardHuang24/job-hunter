@@ -14,12 +14,17 @@ end-to-end smoke test in CI.
 - CI: tests on SQLite and Postgres, lint, types, build, secret and
   personal-data scans, and an end-to-end run against the Docker images.
 
-## 1. Profiles and presets
+## 1. Profiles and presets - done
 
-- Presets that carry search terms, seniority and title rules, and a scoring
-  rubric per industry - starting with a handful of industries.
-- Onboarding that sets up a profile in a couple of minutes.
-- Skills, experience and deal-breakers (location, salary, work arrangement).
+- Twelve industry presets and seven job markets, as data files
+  ([`presets/`](../presets/README.md)): roles with the job titles they cover
+  and search terms, suggested skills, scoring weights, seniority words;
+  currencies, countries and common locations.
+- Reading job titles: which target role a title is, and how senior.
+- A full profile: experience, levels wanted, skills, languages, and the
+  deal-breakers - locations, work arrangements, work permits, minimum salary.
+- A four-step onboarding, editable target roles in Settings, and a "check a
+  job title" tool that shows how job search will read a posting.
 
 ## 2. Job search
 

@@ -1,0 +1,8 @@
+# Format: presets/README.md
+label = "Ireland"
+currency = "EUR"
+salary_period = "year"
+locations = ["Dublin", "Cork", "Galway", "Limerick", "Waterford", "Remote (Ireland)"]
+
+[countries]
+IE = "Ireland"

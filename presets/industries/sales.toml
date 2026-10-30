@@ -1,0 +1,45 @@
+# Format: presets/README.md
+label = "Sales & customer success"
+description = "Selling, account management, customer success and customer service."
+
+skills = ["Prospecting", "Cold calling", "Pipeline management", "Negotiation", "Account management", "Salesforce", "HubSpot", "Lead qualification", "Customer onboarding", "Renewals", "Upselling", "Presentation skills", "Zendesk", "Complaint handling"]
+
+[scoring]
+skills = 25
+experience = 30
+culture = 20
+career = 25
+
+[seniority]
+mid = ["lead generation"]
+
+[[roles]]
+key = "sales"
+label = "Sales and business development"
+titles = ["sales executive", "sales representative", "sales consultant", "business development", "business development representative", "sales development representative", "bdr", "sdr", "account executive", "sales"]
+exclude = ["sales assistant", "sales engineer", "sales ledger"]
+search = ["sales executive", "business development", "account executive"]
+
+[[roles]]
+key = "account-manager"
+label = "Account management"
+titles = ["account manager", "key account manager", "client manager", "relationship manager", "client partner"]
+search = ["account manager", "key account manager"]
+
+[[roles]]
+key = "customer-success"
+label = "Customer success"
+titles = ["customer success", "customer success manager", "client success", "customer onboarding"]
+search = ["customer success manager"]
+
+[[roles]]
+key = "customer-service"
+label = "Customer service"
+titles = ["customer service", "customer support", "customer advisor", "customer adviser", "customer service advisor", "contact centre", "call centre"]
+search = ["customer service advisor", "customer support"]
+
+[[roles]]
+key = "sales-engineer"
+label = "Sales or solutions engineer"
+titles = ["sales engineer", "solutions engineer", "pre sales", "presales", "solutions consultant"]
+search = ["sales engineer", "solutions engineer"]

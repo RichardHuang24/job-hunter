@@ -1,0 +1,57 @@
+# Format: presets/README.md
+label = "Software engineering"
+description = "Building, testing and running software: web, mobile, backend, infrastructure."
+
+skills = ["Python", "JavaScript", "TypeScript", "Java", "Go", "C#", "SQL", "React", "Node.js", "AWS", "Docker", "Kubernetes", "Git", "CI/CD", "REST APIs", "System design", "Automated testing"]
+
+[scoring]
+skills = 35
+experience = 25
+culture = 15
+career = 25
+
+[seniority]
+lead = ["staff"]
+
+[[roles]]
+key = "software-engineer"
+label = "Software engineer"
+titles = ["software engineer", "software developer", "developer", "programmer", "software development engineer"]
+exclude = ["business developer", "business development", "property developer"]
+search = ["software engineer", "software developer"]
+
+[[roles]]
+key = "frontend-engineer"
+label = "Frontend engineer"
+titles = ["frontend engineer", "front end engineer", "frontend developer", "front end developer", "ui engineer", "ui developer"]
+search = ["frontend engineer", "frontend developer"]
+
+[[roles]]
+key = "backend-engineer"
+label = "Backend engineer"
+titles = ["backend engineer", "back end engineer", "backend developer", "back end developer", "api engineer"]
+search = ["backend engineer", "backend developer"]
+
+[[roles]]
+key = "full-stack-engineer"
+label = "Full-stack engineer"
+titles = ["full stack engineer", "fullstack engineer", "full stack developer", "fullstack developer"]
+search = ["full stack engineer", "full stack developer"]
+
+[[roles]]
+key = "mobile-engineer"
+label = "Mobile engineer"
+titles = ["mobile engineer", "mobile developer", "ios engineer", "ios developer", "android engineer", "android developer", "react native developer"]
+search = ["mobile developer", "ios developer", "android developer"]
+
+[[roles]]
+key = "devops-engineer"
+label = "DevOps or platform engineer"
+titles = ["devops engineer", "site reliability engineer", "sre", "platform engineer", "cloud engineer", "infrastructure engineer"]
+search = ["devops engineer", "platform engineer", "site reliability engineer"]
+
+[[roles]]
+key = "qa-engineer"
+label = "QA or test engineer"
+titles = ["qa engineer", "test engineer", "software tester", "sdet", "quality assurance engineer", "test automation engineer", "qa analyst"]
+search = ["qa engineer", "test automation engineer"]

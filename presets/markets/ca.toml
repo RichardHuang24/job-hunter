@@ -1,0 +1,8 @@
+# Format: presets/README.md
+label = "Canada"
+currency = "CAD"
+salary_period = "year"
+locations = ["Toronto", "Vancouver", "Montreal", "Calgary", "Ottawa", "Edmonton", "Remote (Canada)"]
+
+[countries]
+CA = "Canada"

@@ -14,6 +14,8 @@ RUN pip install -r requirements.txt
 COPY apps/api/alembic.ini ./
 COPY apps/api/alembic ./alembic
 COPY apps/api/app ./app
+# Industry and market presets; the API finds them at /app/presets.
+COPY presets ./presets
 
 RUN useradd --system --uid 10001 --no-create-home app
 USER app

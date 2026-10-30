@@ -1,0 +1,8 @@
+# Format: presets/README.md
+label = "United States"
+currency = "USD"
+salary_period = "year"
+locations = ["New York", "San Francisco", "Los Angeles", "Seattle", "Austin", "Boston", "Chicago", "Washington, DC", "Atlanta", "Denver", "Miami", "Remote (US)"]
+
+[countries]
+US = "United States"

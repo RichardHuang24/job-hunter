@@ -1,0 +1,48 @@
+# Format: presets/README.md
+label = "Education"
+description = "Teaching in schools, colleges and universities, tutoring and early years."
+
+skills = ["Lesson planning", "Classroom management", "Differentiation", "Behaviour management", "Assessment and feedback", "Curriculum design", "Safeguarding", "SEND support", "Pastoral care", "Phonics", "Parent communication", "Google Classroom", "Teaching qualification"]
+
+[scoring]
+skills = 25
+experience = 35
+culture = 20
+career = 20
+
+[seniority]
+entry = ["ect", "early career teacher", "nqt"]
+lead = ["head of department", "head of year", "subject lead"]
+manager = ["assistant head", "deputy head", "assistant headteacher", "deputy headteacher"]
+executive = ["headteacher", "head teacher"]
+
+[[roles]]
+key = "teacher"
+label = "Teacher"
+titles = ["teacher", "primary teacher", "secondary teacher", "class teacher", "supply teacher"]
+exclude = ["teacher training"]
+search = ["teacher", "primary teacher", "secondary teacher"]
+
+[[roles]]
+key = "teaching-assistant"
+label = "Teaching assistant"
+titles = ["teaching assistant", "learning support assistant", "classroom assistant", "sen teaching assistant", "learning support"]
+search = ["teaching assistant", "learning support assistant"]
+
+[[roles]]
+key = "lecturer"
+label = "Lecturer"
+titles = ["lecturer", "teaching fellow", "assistant professor", "associate professor", "professor"]
+search = ["lecturer", "teaching fellow"]
+
+[[roles]]
+key = "tutor"
+label = "Tutor"
+titles = ["tutor", "private tutor", "online tutor"]
+search = ["tutor"]
+
+[[roles]]
+key = "early-years"
+label = "Early years"
+titles = ["early years practitioner", "nursery practitioner", "early years educator", "nursery nurse", "nursery assistant"]
+search = ["early years practitioner", "nursery practitioner"]

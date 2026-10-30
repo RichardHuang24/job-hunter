@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Checks a running Job Hunter end to end, the way a person would use it:
-signs in by email (reading the link from Mailpit), opens the dashboard,
-saves a profile, checks the API door refuses what it should, signs out.
+signs in by email (reading the link from Mailpit), goes through the setup,
+checks the dashboard and a few job titles, edits the target roles, checks
+the API door refuses what it should, signs out.
 
     docker compose up --build -d
     python3 scripts/smoke_test.py            # defaults suit docker-compose.yml
@@ -140,9 +141,9 @@ def main() -> int:
     status, _, page = browser.get("/signin")
     check("the sign-in page renders", status == 200 and "Sign in" in page, status)
     status, headers, _ = browser.submit("/signin", form_with(page, "sign-in link"), {"email": address})
-    check("the email form sends a link", status == 303 and "verify-request" in headers.get("location", ""), (status, headers.get("location")))
-    status, headers, _ = browser.get(headers["location"])
-    check("and shows the check-your-email page", status in (302, 303) and "/signin/check-email" in headers.get("location", ""), status)
+    check("the email form sends a link", status == 303 and headers.get("location", "").endswith("/signin/check-email"), (status, headers.get("location")))
+    status, _, page = browser.get(headers["location"])
+    check("and shows the check-your-email page", status == 200 and "Check your email" in page, status)
 
     link = sign_in_link(args.mailpit.rstrip("/"), address)
     status, _, _ = browser.get(link)
@@ -150,22 +151,41 @@ def main() -> int:
     status, headers, _ = Client(args.web).get(link)
     check("and works only once", "error=Verification" in headers.get("location", ""), (status, headers.get("location")))
 
-    status, _, page = browser.get("/")
-    check("the dashboard renders", status == 200 and "Welcome" in page, status)
+    status, headers, _ = browser.get("/")
+    check("a new account is sent to the setup", status == 307 and "/onboarding" in headers.get("location", ""), status)
+    status, _, page = browser.get("/onboarding")
+    check("the setup renders", status == 200 and "what you’re looking for" in page, status)
     status, _, body = browser.get("/api/backend/me")
     check("the API knows who is signed in", status == 200 and json.loads(body)["email"] == address, body)
-    status, _, body = browser.get("/api/backend/presets")
-    check("presets come through", status == 200 and json.loads(body)["industries"], body)
+    status, _, body = browser.get("/api/backend/presets/industries/healthcare")
+    check("industry presets come through", status == 200 and any(r["key"] == "registered-nurse" for r in json.loads(body)["roles"]), status)
 
-    profile = {"display_name": "Smoke Test", "headline": "Registered nurse", "industry": "healthcare", "market": "uk"}
-    status, _, body = browser.json("PUT", "/api/backend/me/profile", profile)
-    check("the profile saves", status == 200 and json.loads(body)["industry"] == "healthcare", body)
+    setup = {
+        "display_name": "Smoke Test", "headline": "Registered nurse", "industry": "healthcare", "market": "uk",
+        "roles": ["registered-nurse"], "custom_roles": [{"label": "Research nurse", "titles": ["research nurse"]}],
+        "seniority_levels": ["mid", "senior"], "locations": ["Manchester"], "work_arrangements": ["onsite", "hybrid"],
+        "authorized_countries": ["GB"], "salary_min": 32000, "salary_currency": "GBP", "skills": ["Wound care"],
+    }
+    status, _, body = browser.json("POST", "/api/backend/me/onboarding", setup)
+    check("the setup saves", status == 200 and [t["label"] for t in json.loads(body)["targets"]] == ["Registered nurse", "Research nurse"], body)
     status, _, page = browser.get("/")
-    check("the dashboard shows it", "Welcome, Smoke Test" in page and "Healthcare" in page and "United Kingdom" in page)
+    check("the dashboard shows it", status == 200 and all(text in page for text in (
+        "Welcome, Smoke Test", "Research nurse", "Manchester", "£32,000 per year")), status)
+    status, headers, _ = browser.get("/onboarding")
+    check("the setup now leads to settings", status == 307 and "/settings" in headers.get("location", ""), status)
+
+    def title(text: str) -> dict:
+        return json.loads(browser.json("POST", "/api/backend/me/title-check", {"title": text})[2])
+
+    nurse = title("Senior Staff Nurse - Band 6")
+    check("a matching title is included", nurse["wanted"] and nurse["level"]["key"] == "senior", nurse)
+    check("a title for another job is left out", not title("Primary Teacher")["wanted"])
+    status, _, body = browser.json("PUT", "/api/backend/me/targets", [{"label": "Staff nurse", "titles": ["staff nurse"]}])
+    check("target roles save", status == 200 and json.loads(body)[0]["search"] == ["Staff nurse"], body)
     check("an unknown industry is refused", browser.json("PUT", "/api/backend/me/profile", {"industry": "astrology"})[0] == 422)
     check("an encoded slash can't reach another API path", browser.get("/api/backend/me%2Fprofile")[0] == 404)
     status, _, page = browser.get("/settings")
-    check("settings renders the saved profile", status == 200 and "Registered nurse" in page, status)
+    check("settings renders the roles and profile", status == 200 and "Staff nurse" in page and "Target roles" in page, status)
 
     status, _, page = browser.get("/")
     status, headers, _ = browser.submit("/", form_with(page, "Sign out"), {})

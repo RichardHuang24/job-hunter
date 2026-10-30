@@ -75,6 +75,8 @@ against them.
   `src/lib/session.ts`.
 - **No real people in fixtures or examples.** Use `@example.com` addresses and
   made-up names and companies.
+- **Industries and markets are data.** To support a new field or country,
+  add a file under `presets/` - see [presets/README.md](presets/README.md).
 - **Job sources:** a connector is only merged once the source's terms allow
   the use - see [docs/third-party.md](docs/third-party.md).
 

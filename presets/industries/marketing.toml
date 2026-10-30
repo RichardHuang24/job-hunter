@@ -1,0 +1,51 @@
+# Format: presets/README.md
+label = "Marketing & communications"
+description = "Marketing, digital and performance marketing, content, social media, PR and brand."
+
+skills = ["SEO", "PPC", "Google Analytics", "Google Ads", "Meta Ads", "Content strategy", "Copywriting", "Email marketing", "HubSpot", "Salesforce", "Social media", "Campaign management", "Brand strategy", "Market research", "Marketing automation", "Canva"]
+
+[scoring]
+skills = 30
+experience = 30
+culture = 15
+career = 25
+
+[seniority]
+mid = ["lead generation"]
+
+[[roles]]
+key = "marketing"
+label = "Marketing"
+titles = ["marketing executive", "marketing manager", "marketing coordinator", "marketing assistant", "marketing specialist", "marketing officer", "marketing"]
+exclude = ["marketing analyst"]
+search = ["marketing executive", "marketing manager"]
+
+[[roles]]
+key = "digital-marketing"
+label = "Digital and performance marketing"
+titles = ["digital marketing", "digital marketing executive", "digital marketing manager", "performance marketing", "performance marketing executive", "performance marketing manager", "ppc", "paid social", "paid search", "seo", "growth marketing", "growth marketer"]
+search = ["digital marketing executive", "performance marketing"]
+
+[[roles]]
+key = "content"
+label = "Content and copywriting"
+titles = ["content marketing", "content marketing executive", "content marketing manager", "content writer", "copywriter", "content creator", "content executive", "content editor"]
+search = ["content marketing", "copywriter"]
+
+[[roles]]
+key = "social-media"
+label = "Social media"
+titles = ["social media manager", "social media executive", "social media", "community manager"]
+search = ["social media manager", "social media executive"]
+
+[[roles]]
+key = "pr-communications"
+label = "PR and communications"
+titles = ["public relations", "pr executive", "pr manager", "communications officer", "communications manager", "communications executive", "press officer", "internal communications"]
+search = ["communications officer", "pr executive"]
+
+[[roles]]
+key = "brand"
+label = "Brand and product marketing"
+titles = ["brand manager", "brand executive", "product marketing", "product marketing manager"]
+search = ["brand manager", "product marketing manager"]

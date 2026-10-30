@@ -32,7 +32,11 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
           className="flex flex-col gap-3"
           action={async (formData) => {
             "use server";
-            await signIn(email.id, { email: String(formData.get("email") ?? ""), redirectTo });
+            // Straight to our check-email page (Auth.js's own redirect would leave
+            // its /api/auth/verify-request address in the browser's address bar).
+            const sent = await signIn(email.id, { email: String(formData.get("email") ?? ""), redirectTo, redirect: false });
+            const error = new URL(sent, "http://localhost").searchParams.get("error");
+            redirect(error ? `/signin?error=${encodeURIComponent(error)}` : "/signin/check-email");
           }}
         >
           <label className="flex flex-col gap-1 text-sm font-medium text-ink-secondary">

@@ -1,0 +1,8 @@
+# Format: presets/README.md
+label = "Australia"
+currency = "AUD"
+salary_period = "year"
+locations = ["Sydney", "Melbourne", "Brisbane", "Perth", "Adelaide", "Canberra", "Remote (Australia)"]
+
+[countries]
+AU = "Australia"

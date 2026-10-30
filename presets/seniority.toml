@@ -1,0 +1,45 @@
+# Seniority levels, lowest first, and the title words that signal each one.
+#
+# A job title's level is the highest level whose words appear in it; a title
+# with none of them is "mid". A word inside a longer phrase doesn't count on
+# its own ("head of year" is a school's middle-leadership role, so the
+# "head of" inside it isn't read as executive), and neither does a word that
+# is part of the role's own name ("manager" in "Product Manager").
+#
+# Industries add their own words in their [seniority] table. Phrases are
+# matched as whole words, ignoring case and punctuation.
+
+[[levels]]
+key = "intern"
+label = "Internship or placement"
+words = ["intern", "internship", "placement", "industrial placement", "apprentice", "apprenticeship", "work experience"]
+
+[[levels]]
+key = "entry"
+label = "Entry level or graduate"
+words = ["graduate", "junior", "jr", "entry level", "trainee", "newly qualified"]
+
+[[levels]]
+key = "mid"
+label = "Mid level"
+words = ["mid level", "intermediate"]
+
+[[levels]]
+key = "senior"
+label = "Senior"
+words = ["senior", "sr"]
+
+[[levels]]
+key = "lead"
+label = "Lead or principal"
+words = ["lead", "principal"]
+
+[[levels]]
+key = "manager"
+label = "Manager"
+words = ["manager", "supervisor", "team leader"]
+
+[[levels]]
+key = "executive"
+label = "Director or executive"
+words = ["director", "head of", "vp", "vice president", "chief", "ceo", "cfo", "coo", "cto", "cmo", "cio"]

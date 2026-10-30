@@ -1,0 +1,52 @@
+# Format: presets/README.md
+label = "Finance & accounting"
+description = "Accounting, financial analysis, audit, tax, and risk and compliance."
+
+skills = ["Excel", "Financial modelling", "Management accounts", "Month-end close", "Reconciliations", "IFRS", "US GAAP", "Budgeting and forecasting", "Variance analysis", "Xero", "SAP", "Sage", "Power BI", "ACCA", "ACA", "CIMA", "Tax compliance"]
+
+[scoring]
+skills = 35
+experience = 30
+culture = 10
+career = 25
+
+[seniority]
+intern = ["summer analyst", "spring week", "spring insight"]
+entry = ["part qualified", "newly qualified"]
+
+[[roles]]
+key = "accountant"
+label = "Accountant"
+titles = ["accountant", "management accountant", "financial accountant", "chartered accountant", "accounts assistant", "finance assistant"]
+search = ["accountant", "management accountant"]
+
+[[roles]]
+key = "bookkeeping"
+label = "Bookkeeping and accounts"
+titles = ["bookkeeper", "accounts payable", "accounts receivable", "purchase ledger", "sales ledger", "credit controller", "payroll"]
+search = ["bookkeeper", "accounts payable", "credit controller"]
+
+[[roles]]
+key = "financial-analyst"
+label = "Financial analyst"
+titles = ["financial analyst", "finance analyst", "fp&a", "finance business partner", "investment analyst"]
+search = ["financial analyst", "fp&a analyst"]
+
+[[roles]]
+key = "auditor"
+label = "Audit"
+titles = ["auditor", "audit"]
+exclude = ["clinical audit"]
+search = ["auditor", "audit associate"]
+
+[[roles]]
+key = "tax"
+label = "Tax"
+titles = ["tax advisor", "tax adviser", "tax accountant", "tax associate", "tax consultant", "tax analyst"]
+search = ["tax advisor", "tax accountant"]
+
+[[roles]]
+key = "risk-compliance"
+label = "Risk and compliance"
+titles = ["risk analyst", "compliance analyst", "compliance officer", "kyc analyst", "aml analyst", "financial crime analyst"]
+search = ["compliance analyst", "risk analyst"]
