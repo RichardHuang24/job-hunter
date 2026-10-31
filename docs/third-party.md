@@ -22,7 +22,7 @@ its own license:
 | [httpx2](https://pypi.org/project/httpx2/) | Calling job sources | BSD-3-Clause |
 | [boto3](https://github.com/boto/boto3) | File storage over the S3 API | Apache-2.0 |
 | [Stripe Python library](https://github.com/stripe/stripe-python) | Checking Stripe webhook signatures | MIT |
-| [TeX Live](https://tug.org/texlive/): LuaLaTeX, fontspec, geometry, xcolor, enumitem, hyperref | Building CV PDFs (installed from Debian in the API image) | LPPL-1.3c and GPL-2.0-or-later, per package |
+| [TeX Live](https://tug.org/texlive/): LuaLaTeX, fontspec, geometry, xcolor, hyperref | Building CV PDFs (installed from Debian in the API image) | LPPL-1.3c and GPL-2.0-or-later, per package |
 | [Lato](https://www.latofonts.com) (`fonts-lato`) | The CV font, embedded in each PDF | OFL-1.1 |
 | [DejaVu fonts](https://dejavu-fonts.github.io) (`fonts-dejavu-core`) | Characters Lato lacks, in CV PDFs | Bitstream Vera license |
 | [Versity S3 Gateway](https://github.com/versity/versitygw) | The file store in the Docker setup | Apache-2.0 |

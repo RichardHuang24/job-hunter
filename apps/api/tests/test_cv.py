@@ -112,13 +112,13 @@ def test_build_failures_say_why(tmp_path):
 
 
 def test_a_build_is_sealed_off(tmp_path):
-    """LaTeX gets the paranoid file settings and no shell, in its own folder."""
+    """LaTeX gets the file restrictions and no shell, in its own folder."""
     spy = _fake_latex(tmp_path, f'env > {tmp_path}/env.txt\necho "$@" > {tmp_path}/args.txt\npwd > {tmp_path}/cwd.txt\n'
                                 'printf "%%PDF-1.7" > cv.pdf\necho "Output written on cv.pdf (2 pages, 9 bytes)." > cv.log\n')
     pdf = build_pdf("source", Settings(cv_latex=spy))
     assert pdf == Pdf(b"%PDF-1.7", 2)
     env = dict(line.split("=", 1) for line in (tmp_path / "env.txt").read_text().splitlines() if "=" in line)
-    assert (env["openin_any"], env["openout_any"], env["shell_escape"]) == ("p", "p", "f")
+    assert (env["openin_any"], env["openout_any"], env["shell_escape"]) == ("r", "p", "f")
     assert "-no-shell-escape" in (tmp_path / "args.txt").read_text()
     assert "job-hunter-cv-" in (tmp_path / "cwd.txt").read_text()
     assert page_count("Output written on cv.pdf (1 page, 52785 bytes).") == 1

@@ -82,7 +82,7 @@ def body(cv: CvContent) -> str:
             if job.employer or job.location:
                 out.append(rf"\cvwhere{{{_where(job.employer, job.location)}}}")
             if job.bullets:
-                out += [r"\begin{itemize}", *(rf"\item {tex(b)}" for b in job.bullets), r"\end{itemize}"]
+                out += [r"\begin{cvitems}", *(rf"\item {tex(b)}" for b in job.bullets), r"\end{cvitems}"]
     if cv.education:
         out.append(r"\cvsection{Education}")
         for i, school in enumerate(cv.education):

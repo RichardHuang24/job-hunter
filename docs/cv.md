@@ -29,9 +29,12 @@ Nothing typed into a CV can run as LaTeX:
   and `~` print as themselves, control characters are dropped - and links
   are percent-encoded. Only the template's own commands are LaTeX.
 - LuaLaTeX runs with shell commands off (`-no-shell-escape`,
-  `shell_escape=f`), may only read and write inside its own throwaway folder
-  (`openin_any=p`, `openout_any=p`), stops at the first error, and is killed
-  after `CV_TIMEOUT_SECONDS` (90).
+  `shell_escape=f`), may only write inside its own throwaway folder
+  (`openout_any=p`) and can't read hidden files (`openin_any=r`), stops at
+  the first error, and is killed after `CV_TIMEOUT_SECONDS` (90). Reading
+  isn't restricted further because luaotfload 3.28-3.29 - in TeX Live
+  2024-2025, as Debian ships it - can't load its own data under
+  `openin_any=p`; the escaping is what keeps CV text from reading anything.
 - It runs in the worker container as an unprivileged user.
 
 Tests cover the escaping with every special character, and a real build with

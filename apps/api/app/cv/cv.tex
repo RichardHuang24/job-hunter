@@ -16,9 +16,11 @@
 \definecolor{accent}{HTML}{1D3A5C}
 \definecolor{muted}{HTML}{5A5F66}
 \definecolor{rule}{HTML}{C9D1DB}
-\usepackage{enumitem}
-\setlist[itemize]{leftmargin=1.05em,itemsep=1.5pt,topsep=2.5pt,parsep=0pt,partopsep=0pt,
-  label={\color{muted}\textbullet}}
+% Bullets, with LaTeX's own list (no extra package needed).
+\newenvironment{cvitems}{\begin{list}{\color{muted}\textbullet}{%
+  \setlength{\leftmargin}{1.05em}\setlength{\labelwidth}{0.6em}\setlength{\labelsep}{0.45em}%
+  \setlength{\itemsep}{1.5pt}\setlength{\parsep}{0pt}\setlength{\topsep}{2.5pt}\setlength{\partopsep}{0pt}}}%
+  {\end{list}}
 \usepackage[hidelinks,pdfcreator={Job Hunter},pdfproducer={Job Hunter}]{hyperref}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0pt}

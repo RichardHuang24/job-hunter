@@ -1,8 +1,8 @@
 """LaTeX source -> PDF, with LuaLaTeX, in a throwaway folder.
 
 The source only ever holds escaped text (app/cv/latex.py), and LaTeX runs
-with every door shut anyway: no shell commands, reading and writing files
-only in its own folder, and a time limit.
+with the doors shut anyway: no shell commands, writing only in its own
+folder, no reading hidden files, and a time limit.
 """
 
 from __future__ import annotations
@@ -49,8 +49,10 @@ def build_pdf(source: str, settings: Settings | None = None) -> Pdf:
         (work / "cv.tex").write_text(source, encoding="utf-8")
         env = {
             **os.environ,
-            "openin_any": "p",  # paranoid: read only below this folder (and TeX's own files)
-            "openout_any": "p",  # write only below this folder
+            # Reading: no hidden files. Not "p" (paranoid): luaotfload 3.28-3.29, in
+            # TeX Live 2024-2025 as Debian ships it, can't load its own data with it.
+            "openin_any": "r",
+            "openout_any": "p",  # writing: only below this folder
             "shell_escape": "f",
             "TEXMFOUTPUT": str(work),
         }

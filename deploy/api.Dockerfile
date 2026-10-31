@@ -10,7 +10,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     TEXMFVAR=/app/.texmf-var
 
 # LuaLaTeX and two fonts, for CV PDFs (app/cv): only the packages the CV
-# template uses - fontspec, geometry, xcolor, enumitem, hyperref.
+# template uses - fontspec, geometry, xcolor, hyperref.
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
       texlive-luatex texlive-latex-recommended fonts-lato fonts-dejavu-core \
