@@ -161,6 +161,8 @@ def main() -> int:
     check("the API knows who is signed in", status == 200 and json.loads(body)["email"] == address, body)
     status, _, body = browser.get("/api/backend/presets/industries/healthcare")
     check("industry presets come through", status == 200 and any(r["key"] == "registered-nurse" for r in json.loads(body)["roles"]), status)
+    sources = [s["key"] for s in json.loads(browser.get("/api/backend/sources")[2])]
+    check("the sample jobs are on (this test needs JOB_SOURCES=demo)", "demo" in sources, sources)
 
     setup = {
         "display_name": "Smoke Test", "headline": "Registered nurse", "industry": "healthcare", "market": "uk",

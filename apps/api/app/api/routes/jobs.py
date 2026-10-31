@@ -1,5 +1,7 @@
 """The signed-in user's jobs, in views: matches, flagged, filtered out,
-saved and hidden."""
+saved and hidden. Jobs that have closed or expired leave the first three
+(the sources' terms say to take them down); Saved and Hidden keep them,
+marked closed, without the posting."""
 
 from __future__ import annotations
 
@@ -7,7 +9,7 @@ import datetime as dt
 from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import func, or_, select
+from sqlalchemy import ColumnElement, and_, func, or_, select
 from sqlalchemy.orm import Session
 
 from app.auth import current_user
@@ -24,17 +26,27 @@ View = Literal["matches", "flagged", "filtered", "saved", "hidden"]
 VERDICT = {"matches": "match", "flagged": "flagged", "filtered": "filtered"}
 
 
+def _now() -> dt.datetime:
+    return dt.datetime.now(dt.UTC)
+
+
+def is_open(now: dt.datetime) -> ColumnElement[bool]:
+    return and_(Job.closed_at.is_(None), or_(Job.expires_at.is_(None), Job.expires_at > now))
+
+
 def _job(job: Job, detail: bool = False) -> dict:
     source = SOURCES.get(job.source)
+    closed = job.is_closed(_now())
     out = {
         "id": job.id, "source": job.source, "source_label": source.label if source else job.source,
-        "demo": bool(source and source.demo), "url": job.url, "title": job.title, "company": job.company,
+        "source_url": source.homepage if source else "", "demo": bool(source and source.demo), "closed": closed,
+        "url": job.url, "title": job.title, "company": job.company,
         "location": job.location, "country": job.country, "arrangement": job.arrangement,
         "salary_min": job.salary_min, "salary_max": job.salary_max, "salary_currency": job.salary_currency,
         "salary_period": job.salary_period, "posted_at": job.posted_at,
     }
     if detail:
-        out["description"] = job.description
+        out["description"] = "" if closed else job.description
     return out
 
 
@@ -57,10 +69,11 @@ def _labels() -> dict[str, str]:
 def list_jobs(view: View = "matches", q: str = Query("", max_length=100), sort: Literal["recent", "fit"] = "recent",
               limit: int = 50, offset: int = 0, user: User = Depends(current_user), db: Session = Depends(get_db)) -> dict:
     """sort=fit puts the best AI scores first; jobs not scored yet come last."""
+    now = _now()
     mine = (select(UserJob, Job).join(Job, UserJob.job_id == Job.id)
             .outerjoin(JobScore, JobScore.user_job_id == UserJob.id).where(UserJob.user_id == user.id))
     if view in VERDICT:
-        mine = mine.where(UserJob.verdict == VERDICT[view], UserJob.state != "hidden")
+        mine = mine.where(UserJob.verdict == VERDICT[view], UserJob.state != "hidden", is_open(now))
     else:
         mine = mine.where(UserJob.state == ("hidden" if view == "hidden" else "saved"))
     if q.strip():
@@ -72,16 +85,16 @@ def list_jobs(view: View = "matches", q: str = Query("", max_length=100), sort: 
         order.insert(0, JobScore.overall.desc().nulls_last())
     rows = db.execute(mine.order_by(*order).limit(min(max(limit, 1), 200)).offset(max(offset, 0))).all()
 
-    grouped = db.execute(select(UserJob.verdict, UserJob.state, func.count()).where(UserJob.user_id == user.id)
-                         .group_by(UserJob.verdict, UserJob.state)).all()
     counts = {"matches": 0, "flagged": 0, "filtered": 0, "saved": 0, "hidden": 0}
-    for verdict, state, n in grouped:
-        if state == "hidden":
-            counts["hidden"] += n
-            continue
-        if state == "saved":
-            counts["saved"] += n
+    by_verdict = db.execute(select(UserJob.verdict, func.count()).join(Job, UserJob.job_id == Job.id)
+                            .where(UserJob.user_id == user.id, UserJob.state != "hidden", is_open(now))
+                            .group_by(UserJob.verdict)).all()
+    for verdict, n in by_verdict:
         counts[{"match": "matches", "flagged": "flagged", "filtered": "filtered"}[verdict]] += n
+    by_state = db.execute(select(UserJob.state, func.count()).where(UserJob.user_id == user.id, UserJob.state != "new")
+                          .group_by(UserJob.state)).all()
+    for state, n in by_state:
+        counts[state] += n
     labels, context = _labels(), scoring.Context.of(user)
     return {"items": [_read(uj, job, labels, context) for uj, job in rows], "total": total, "counts": counts}
 
@@ -114,6 +127,8 @@ def score_job(user_job_id: str, user: User = Depends(current_user), db: Session 
     """Queues an AI score (or a fresh one) for this job; the worker makes it.
     Poll GET /jobs/{id} until score.status is no longer "queued"."""
     user_job, job = _mine(db, user, user_job_id)
+    if job.is_closed(_now()):
+        raise HTTPException(status_code=410, detail="This job has closed.")
     if user_job.score is not None and user_job.score.status == "queued":
         raise HTTPException(status_code=409, detail="This job is already being scored.")
     try:

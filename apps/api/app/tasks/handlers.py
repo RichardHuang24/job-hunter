@@ -43,3 +43,11 @@ def score(session: Session, task: Task) -> dict[str, Any]:
     from app.scoring.service import run_task
 
     return run_task(session, task.payload["score_ids"])
+
+
+@handler("recheck")
+def recheck(session: Session, task: Task) -> dict[str, Any]:
+    """Asks sources whether stored jobs are still open (app/search/recheck.py)."""
+    from app.search.recheck import recheck_due
+
+    return recheck_due(session)

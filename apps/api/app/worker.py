@@ -23,6 +23,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from app.config import get_settings
 from app.db.models import Task
 from app.db.session import get_sessionmaker
+from app.search.recheck import queue_recheck
 from app.search.schedule import schedule_due
 from app.tasks import queue
 from app.tasks.handlers import HANDLERS
@@ -91,8 +92,15 @@ def main() -> None:
     signal.signal(signal.SIGINT, stop)
     sessions = get_sessionmaker()
     log.info("Worker %s started", worker)
-    last_schedule = 0.0
+    last_schedule = last_recheck = 0.0
     while not stopping:
+        if time.monotonic() - last_recheck >= settings.recheck_seconds:
+            last_recheck = time.monotonic()
+            try:
+                with sessions() as session:
+                    queue_recheck(session)
+            except Exception:  # noqa: BLE001 - tries again next time
+                log.exception("Couldn't queue a check for closed jobs")
         if time.monotonic() - last_schedule >= settings.schedule_seconds:
             last_schedule = time.monotonic()
             try:

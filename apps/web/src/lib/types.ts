@@ -89,6 +89,7 @@ export type Source = {
   countries: string[];
   commercial: boolean;
   demo: boolean;
+  remote_only: boolean;
 };
 
 export type SearchWrite = {
@@ -127,7 +128,9 @@ export type JobPosting = {
   id: string;
   source: string;
   source_label: string;
+  source_url: string;
   demo: boolean;
+  closed: boolean;
   url: string;
   title: string;
   company: string;

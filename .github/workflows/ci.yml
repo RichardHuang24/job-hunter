@@ -97,6 +97,8 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - run: scripts/setup-env.sh
+      - name: Use the sample jobs, so the run is predictable and calls no job board
+        run: sed -i 's/^JOB_SOURCES=.*/JOB_SOURCES=demo/' .env
       - name: The production setup is valid
         run: docker compose -f docker-compose.yml -f deploy/docker-compose.prod.yml config --quiet
         env:

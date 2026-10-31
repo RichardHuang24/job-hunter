@@ -9,8 +9,7 @@ import json
 from functools import lru_cache
 from pathlib import Path
 
-from app.matching.titles import normalize, spans
-from app.sources.base import Posting, Query, Source
+from app.sources.base import Posting, Query, Source, title_has_words
 
 DATA = Path(__file__).with_name("demo_jobs.json")
 
@@ -18,11 +17,6 @@ DATA = Path(__file__).with_name("demo_jobs.json")
 @lru_cache
 def _jobs() -> tuple[dict, ...]:
     return tuple(json.loads(DATA.read_text(encoding="utf-8")))
-
-
-def _has_words(text: str, phrase: str) -> bool:
-    text = normalize(text)
-    return all(spans(word, text) for word in normalize(phrase).split())
 
 
 class DemoSource(Source):
@@ -36,14 +30,14 @@ class DemoSource(Source):
         today = dt.datetime.now(dt.UTC).replace(hour=9, minute=0, second=0, microsecond=0)
         out = []
         for job in _jobs():
-            if not _has_words(job["title"], query.term):
+            if not title_has_words(job["title"], query.term):
                 continue
             remote = job["arrangement"] == "remote"
             if query.countries and job["country"] not in query.countries:
                 continue
             if query.remote and not remote:
                 continue
-            if query.location and not query.remote and not _has_words(job["location"], query.location):
+            if query.location and not query.remote and not title_has_words(job["location"], query.location):
                 continue
             salary = job.get("salary") or [None, None, "", ""]
             out.append(Posting(

@@ -32,8 +32,13 @@ class Settings(BaseSettings):
     # Job sources (app/sources): which to use, comma-separated. A hosted,
     # paid deployment sets COMMERCIAL_ONLY so sources whose terms don't allow
     # commercial use stay off.
-    job_sources: str = "demo"
+    job_sources: str = "demo"  # demo, himalayas, jobicy
     commercial_only: bool = False
+    himalayas_api_key: str = ""  # optional: raises Himalayas' limits
+
+    # How often the worker checks stored jobs are still open, for sources
+    # whose terms say closed jobs must come down (seconds).
+    recheck_seconds: float = 3600.0
 
     # How often the worker looks for saved searches due to run (seconds).
     schedule_seconds: float = 60.0

@@ -8,9 +8,9 @@ industry, not just tech. Self-hosted, multi-user, open source.
 
 > **Status: early development.** Accounts, onboarding, profiles with
 > industry presets, job search with deal-breaker checks, and AI fit scoring
-> work today - searching built-in sample jobs until real job boards are
-> added. The applications tracker and the CV workbench come next; see the
-> [roadmap](docs/roadmap.md).
+> work today. Real jobs come from two free remote-job boards, Himalayas and
+> Jobicy; job boards for on-site work come next, with the applications
+> tracker and the CV workbench - see the [roadmap](docs/roadmap.md).
 
 ## What works today
 
@@ -32,9 +32,13 @@ industry, not just tech. Self-hosted, multi-user, open source.
   dimension, requirements quoted from the posting (and checked to be there),
   gaps and risks; best fit first. Without an Anthropic API key a free,
   clearly labelled simulated scorer stands in ([docs/ai-scoring.md](docs/ai-scoring.md)).
+- **Real remote jobs** from [Himalayas](https://himalayas.app) and
+  [Jobicy](https://jobicy.com) - free, used within their terms, credited on
+  every job, and taken down when they close. Remote jobs carry the countries
+  they're open to, so the work-permit check knows who can apply.
 - **Pluggable job sources**, each declaring its countries and whether its
   terms allow commercial use ([docs/job-sources.md](docs/job-sources.md)).
-  Built-in sample jobs make everything work on the first run.
+  Built-in sample jobs (`JOB_SOURCES=demo`) work with no network at all.
 - **One API** that every feature goes through, scoped to the signed-in user.
 - **A background worker** on a Postgres-backed queue - no Redis to run.
 - **One command to run it all** with Docker Compose, and a production setup with
@@ -54,9 +58,10 @@ docker compose up --build
 Then open <http://localhost:3420>, sign in with any email address, and open
 Mailpit at <http://localhost:8025> - it catches the sign-in email locally, so
 nothing is really sent. After the four-step setup, your first search runs
-against the built-in sample jobs.
+against Himalayas and Jobicy (remote jobs). To try it with the built-in
+sample jobs instead, set `JOB_SOURCES=demo` in `.env`.
 
-To check a running stack end to end: `python3 scripts/smoke_test.py`.
+To check a running stack end to end, with `JOB_SOURCES=demo`: `python3 scripts/smoke_test.py`.
 
 ## How it fits together
 

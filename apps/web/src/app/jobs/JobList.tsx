@@ -190,6 +190,13 @@ function Detail({ item, onScore, busy }: { item: UserJob; onScore: () => void; b
     };
   }, [item.id, version]);
   const score = (full?.score as Score | null | undefined) ?? null;
+  if (item.job.closed) {
+    return (
+      <div className="border-t border-hairline px-4 py-4 text-sm text-ink-secondary sm:px-5">
+        This job has closed, so its posting is no longer shown. Hide it to tidy up, or keep it saved as a reminder.
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col gap-5 border-t border-hairline px-4 py-4 sm:px-5">
       <section>
@@ -268,7 +275,8 @@ export default function JobList({ initial, view }: { initial: UserJob[]; view: s
           const { job } = item;
           const expanded = open === item.id;
           const salary = salaryRange(job.salary_min, job.salary_max, job.salary_currency, job.salary_period);
-          const meta = [job.company, job.location, ARRANGEMENTS[job.arrangement]].filter(Boolean).join(" · ");
+          const arrangement = job.location.toLowerCase().startsWith(job.arrangement) ? "" : ARRANGEMENTS[job.arrangement]; // not "Remote (UK) · Remote"
+          const meta = [job.company, job.location, arrangement].filter(Boolean).join(" · ");
           const problem = item.checks.find((c) => c.status === "fail") ?? item.checks.find((c) => c.status === "flag");
           return (
             <li key={item.id} className="rounded-xl border border-edge bg-surface">
@@ -286,6 +294,7 @@ export default function JobList({ initial, view }: { initial: UserJob[]; view: s
                       <span className="rounded-md bg-ink/[0.07] px-1.5 py-0.5">{item.level.label}</span>
                       {item.score?.status === "done" && <span className="text-ink-secondary">{item.score.band}</span>}
                       {job.demo && <span className="rounded-md border border-dashed border-edge px-1.5 py-0.5 text-ink-muted">Sample</span>}
+                      {job.closed && <span className="rounded-md border border-edge px-1.5 py-0.5 text-ink-secondary">Closed</span>}
                       {item.state === "saved" && view !== "saved" && <span className="rounded-md bg-foreground px-1.5 py-0.5 text-background">Saved</span>}
                       {problem && (
                         <span className={problem.status === "fail" ? "text-red-700 dark:text-red-400" : "text-amber-700 dark:text-amber-400"}>{problem.detail}</span>
@@ -296,6 +305,11 @@ export default function JobList({ initial, view }: { initial: UserJob[]; view: s
                     </span>
                   </span>
                 </button>
+                {!job.demo && job.source_url && (
+                  <a href={job.source_url} target="_blank" rel="noopener noreferrer" className="self-start text-xs text-ink-muted underline-offset-2 hover:underline sm:order-last sm:pt-2">
+                    via {job.source_label}
+                  </a>
+                )}
                 <div className="flex shrink-0 gap-1.5 sm:pl-0">
                   {item.state === "hidden" ? (
                     <button type="button" onClick={() => move(item, "new")} className="h-8 rounded-lg border border-edge px-3 text-sm hover:bg-ink/[0.04]">

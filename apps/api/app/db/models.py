@@ -170,10 +170,26 @@ class Job(Base):
     salary_period: Mapped[str] = mapped_column(String(8), default="")
     description: Mapped[str] = mapped_column(Text, default="")
     posted_at: Mapped[dt.datetime | None] = mapped_column(UtcDateTime, nullable=True)
+    # Remote jobs: where candidates may live (ISO codes), or anywhere.
+    countries: Mapped[list[str]] = _list_column()
+    worldwide: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
+    # Taken down: past its expiry date, or the source says it has closed.
+    # Closed and expired jobs leave every list except Saved and Hidden.
+    expires_at: Mapped[dt.datetime | None] = mapped_column(UtcDateTime, nullable=True)
+    closed_at: Mapped[dt.datetime | None] = mapped_column(UtcDateTime, nullable=True)
+    checked_at: Mapped[dt.datetime | None] = mapped_column(UtcDateTime, nullable=True)  # last asked the source
     # The same job listed by two sources: company, title and place, normalised.
     fingerprint: Mapped[str] = mapped_column(String(40), index=True)
     first_seen_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
     last_seen_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+
+    def is_closed(self, now: dt.datetime) -> bool:
+        if self.closed_at is not None:
+            return True
+        expires = self.expires_at
+        if expires is not None and expires.tzinfo is None:  # SQLite hands back naive UTC
+            expires = expires.replace(tzinfo=dt.UTC)
+        return expires is not None and expires <= now
 
 
 class SavedSearch(Base):

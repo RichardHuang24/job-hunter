@@ -26,7 +26,7 @@ end-to-end smoke test in CI.
 - A four-step onboarding, editable target roles in Settings, and a "check a
   job title" tool that shows how job search will read a posting.
 
-## 2. Job search - done, with sample data
+## 2. Job search - done
 
 - A job source interface, with a registry that knows where each source has
   jobs and whether its terms allow commercial use
@@ -41,8 +41,12 @@ end-to-end smoke test in CI.
 - Deal-breaker checks: role, level, work arrangement, location, work permit
   and salary, each explained.
 
-Still to come: real job boards, each added once its terms are cleared
-([third-party.md](third-party.md)).
+- Real remote jobs from Himalayas and Jobicy, used within their terms:
+  credited on every job, closed and expired jobs taken down, and remote jobs
+  carrying the countries they're open to for the work-permit check.
+
+Still to come: job boards for on-site and hybrid work, each added once its
+terms are cleared ([third-party.md](third-party.md)).
 
 ## 3. Ranking - done
 
@@ -50,8 +54,9 @@ Still to come: real job boards, each added once its terms are cleared
   background, with a reason for each of four dimensions weighted by the
   industry preset, requirements quoted from the posting (and checked to be
   there), gaps, risks and what the posting doesn't say.
-- Claude through the Anthropic API when a key is set; a free, clearly
-  labelled simulated scorer when not ([ai-scoring.md](ai-scoring.md)).
+- Claude through the Anthropic API when a key is set - Haiku 5.5 at low
+  effort with thinking off by default, under $0.001 a score - and a free,
+  clearly labelled simulated scorer when not ([ai-scoring.md](ai-scoring.md)).
 - A monthly allowance per user (scores and dollars), a usage ledger with
   the cost of every call, and "best fit first" sorting.
 

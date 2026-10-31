@@ -14,7 +14,8 @@ from app.sources.base import Posting
 
 
 def fingerprint(company: str, title: str, location: str) -> str:
-    """The same job listed by two sources gets the same fingerprint."""
+    """The same job listed by two sources gets the same fingerprint. Remote
+    jobs pass "remote": boards name the countries differently."""
     key = "|".join(normalize(part) for part in (company, title, location))
     return hashlib.sha1(key.encode()).hexdigest()
 
@@ -39,6 +40,11 @@ def upsert(db: Session, source: str, posting: Posting, now: dt.datetime) -> Job:
     job.salary_period = posting.salary_period if posting.salary_period in ("year", "month", "day", "hour") else ""
     job.description = _clip(posting.description, 20_000)
     job.posted_at = posting.posted_at
-    job.fingerprint = fingerprint(posting.company, posting.title, posting.location)
+    job.countries = [c for c in dict.fromkeys(posting.countries) if len(c) == 2]
+    job.worldwide = posting.worldwide
+    job.expires_at = posting.expires_at
+    job.closed_at = None  # the source just listed it, so it's open
+    job.checked_at = now
+    job.fingerprint = fingerprint(posting.company, posting.title, "remote" if job.arrangement == "remote" else posting.location)
     job.last_seen_at = now
     return job

@@ -15,6 +15,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Protocol
 
+from app.countries import name_for
 from app.matching.titles import LevelLike, TargetLike, match_title, normalize, spans
 
 PASS, FLAG, FAIL, UNKNOWN = "pass", "flag", "fail", "unknown"
@@ -28,6 +29,8 @@ class JobLike(Protocol):
     location: str
     country: str
     arrangement: str
+    countries: Sequence[str]  # remote jobs: where candidates may live
+    worldwide: bool  # remote jobs: open to anyone, anywhere
     salary_min: int | None
     salary_max: int | None
     salary_currency: str
@@ -116,17 +119,31 @@ def _location(job: JobLike, profile: ProfileLike) -> Check:
     return Check("location", FAIL, f"{job.location} - not one of your locations")
 
 
+def _places(codes: Sequence[str], countries: Mapping[str, str]) -> str:
+    """'Canada', 'Canada and United States', 'Canada, Mexico and 4 more'"""
+    names = [countries.get(code) or name_for(code) for code in codes]
+    if len(names) <= 2:
+        return " and ".join(names)
+    if len(names) == 3:
+        return f"{names[0]}, {names[1]} and {names[2]}"
+    return f"{names[0]}, {names[1]} and {len(names) - 2} more"
+
+
 def _permit(job: JobLike, profile: ProfileLike, countries: Mapping[str, str]) -> Check:
-    if not job.country:
+    if job.worldwide:
+        return Check("permit", PASS, "Open to people anywhere")
+    codes = list(dict.fromkeys(job.countries)) or ([job.country] if job.country else [])
+    if not codes:
         return Check("permit", UNKNOWN, "The posting doesn’t say which country")
-    name = countries.get(job.country, job.country)
+    where = _places(codes, countries)
     if not profile.authorized_countries:
-        return Check("permit", UNKNOWN, f"{name} - add where you can work to check this")
-    if job.country in profile.authorized_countries:
-        return Check("permit", PASS, f"{name} - no visa needed")
+        return Check("permit", UNKNOWN, f"{where} - add where you can work to check this")
+    allowed = [code for code in codes if code in profile.authorized_countries]
+    if allowed:
+        return Check("permit", PASS, f"{_places(allowed[:1], countries)} - no visa needed")
     if profile.open_to_sponsorship:
-        return Check("permit", FLAG, f"{name} - you’d need a visa; check the job offers sponsorship")
-    return Check("permit", FAIL, f"{name} - you’d need a visa")
+        return Check("permit", FLAG, f"{where} - you’d need a visa; check the job offers sponsorship")
+    return Check("permit", FAIL, f"{where} - you’d need a visa")
 
 
 def _salary(job: JobLike, profile: ProfileLike) -> Check | None:

@@ -64,7 +64,7 @@ def suggestion(user: User) -> dict:
     if not countries and profile:
         countries = list(profile.authorized_countries[:5])
     arrangements = profile.work_arrangements if profile else []
-    remote = any(place.lower().startswith("remote") for place in locations) or arrangements == ["remote"]
+    remote = any(place.lower().startswith("remote") for place in locations) or "remote" in arrangements
     return {
         "name": "From your profile", "terms": terms[:10], "locations": locations[:10], "countries": countries,
         "include_remote": remote, "sources": [], "daily": True,

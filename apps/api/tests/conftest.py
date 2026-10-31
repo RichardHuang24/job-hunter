@@ -24,6 +24,8 @@ def _settings(monkeypatch):
     monkeypatch.setenv("BACKEND_JWT_SECRET", SECRET)
     monkeypatch.setenv("ENVIRONMENT", "test")
     monkeypatch.setenv("ANTHROPIC_API_KEY", "")  # tests never call the real API
+    monkeypatch.setenv("JOB_SOURCES", "demo")  # nor a real job board
+    monkeypatch.setenv("HIMALAYAS_API_KEY", "")
     get_settings.cache_clear()
     yield
     get_settings.cache_clear()

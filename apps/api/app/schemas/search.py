@@ -19,6 +19,7 @@ class SourceRead(BaseModel):
     countries: list[str]  # [] = anywhere
     commercial: bool
     demo: bool
+    remote_only: bool  # only remote jobs: used for remote searches only
 
 
 class SearchFields(BaseModel):

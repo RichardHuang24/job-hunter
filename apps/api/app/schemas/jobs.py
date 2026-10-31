@@ -13,7 +13,9 @@ class JobRead(BaseModel):
     id: str
     source: str
     source_label: str
+    source_url: str  # the source's home page, for the credit its terms ask for
     demo: bool  # from the built-in sample data
+    closed: bool  # closed or expired: the posting is no longer shown
     url: str
     title: str
     company: str

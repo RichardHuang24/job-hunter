@@ -16,6 +16,19 @@ function toWrite(search: Search | SearchWrite): SearchWrite {
   return { name, terms, locations, countries, include_remote, sources, daily };
 }
 
+function chosen(sources: Source[], draft: SearchWrite): Source[] {
+  return draft.sources.length ? sources.filter((s) => draft.sources.includes(s.key)) : sources;
+}
+
+function onlyRemoteSources(sources: Source[], draft: SearchWrite): boolean {
+  const used = chosen(sources, draft);
+  return used.length > 0 && used.every((s) => s.remote_only);
+}
+
+function listNames(names: string[]): string {
+  return names.length < 2 ? (names[0] ?? "") : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+}
+
 type Props = { search: Search | null; draft: SearchWrite; sources: Source[]; countries: Option[]; locations: string[]; onSaved: (s: Search) => void; onDeleted: () => void };
 
 function SearchCard({ search, draft: start, sources, countries, locations, onSaved, onDeleted }: Props) {
@@ -106,13 +119,18 @@ function SearchCard({ search, draft: start, sources, countries, locations, onSav
         {sources.length > 1 && (
           <PillGroup
             label="Sources"
-            options={sources.map((s) => ({ key: s.key, label: s.label }))}
+            options={sources.map((s) => ({ key: s.key, label: s.remote_only ? `${s.label} (remote only)` : s.label }))}
             values={draft.sources}
             onChange={(values) => set({ sources: values })}
             hint="Leave them all off to use every source."
           />
         )}
         <Checkbox label="Also look for remote jobs" checked={draft.include_remote} onChange={(include_remote) => set({ include_remote })} />
+        {onlyRemoteSources(sources, draft) && !draft.include_remote && !draft.locations.some((l) => l.toLowerCase().startsWith("remote")) && (
+          <p className="-mt-2 text-sm text-amber-700 dark:text-amber-400">
+            {listNames(chosen(sources, draft).map((s) => s.label))} only list remote jobs, so this search won&apos;t find anything until you tick this or add “Remote” under Where.
+          </p>
+        )}
         <Checkbox label="Run every day" checked={draft.daily} onChange={(daily) => set({ daily })} hint="New jobs appear under Jobs without you asking." />
         {run && run.errors.length > 0 && (
           <ErrorBanner message={`Last run: ${run.errors.map((e) => `${e.source || "search"} - ${e.message}`).join("; ")}`} />

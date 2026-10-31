@@ -19,6 +19,7 @@ its own license:
 | [SQLAlchemy](https://www.sqlalchemy.org), [Alembic](https://alembic.sqlalchemy.org) | Database models, migrations | MIT |
 | [psycopg](https://www.psycopg.org) | API's Postgres driver | LGPL-3.0 |
 | [PyJWT](https://pyjwt.readthedocs.io) | Checking API tokens | MIT |
+| [HTTPX](https://github.com/encode/httpx) (`httpx2`) | Calling job sources | BSD-3-Clause |
 | [Anthropic Python SDK](https://github.com/anthropics/anthropic-sdk-python) | AI scoring | Apache-2.0 |
 | [PostgreSQL](https://www.postgresql.org) | Database | PostgreSQL License |
 | [Caddy](https://caddyserver.com) | HTTPS in production | Apache-2.0 |
@@ -32,6 +33,7 @@ The exact versions are in `apps/web/package-lock.json` and
 | Service | Used for | Needed |
 | --- | --- | --- |
 | [Anthropic API](https://www.anthropic.com/api) (Claude) | AI scoring - your profile and the posting are sent; see [ai-scoring.md](ai-scoring.md) | Only when `ANTHROPIC_API_KEY` is set |
+| [Himalayas API](https://himalayas.app/api), [Jobicy API](https://jobicy.com/jobs-rss-feed) | Remote job listings - only the search terms and countries are sent, never anything about a person | When `JOB_SOURCES` includes them |
 
 ## Job data
 
@@ -44,3 +46,8 @@ including any that forbids scraping - isn't added. How to add one:
 | Source | Key | Commercial use | Notes |
 | --- | --- | --- | --- |
 | Sample jobs | `demo` | Yes - our own data | Built-in postings with fictional employers, for trying Job Hunter out |
+| [Himalayas](https://himalayas.app/api) | `himalayas` | Yes - "personal and commercial integrations" ([API terms](https://himalayas.app/terms)) | Remote jobs. Apply links unchanged; a visible link credits Himalayas; jobs shown only on sites you run and never passed to other job boards or aggregators (no feeds, no JobPosting markup); expired and closed jobs taken down. Free; key optional |
+| [Jobicy](https://jobicy.com/jobs-rss-feed) | `jobicy` | Yes - "commercial use, job boards, aggregators, and redistribution are permitted" | Remote jobs from the last 7 days. Jobicy credited with a link; apply links go to the Jobicy job page; feed read at most hourly; closed jobs taken down. Free, no key |
+
+Terms as published on 31 October 2026 - they can change, so re-read them
+before relying on a source for a paid service.

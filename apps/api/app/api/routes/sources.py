@@ -14,5 +14,6 @@ router = APIRouter(prefix="/sources", tags=["searches"], dependencies=[Depends(c
 @router.get("", response_model=list[SourceRead])
 def get_sources() -> list[dict]:
     return [{"key": s.key, "label": s.label, "description": s.description, "homepage": s.homepage,
-             "countries": list(s.countries), "commercial": s.commercial, "demo": s.demo}
+             "countries": list(s.countries), "commercial": s.commercial, "demo": s.demo,
+             "remote_only": s.remote_only}
             for s in enabled_sources()]

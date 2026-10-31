@@ -20,6 +20,8 @@ class Job:
     salary_max: int | None = 38000
     salary_currency: str = "GBP"
     salary_period: str = "year"
+    countries: tuple = ()
+    worldwide: bool = False
 
 
 @dataclass
