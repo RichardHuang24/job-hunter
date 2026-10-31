@@ -12,6 +12,10 @@ industry, not just tech. Self-hosted, multi-user, open source.
 > Jobicy; job boards for on-site work come next, with the applications
 > tracker and the CV workbench - see the [roadmap](docs/roadmap.md).
 
+![Setting up a nurse's profile, then the matches sorted by fit, one job's fit explained, and the jobs left out with the reasons](docs/images/walkthrough.gif)
+
+<sub>Built-in sample jobs with fictional employers, scored by the free simulated scorer. With an Anthropic API key, Claude writes the scores and the reasons. More [screenshots](#screenshots) below.</sub>
+
 ## What works today
 
 - **Sign-in** by emailed link, or with GitHub or Google if you configure them (Auth.js).
@@ -43,6 +47,32 @@ industry, not just tech. Self-hosted, multi-user, open source.
 - **A background worker** on a Postgres-backed queue - no Redis to run.
 - **One command to run it all** with Docker Compose, and a production setup with
   automatic HTTPS for a single VPS.
+
+## Screenshots
+
+**Matches, best fit first** - each checked against your deal-breakers and scored 0-100.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/jobs-dark.png">
+  <img alt="The Jobs page: four nursing jobs in Manchester, each with a fit score, salary, role, level and how long ago it was posted" src="docs/images/jobs.png">
+</picture>
+
+**Why a job fits** - a reason for each part of the score, requirements quoted from the posting, gaps, and every deal-breaker check.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/job-fit-dark.png">
+  <img alt="One job opened: a score of 79 with skills, experience, ways of working and career direction each scored and explained, the skills found and missing, and the checks against the profile" src="docs/images/job-fit.png">
+</picture>
+
+**The dashboard** - best matches, what you're looking for, and this month's AI scoring.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/dashboard-dark.png">
+  <img alt="The dashboard: best matches with scores, the profile summary, and the AI scoring allowance" src="docs/images/dashboard.png">
+</picture>
+
+The walkthrough and screenshots are made by [`scripts/readme_media.py`](scripts/readme_media.py)
+against a local stack with the sample jobs - run it again after changing the UI.
 
 ## Quick start
 
@@ -84,7 +114,7 @@ nothing else. More in [docs/architecture.md](docs/architecture.md).
 | [`apps/api`](apps/api) | FastAPI service, SQLAlchemy models, Alembic migrations, the worker |
 | [`presets`](presets) | Industries and job markets, as data files |
 | [`deploy`](deploy) | Dockerfiles, the production Compose file, Caddy |
-| [`scripts`](scripts) | `.env` setup, the end-to-end smoke test, the personal-data check |
+| [`scripts`](scripts) | `.env` setup, the end-to-end smoke test, the personal-data check, the README pictures |
 | [`docs`](docs) | Architecture, roadmap, self-hosting, third-party notices |
 
 ## Running it on a server
