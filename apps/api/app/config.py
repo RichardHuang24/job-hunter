@@ -29,6 +29,15 @@ class Settings(BaseSettings):
     worker_poll_seconds: float = 1.0
     task_lease_seconds: int = 600
 
+    # Job sources (app/sources): which to use, comma-separated. A hosted,
+    # paid deployment sets COMMERCIAL_ONLY so sources whose terms don't allow
+    # commercial use stay off.
+    job_sources: str = "demo"
+    commercial_only: bool = False
+
+    # How often the worker looks for saved searches due to run (seconds).
+    schedule_seconds: float = 60.0
+
     # Where the industry and market presets are. Empty: the presets/ folder
     # found above the code (the repo's, or /app/presets in Docker).
     presets_dir: str = ""

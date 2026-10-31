@@ -78,7 +78,8 @@ against them.
 - **Industries and markets are data.** To support a new field or country,
   add a file under `presets/` - see [presets/README.md](presets/README.md).
 - **Job sources:** a connector is only merged once the source's terms allow
-  the use - see [docs/third-party.md](docs/third-party.md).
+  the use - see [docs/job-sources.md](docs/job-sources.md) and
+  [docs/third-party.md](docs/third-party.md).
 
 By contributing, you agree that your contributions are licensed under the
 project's license (AGPL-3.0).

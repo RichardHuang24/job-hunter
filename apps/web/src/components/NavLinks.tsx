@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 // Pages join this list as their features move in (docs/roadmap.md).
 const LINKS = [
   { href: "/", label: "Dashboard" },
+  { href: "/jobs", label: "Jobs" },
   { href: "/settings", label: "Settings" },
 ];
 

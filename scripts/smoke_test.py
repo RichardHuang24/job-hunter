@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Checks a running Job Hunter end to end, the way a person would use it:
 signs in by email (reading the link from Mailpit), goes through the setup,
-checks the dashboard and a few job titles, edits the target roles, checks
-the API door refuses what it should, signs out.
+waits for the worker to run the first job search and checks what it found,
+checks a few job titles, edits the target roles, checks the API door
+refuses what it should, signs out. Needs the worker running.
 
     docker compose up --build -d
     python3 scripts/smoke_test.py            # defaults suit docker-compose.yml
@@ -171,6 +172,30 @@ def main() -> int:
     status, _, page = browser.get("/")
     check("the dashboard shows it", status == 200 and all(text in page for text in (
         "Welcome, Smoke Test", "Research nurse", "Manchester", "£32,000 per year")), status)
+
+    searches = json.loads(browser.get("/api/backend/searches")[2])
+    check("the setup made a search and started it", len(searches) == 1 and searches[0]["last_run"]["trigger"] == "onboarding", searches)
+    deadline = time.monotonic() + 90
+    while searches[0]["last_run"]["status"] in ("queued", "running") and time.monotonic() < deadline:
+        time.sleep(1)
+        searches = json.loads(browser.get("/api/backend/searches")[2])
+    run = searches[0]["last_run"]
+    check("the worker ran the search", run["status"] == "succeeded" and run["counts"].get("new", 0) > 0, run)
+
+    def view(name: str) -> dict:
+        return json.loads(browser.get(f"/api/backend/jobs?view={name}")[2])
+
+    matches = view("matches")
+    check("matching jobs were found", {"Staff Nurse - Acute Medicine", "Research Nurse"} <= {i["job"]["title"] for i in matches["items"]}, matches["counts"])
+    check("a low salary is flagged", "Registered Nurse - Nights" in {i["job"]["title"] for i in view("flagged")["items"]})
+    check("a too-senior job is filtered out", "Lead Staff Nurse - Band 7" in {i["job"]["title"] for i in view("filtered")["items"]})
+    first = matches["items"][0]
+    status, _, body = browser.json("PATCH", f"/api/backend/jobs/{first['id']}", {"state": "saved"})
+    check("a job can be saved", status == 200 and [i["id"] for i in view("saved")["items"]] == [first["id"]], body)
+    status, _, page = browser.get("/jobs")
+    check("the jobs page lists them", status == 200 and "Staff Nurse - Acute Medicine" in page and "Search now" in page, status)
+    status, _, page = browser.get("/jobs/searches")
+    check("the searches page renders", status == 200 and "From your profile" in page, status)
     status, headers, _ = browser.get("/onboarding")
     check("the setup now leads to settings", status == 307 and "/settings" in headers.get("location", ""), status)
 

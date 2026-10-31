@@ -28,12 +28,12 @@ The exact versions are in `apps/web/package-lock.json` and
 
 ## Job data
 
-No job sources are included yet. Before a connector is added, the source's
-terms of use are read and recorded here: whether automated access is allowed,
-whether commercial use is, and what attribution it asks for. A source whose
-terms don't allow this use - including any that forbids scraping - isn't
-added.
+Before a job source is added, its terms of use are read and recorded here:
+whether automated access is allowed, whether commercial use is, and what
+attribution it asks for. A source whose terms don't allow this use -
+including any that forbids scraping - isn't added. How to add one:
+[job-sources.md](job-sources.md).
 
-| Source | Status |
-| --- | --- |
-| *(none yet)* | |
+| Source | Key | Commercial use | Notes |
+| --- | --- | --- | --- |
+| Sample jobs | `demo` | Yes - our own data | Built-in postings with fictional employers, for trying Job Hunter out |

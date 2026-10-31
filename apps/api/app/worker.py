@@ -2,6 +2,8 @@
 Postgres queue (app/tasks/queue.py) and runs their handler; stops cleanly on
 SIGTERM, between tasks.
 
+It also queues daily saved searches when they're due (app/search/schedule.py).
+
 `python -m app.worker --check` asks whether a worker is running: it queues a
 ping and waits for one to answer (exit 0), or gives up (exit 1).
 """
@@ -21,6 +23,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from app.config import get_settings
 from app.db.models import Task
 from app.db.session import get_sessionmaker
+from app.search.schedule import schedule_due
 from app.tasks import queue
 from app.tasks.handlers import HANDLERS
 
@@ -88,7 +91,16 @@ def main() -> None:
     signal.signal(signal.SIGINT, stop)
     sessions = get_sessionmaker()
     log.info("Worker %s started", worker)
+    last_schedule = 0.0
     while not stopping:
+        if time.monotonic() - last_schedule >= settings.schedule_seconds:
+            last_schedule = time.monotonic()
+            try:
+                with sessions() as session:
+                    if queued := schedule_due(session):
+                        log.info("Queued %d daily search(es)", queued)
+            except Exception:  # noqa: BLE001 - scheduling tries again next time
+                log.exception("Couldn't schedule daily searches")
         if not run_one(sessions, worker, settings.task_lease_seconds):
             time.sleep(settings.worker_poll_seconds)
 

@@ -26,13 +26,23 @@ end-to-end smoke test in CI.
 - A four-step onboarding, editable target roles in Settings, and a "check a
   job title" tool that shows how job search will read a posting.
 
-## 2. Job search
+## 2. Job search - done, with sample data
 
-- A connector interface for job sources, and the first connectors - only
-  sources whose terms allow this use (see [third-party.md](third-party.md)).
-- Saved searches per user, run on a schedule by the worker.
+- A job source interface, with a registry that knows where each source has
+  jobs and whether its terms allow commercial use
+  ([job-sources.md](job-sources.md)).
+- Built-in sample jobs with fictional employers, so everything works on the
+  first run.
+- Saved searches per user - the first made from the profile at the end of
+  onboarding - run daily by the worker or on demand.
 - Postings stored once and de-duplicated across sources; each user's view of
-  a posting kept separately.
+  a posting kept separately: its role, level, deal-breaker checks, and saved
+  or hidden.
+- Deal-breaker checks: role, level, work arrangement, location, work permit
+  and salary, each explained.
+
+Still to come: real job boards, each added once its terms are cleared
+([third-party.md](third-party.md)).
 
 ## 3. Ranking
 

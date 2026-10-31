@@ -25,9 +25,9 @@ flowchart LR
 | --- | --- | --- |
 | `web` | Pages, sign-in, and the only door to the API | `apps/web` |
 | `api` | Every feature's logic and data, per user | `apps/api/app` |
-| `worker` | Runs slow jobs (searches, AI scoring, PDF builds) from the queue | `apps/api/app/worker.py` |
+| `worker` | Runs searches (and later AI scoring and PDF builds) from the queue, and queues daily searches | `apps/api/app/worker.py` |
 | `migrate` | Brings the schema up to date, then exits; the others wait for it | `apps/api/alembic` |
-| `db` | Postgres: users, sessions, profiles, target roles, tasks - everything | |
+| `db` | Postgres: users, sessions, profiles, searches, jobs, tasks - everything | |
 | `mailpit` | Development only: catches outgoing email | |
 | `caddy` | Production only: HTTPS in front of `web` | `deploy/Caddyfile` |
 
@@ -90,11 +90,32 @@ role it is (the longest matching phrase wins; exclusions knock a role out)
 and how senior it is. `POST /me/title-check` runs it for one title, so people
 can see how job search will read a posting before job search exists.
 
+## Job search
+
+A **saved search** (`saved_searches`) holds terms, places and countries.
+Running one creates a `search_runs` row and queues a `search` task; the
+worker does the work (`app/search/runs.py`):
+
+1. The search becomes queries - every term in every place
+   (`app/search/queries.py`).
+2. Each enabled **job source** (`app/sources/`, see
+   [job-sources.md](job-sources.md)) that covers the query's countries is
+   asked. A source that fails is recorded on the run; the others carry on.
+3. Postings go into the shared **`jobs`** table - one row per source and
+   source id, updated on every sighting. A fingerprint of company, title and
+   place stops the same job from two sources showing twice.
+4. Each job the user hasn't seen gets a **`user_jobs`** row: which of their
+   roles it is, its level, and the deal-breaker checks
+   (`app/matching/evaluate.py`) - role, level, arrangement, location, work
+   permit, salary - each pass, flag, fail or unknown, with the reason. Any
+   fail files the job under "Filtered out"; any flag under "Flagged".
+
+Changing the profile or the target roles re-judges every job the user has.
+Daily searches are queued by the worker itself (`app/search/schedule.py`,
+with `SKIP LOCKED` so several workers never queue the same search twice).
+
 ## Where the rest goes
 
-See [roadmap.md](roadmap.md). Job sources become **connectors** behind one
-interface, run by the worker on a schedule. Postings are stored once and
-shared; each user's view of a posting (score, status, notes) is a separate
-per-user row. AI scoring, the applications tracker, the CV workbench and
-billing all follow the same rules: data scoped to the user, slow work on the
-worker, every call through the API.
+See [roadmap.md](roadmap.md). AI scoring, the applications tracker, the CV
+workbench and billing all follow the same rules: data scoped to the user,
+slow work on the worker, every call through the API.

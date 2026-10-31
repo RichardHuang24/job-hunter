@@ -4,13 +4,13 @@ import type { ReactNode } from "react";
 import Card from "@/components/Card";
 import { ErrorBanner } from "@/components/Feedback";
 import TitleCheck from "@/components/TitleCheck";
+import { isActive, runSummary, salaryRange, since } from "@/lib/jobs";
 import { formatSalary, labelOf, listOf } from "@/lib/profile";
 import { backendGet } from "@/lib/session";
-import type { Me, Presets } from "@/lib/types";
+import type { JobList, Me, Presets, Search } from "@/lib/types";
 
 // What the app will do, in the order it arrives (docs/roadmap.md).
 const COMING = [
-  { title: "Job search", body: "Searches job boards for your roles and locations, every day." },
   { title: "Ranking", body: "Scores each posting against your profile and explains the fit." },
   { title: "Applications", body: "Tracks where every application stands." },
   { title: "CV workbench", body: "Keeps your CV content in one place and builds a tailored PDF per job." },
@@ -26,11 +26,20 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
 }
 
 export default async function DashboardPage() {
-  const [me, presets] = await Promise.all([backendGet<Me>("/me"), backendGet<Presets>("/presets")]);
+  const [me, presets, jobs, searches] = await Promise.all([
+    backendGet<Me>("/me"),
+    backendGet<Presets>("/presets"),
+    backendGet<JobList>("/jobs?view=matches&limit=5"),
+    backendGet<Search[]>("/searches"),
+  ]);
   if (!me) return <ErrorBanner message="The API isn't answering. Check that it's running (see the README), then reload." />;
   const profile = me.profile;
   if (!profile?.onboarded_at) redirect("/onboarding");
 
+  const latest = (searches ?? [])
+    .map((search) => search.last_run)
+    .filter((run) => run !== null)
+    .sort((a, b) => b.created_at.localeCompare(a.created_at))[0];
   const name = profile.display_name || me.name || me.email?.split("@")[0] || "there";
   const countries = profile.authorized_countries.map((code) => labelOf(presets?.countries, code));
   const salary =
@@ -47,6 +56,45 @@ export default async function DashboardPage() {
 
       <div className="grid items-start gap-4 lg:grid-cols-[3fr_2fr]">
         <div className="flex flex-col gap-4">
+          <Card
+            title="Latest matches"
+            subtitle={
+              latest
+                ? isActive(latest)
+                  ? "Your search is running - new jobs will appear here."
+                  : `${runSummary(latest)} · searched ${since(latest.finished_at ?? latest.created_at)}`
+                : "Set up a search to start finding jobs."
+            }
+            action={
+              <Link href="/jobs" className="shrink-0 rounded-lg border border-edge px-3 py-1.5 text-sm hover:bg-ink/[0.04]">
+                All jobs
+              </Link>
+            }
+          >
+            {jobs && (
+              <p className="mb-3 text-sm text-ink-secondary">
+                <strong className="font-semibold text-ink tabular-nums">{jobs.counts.matches}</strong> matches ·{" "}
+                <span className="tabular-nums">{jobs.counts.flagged}</span> flagged · <span className="tabular-nums">{jobs.counts.saved}</span> saved
+              </p>
+            )}
+            {jobs && jobs.items.length > 0 ? (
+              <ul className="flex flex-col divide-y divide-hairline">
+                {jobs.items.map((item) => (
+                  <li key={item.id} className="flex flex-wrap items-baseline justify-between gap-x-4 py-2 first:pt-0 last:pb-0">
+                    <span className="min-w-0">
+                      <span className="text-sm font-medium">{item.job.title}</span>
+                      <span className="text-sm text-ink-secondary"> · {[item.job.company, item.job.location].filter(Boolean).join(" · ")}</span>
+                    </span>
+                    <span className="text-xs text-ink-muted">
+                      {salaryRange(item.job.salary_min, item.job.salary_max, item.job.salary_currency, item.job.salary_period)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-ink-secondary">No matches yet.</p>
+            )}
+          </Card>
           <Card
             title="What you’re looking for"
             subtitle="Job search will use this to find and filter postings."

@@ -1,0 +1,1085 @@
+[
+ {
+  "id": "demo-001",
+  "title": "Staff Nurse - Acute Medicine",
+  "company": "Contoso Health",
+  "location": "Manchester",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   31000,
+   37000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 2,
+  "description": "Contoso Health is hiring a Staff Nurse - Acute Medicine (on-site, Manchester). Join a 28-bed acute medical ward with a structured preceptorship and protected study time.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-002",
+  "title": "Senior Staff Nurse - Band 6",
+  "company": "Contoso Health",
+  "location": "Manchester",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   37338,
+   44962,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 1,
+  "description": "Contoso Health is hiring a Senior Staff Nurse - Band 6 (on-site, Manchester). Lead shifts on a busy respiratory ward and support newly qualified nurses.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-003",
+  "title": "Registered Nurse - Day Surgery",
+  "company": "Fabrikam Clinics",
+  "location": "Salford, Greater Manchester",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   32000,
+   38000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 4,
+  "description": "Fabrikam Clinics is hiring a Registered Nurse - Day Surgery (on-site, Salford, Greater Manchester). Weekday-only day surgery unit; no nights or weekends.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-004",
+  "title": "Lead Staff Nurse - Band 7",
+  "company": "Contoso Health",
+  "location": "Manchester",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   46148,
+   52809,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 3,
+  "description": "Contoso Health is hiring a Lead Staff Nurse - Band 7 (on-site, Manchester). Manage the ward's day-to-day running and a team of twelve nurses.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-005",
+  "title": "Registered Nurse - Nights",
+  "company": "Lucerne Care Homes",
+  "location": "Stockport, Greater Manchester",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   26000,
+   30000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 5,
+  "description": "Lucerne Care Homes is hiring a Registered Nurse - Nights (on-site, Stockport, Greater Manchester). Night shifts in a 40-bed nursing home with a close, long-serving team.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-006",
+  "title": "Registered Nurse",
+  "company": "Woodgrove Private Hospital",
+  "location": "London",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   36000,
+   42000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 6,
+  "description": "Woodgrove Private Hospital is hiring a Registered Nurse (on-site, London). Surgical ward in a private hospital; enhanced pay for weekends.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-007",
+  "title": "Research Nurse",
+  "company": "Trey Research",
+  "location": "Manchester",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   35000,
+   41000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 2,
+  "description": "Trey Research is hiring a Research Nurse (hybrid, Manchester). Run clinical trial visits and collect study data; two days a week from home.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-008",
+  "title": "Registered Nurse - Telephone Triage",
+  "company": "Contoso Health",
+  "location": "Remote (UK)",
+  "country": "GB",
+  "arrangement": "remote",
+  "salary": [
+   33000,
+   36000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 3,
+  "description": "Contoso Health is hiring a Registered Nurse - Telephone Triage (remote, Remote (UK)). Assess patients by phone and video from home; full training given.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-009",
+  "title": "Healthcare Assistant",
+  "company": "Lucerne Care Homes",
+  "location": "Manchester",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   23000,
+   24500,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 2,
+  "description": "Lucerne Care Homes is hiring a Healthcare Assistant (on-site, Manchester). Support residents with daily care; the Care Certificate is provided.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-010",
+  "title": "Physiotherapist - Musculoskeletal",
+  "company": "Fabrikam Clinics",
+  "location": "Leeds",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   35392,
+   42618,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 7,
+  "description": "Fabrikam Clinics is hiring a Physiotherapist - Musculoskeletal (hybrid, Leeds). Outpatient MSK clinic with a mix of face-to-face and virtual appointments.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-011",
+  "title": "Registered Nurse - Community",
+  "company": "Northwind Health",
+  "location": "Toronto, ON",
+  "country": "CA",
+  "arrangement": "onsite",
+  "salary": [
+   80000,
+   95000,
+   "CAD",
+   "year"
+  ],
+  "days_ago": 3,
+  "description": "Northwind Health is hiring a Registered Nurse - Community (on-site, Toronto, ON). Home visits across the city; car allowance included.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-012",
+  "title": "Pharmacist",
+  "company": "Wide World Pharmacy",
+  "location": "Dublin",
+  "country": "IE",
+  "arrangement": "onsite",
+  "salary": [
+   60000,
+   72000,
+   "EUR",
+   "year"
+  ],
+  "days_ago": 8,
+  "description": "Wide World Pharmacy is hiring a Pharmacist (on-site, Dublin). Community pharmacy with a strong clinical services offer.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-013",
+  "title": "Primary Teacher (KS2)",
+  "company": "Bellows Primary School",
+  "location": "Bristol",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   31650,
+   43607,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 4,
+  "description": "Bellows Primary School is hiring a Primary Teacher (KS2) (on-site, Bristol). Year 5 class in a two-form-entry school with a supportive leadership team.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-014",
+  "title": "Secondary Teacher - Mathematics",
+  "company": "Bellows Academy",
+  "location": "Birmingham",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   31650,
+   43607,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 6,
+  "description": "Bellows Academy is hiring a Secondary Teacher - Mathematics (on-site, Birmingham). Teach maths across KS3 and KS4 in a department of nine.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-015",
+  "title": "Teaching Assistant",
+  "company": "Bellows Primary School",
+  "location": "Bristol",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   21000,
+   23500,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 2,
+  "description": "Bellows Primary School is hiring a Teaching Assistant (on-site, Bristol). Support a Year 2 class, including one-to-one SEND support.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-016",
+  "title": "Lecturer in Nursing",
+  "company": "Bellows College",
+  "location": "Manchester",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   44000,
+   52000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 9,
+  "description": "Bellows College is hiring a Lecturer in Nursing (hybrid, Manchester). Teach on the pre-registration nursing degree and supervise placements.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-017",
+  "title": "Head of Year 9",
+  "company": "Bellows Academy",
+  "location": "Birmingham",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": null,
+  "days_ago": 5,
+  "description": "Bellows Academy is hiring a Head of Year 9 (on-site, Birmingham). Lead the pastoral team for Year 9 alongside a reduced teaching load.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-018",
+  "title": "Early Years Practitioner",
+  "company": "Coho Nursery",
+  "location": "Leeds",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   13,
+   14,
+   "GBP",
+   "hour"
+  ],
+  "days_ago": 3,
+  "description": "Coho Nursery is hiring a Early Years Practitioner (on-site, Leeds). Level 3 practitioner for the pre-school room.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-019",
+  "title": "Software Engineer",
+  "company": "Contoso",
+  "location": "London",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   55000,
+   70000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 2,
+  "description": "Contoso is hiring a Software Engineer (hybrid, London). Build services for the payments platform in Python and Go.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-020",
+  "title": "Senior Backend Engineer (Python)",
+  "company": "Relecloud",
+  "location": "Remote (UK)",
+  "country": "GB",
+  "arrangement": "remote",
+  "salary": [
+   75000,
+   90000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 1,
+  "description": "Relecloud is hiring a Senior Backend Engineer (Python) (remote, Remote (UK)). Own APIs used by thousands of small businesses; fully remote within the UK.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-021",
+  "title": "Frontend Developer - React",
+  "company": "Litware",
+  "location": "Manchester",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   45000,
+   55000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 4,
+  "description": "Litware is hiring a Frontend Developer - React (hybrid, Manchester). Ship features in a React and TypeScript codebase with a design system.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-022",
+  "title": "Staff Software Engineer",
+  "company": "Proseware",
+  "location": "New York, NY",
+  "country": "US",
+  "arrangement": "hybrid",
+  "salary": [
+   210000,
+   250000,
+   "USD",
+   "year"
+  ],
+  "days_ago": 6,
+  "description": "Proseware is hiring a Staff Software Engineer (hybrid, New York, NY). Set technical direction for the data platform team.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-023",
+  "title": "Graduate Software Engineer",
+  "company": "Fabrikam",
+  "location": "Edinburgh",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   32000,
+   35000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 3,
+  "description": "Fabrikam is hiring a Graduate Software Engineer (hybrid, Edinburgh). Two-year graduate programme with rotations across teams.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-024",
+  "title": "DevOps Engineer",
+  "company": "Tailspin Toys",
+  "location": "Berlin",
+  "country": "DE",
+  "arrangement": "hybrid",
+  "salary": [
+   70000,
+   85000,
+   "EUR",
+   "year"
+  ],
+  "days_ago": 5,
+  "description": "Tailspin Toys is hiring a DevOps Engineer (hybrid, Berlin). Run Kubernetes clusters and the CI pipeline for an online store.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-025",
+  "title": "Full Stack Developer",
+  "company": "Wingtip Toys",
+  "location": "Remote",
+  "country": "",
+  "arrangement": "remote",
+  "salary": [
+   90000,
+   120000,
+   "USD",
+   "year"
+  ],
+  "days_ago": 2,
+  "description": "Wingtip Toys is hiring a Full Stack Developer (remote, Remote). Work from anywhere on a TypeScript and Node.js product.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-026",
+  "title": "Data Analyst",
+  "company": "Woodgrove Bank",
+  "location": "Leeds",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   35000,
+   42000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 3,
+  "description": "Woodgrove Bank is hiring a Data Analyst (hybrid, Leeds). Turn customer data into dashboards and insight for the lending team.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-027",
+  "title": "Data Scientist",
+  "company": "Trey Research",
+  "location": "Cambridge",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   55000,
+   68000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 4,
+  "description": "Trey Research is hiring a Data Scientist (hybrid, Cambridge). Build models that help plan clinical trials.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-028",
+  "title": "Machine Learning Engineer",
+  "company": "Relecloud",
+  "location": "London",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   70000,
+   90000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 2,
+  "description": "Relecloud is hiring a Machine Learning Engineer (hybrid, London). Take models from notebooks to production services.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-029",
+  "title": "Graduate Data Analyst",
+  "company": "Humongous Insurance",
+  "location": "Birmingham",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   28000,
+   30000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 7,
+  "description": "Humongous Insurance is hiring a Graduate Data Analyst (on-site, Birmingham). Join the analytics graduate scheme; SQL training provided.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-030",
+  "title": "Senior Data Engineer",
+  "company": "VanArsdel",
+  "location": "Amsterdam",
+  "country": "NL",
+  "arrangement": "hybrid",
+  "salary": [
+   75000,
+   90000,
+   "EUR",
+   "year"
+  ],
+  "days_ago": 5,
+  "description": "VanArsdel is hiring a Senior Data Engineer (hybrid, Amsterdam). Design the pipelines behind a pricing platform.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-031",
+  "title": "AI Engineer",
+  "company": "Proseware",
+  "location": "Remote (Canada)",
+  "country": "CA",
+  "arrangement": "remote",
+  "salary": [
+   130000,
+   160000,
+   "CAD",
+   "year"
+  ],
+  "days_ago": 3,
+  "description": "Proseware is hiring a AI Engineer (remote, Remote (Canada)). Build LLM-powered features for customer support tools.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-032",
+  "title": "Management Accountant",
+  "company": "Northwind Traders",
+  "location": "Leeds",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   42000,
+   48000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 4,
+  "description": "Northwind Traders is hiring a Management Accountant (hybrid, Leeds). Own month-end, forecasting and the management pack for two divisions.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-033",
+  "title": "Financial Analyst",
+  "company": "Woodgrove Bank",
+  "location": "London",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   45000,
+   55000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 3,
+  "description": "Woodgrove Bank is hiring a Financial Analyst (hybrid, London). FP&A role partnering with the retail banking team.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-034",
+  "title": "Audit Senior",
+  "company": "Coho Accountants",
+  "location": "Manchester",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   40000,
+   46000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 6,
+  "description": "Coho Accountants is hiring a Audit Senior (hybrid, Manchester). Run audits for owner-managed businesses and coach trainees.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-035",
+  "title": "Accounts Payable Clerk",
+  "company": "Wide World Importers",
+  "location": "Sydney, NSW",
+  "country": "AU",
+  "arrangement": "onsite",
+  "salary": [
+   65000,
+   72000,
+   "AUD",
+   "year"
+  ],
+  "days_ago": 2,
+  "description": "Wide World Importers is hiring a Accounts Payable Clerk (on-site, Sydney, NSW). Process supplier invoices and payment runs.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-036",
+  "title": "Tax Associate",
+  "company": "Coho Accountants",
+  "location": "Dublin",
+  "country": "IE",
+  "arrangement": "hybrid",
+  "salary": [
+   42000,
+   50000,
+   "EUR",
+   "year"
+  ],
+  "days_ago": 8,
+  "description": "Coho Accountants is hiring a Tax Associate (hybrid, Dublin). Corporate tax compliance for a portfolio of clients.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-037",
+  "title": "Marketing Executive",
+  "company": "Fourth Coffee",
+  "location": "Bristol",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   28000,
+   32000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 3,
+  "description": "Fourth Coffee is hiring a Marketing Executive (hybrid, Bristol). Plan campaigns for a growing coffee brand across email and social.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-038",
+  "title": "Digital Marketing Manager",
+  "company": "Adventure Works",
+  "location": "Remote (UK)",
+  "country": "GB",
+  "arrangement": "remote",
+  "salary": [
+   48000,
+   56000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 2,
+  "description": "Adventure Works is hiring a Digital Marketing Manager (remote, Remote (UK)). Lead paid search and paid social for an outdoor gear retailer.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-039",
+  "title": "Content Writer",
+  "company": "Lucerne Publishing",
+  "location": "London",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   30000,
+   35000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 5,
+  "description": "Lucerne Publishing is hiring a Content Writer (hybrid, London). Write guides and articles for a learning platform.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-040",
+  "title": "Social Media Executive",
+  "company": "Tailspin Toys",
+  "location": "Manchester",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   27000,
+   31000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 4,
+  "description": "Tailspin Toys is hiring a Social Media Executive (hybrid, Manchester). Run the brand's social channels and community.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-041",
+  "title": "Lead Generation Executive",
+  "company": "Litware",
+  "location": "Leeds",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   25000,
+   28000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 6,
+  "description": "Litware is hiring a Lead Generation Executive (on-site, Leeds). Book meetings for the sales team through calls and email.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-042",
+  "title": "Account Executive",
+  "company": "Relecloud",
+  "location": "London",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   45000,
+   55000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 2,
+  "description": "Relecloud is hiring a Account Executive (hybrid, London). Close new business with mid-sized companies; uncapped commission.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-043",
+  "title": "Customer Success Manager",
+  "company": "Litware",
+  "location": "Dublin",
+  "country": "IE",
+  "arrangement": "hybrid",
+  "salary": [
+   50000,
+   60000,
+   "EUR",
+   "year"
+  ],
+  "days_ago": 3,
+  "description": "Litware is hiring a Customer Success Manager (hybrid, Dublin). Look after a portfolio of 40 customer accounts.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-044",
+  "title": "Customer Service Advisor",
+  "company": "Humongous Insurance",
+  "location": "Glasgow",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   23000,
+   25000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 1,
+  "description": "Humongous Insurance is hiring a Customer Service Advisor (on-site, Glasgow). Help customers by phone and chat; full training given.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-045",
+  "title": "Sales Executive",
+  "company": "Adventure Works Cycles",
+  "location": "Chicago, IL",
+  "country": "US",
+  "arrangement": "onsite",
+  "salary": [
+   55000,
+   70000,
+   "USD",
+   "year"
+  ],
+  "days_ago": 5,
+  "description": "Adventure Works Cycles is hiring a Sales Executive (on-site, Chicago, IL). Sell to independent bike shops across the Midwest.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-046",
+  "title": "Operations Coordinator",
+  "company": "Wide World Importers",
+  "location": "Birmingham",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   27000,
+   31000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 3,
+  "description": "Wide World Importers is hiring a Operations Coordinator (on-site, Birmingham). Keep orders, suppliers and the warehouse in step.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-047",
+  "title": "Buyer",
+  "company": "Northwind Traders",
+  "location": "Leeds",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   32000,
+   38000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 6,
+  "description": "Northwind Traders is hiring a Buyer (hybrid, Leeds). Buy for the homeware range and negotiate with suppliers.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-048",
+  "title": "Project Manager",
+  "company": "Fabrikam Engineering",
+  "location": "Manchester",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   50000,
+   60000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 4,
+  "description": "Fabrikam Engineering is hiring a Project Manager (hybrid, Manchester). Deliver office fit-out projects from brief to handover.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-049",
+  "title": "Warehouse Supervisor",
+  "company": "Wide World Importers",
+  "location": "Nottingham",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   30000,
+   33000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 2,
+  "description": "Wide World Importers is hiring a Warehouse Supervisor (on-site, Nottingham). Supervise a shift of fifteen in a busy distribution centre.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-050",
+  "title": "Executive Assistant",
+  "company": "Woodgrove Bank",
+  "location": "London",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   40000,
+   45000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 7,
+  "description": "Woodgrove Bank is hiring a Executive Assistant (hybrid, London). Support two directors with diaries, travel and board papers.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-051",
+  "title": "Civil Engineer",
+  "company": "Fabrikam Engineering",
+  "location": "Birmingham",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   38000,
+   46000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 3,
+  "description": "Fabrikam Engineering is hiring a Civil Engineer (hybrid, Birmingham). Design drainage and highways schemes; support towards chartership.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-052",
+  "title": "Graduate Mechanical Engineer",
+  "company": "Adventure Works Cycles",
+  "location": "Coventry",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   29000,
+   31000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 5,
+  "description": "Adventure Works Cycles is hiring a Graduate Mechanical Engineer (on-site, Coventry). Design and test bike components in the product team.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-053",
+  "title": "Electrical Engineer",
+  "company": "Fabrikam Engineering",
+  "location": "Munich",
+  "country": "DE",
+  "arrangement": "onsite",
+  "salary": [
+   65000,
+   78000,
+   "EUR",
+   "year"
+  ],
+  "days_ago": 4,
+  "description": "Fabrikam Engineering is hiring a Electrical Engineer (on-site, Munich). Electrical design for industrial automation projects.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-054",
+  "title": "CAD Technician",
+  "company": "Fabrikam Engineering",
+  "location": "Glasgow",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   30000,
+   35000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 6,
+  "description": "Fabrikam Engineering is hiring a CAD Technician (hybrid, Glasgow). Produce drawings in AutoCAD and Revit for building projects.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-055",
+  "title": "Trainee Solicitor",
+  "company": "Alpine Legal LLP",
+  "location": "London",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   48000,
+   50000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 9,
+  "description": "Alpine Legal LLP is hiring a Trainee Solicitor (hybrid, London). Two-year training contract with seats in corporate, property and disputes.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-056",
+  "title": "Paralegal - Commercial Property",
+  "company": "Alpine Legal LLP",
+  "location": "Manchester",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   26000,
+   30000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 3,
+  "description": "Alpine Legal LLP is hiring a Paralegal - Commercial Property (hybrid, Manchester). Support the property team with leases and completions.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-057",
+  "title": "Senior Associate Solicitor - Employment",
+  "company": "Alpine Legal LLP",
+  "location": "Leeds",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   70000,
+   85000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 5,
+  "description": "Alpine Legal LLP is hiring a Senior Associate Solicitor - Employment (hybrid, Leeds). Advise employers on tribunal claims and restructures.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-058",
+  "title": "Compliance Officer",
+  "company": "Woodgrove Bank",
+  "location": "Edinburgh",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   45000,
+   52000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 4,
+  "description": "Woodgrove Bank is hiring a Compliance Officer (hybrid, Edinburgh). Monitor conduct risk across the savings business.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-059",
+  "title": "Sous Chef",
+  "company": "Fourth Coffee Kitchen",
+  "location": "Bristol",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   32000,
+   35000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 2,
+  "description": "Fourth Coffee Kitchen is hiring a Sous Chef (on-site, Bristol). Second in command in a 60-cover all-day restaurant.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-060",
+  "title": "Chef de Partie",
+  "company": "Coho Winery Restaurant",
+  "location": "Edinburgh",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   28000,
+   30000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 3,
+  "description": "Coho Winery Restaurant is hiring a Chef de Partie (on-site, Edinburgh). Run the larder section; tips shared fairly.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-061",
+  "title": "Barista",
+  "company": "Fourth Coffee",
+  "location": "Manchester",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   12,
+   13,
+   "GBP",
+   "hour"
+  ],
+  "days_ago": 1,
+  "description": "Fourth Coffee is hiring a Barista (on-site, Manchester). Make great coffee and look after regulars; training provided.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-062",
+  "title": "Hotel Receptionist",
+  "company": "Alpine Ski House",
+  "location": "Edinburgh",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   24000,
+   26000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 4,
+  "description": "Alpine Ski House is hiring a Hotel Receptionist (on-site, Edinburgh). Front desk for a 90-room city hotel, rotating shifts.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-063",
+  "title": "Store Manager",
+  "company": "Tailspin Toys",
+  "location": "Melbourne, VIC",
+  "country": "AU",
+  "arrangement": "onsite",
+  "salary": [
+   75000,
+   85000,
+   "AUD",
+   "year"
+  ],
+  "days_ago": 6,
+  "description": "Tailspin Toys is hiring a Store Manager (on-site, Melbourne, VIC). Run a flagship toy store and a team of twenty.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-064",
+  "title": "Retail Assistant",
+  "company": "Tailspin Toys",
+  "location": "Leeds",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   12,
+   13,
+   "GBP",
+   "hour"
+  ],
+  "days_ago": 2,
+  "description": "Tailspin Toys is hiring a Retail Assistant (on-site, Leeds). Help customers on the shop floor; weekend availability needed.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-065",
+  "title": "Product Designer",
+  "company": "Litware",
+  "location": "London",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   55000,
+   65000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 3,
+  "description": "Litware is hiring a Product Designer (hybrid, London). Design end-to-end flows for a B2B scheduling product.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-066",
+  "title": "Product Manager",
+  "company": "Relecloud",
+  "location": "Remote (UK)",
+  "country": "GB",
+  "arrangement": "remote",
+  "salary": [
+   65000,
+   80000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 2,
+  "description": "Relecloud is hiring a Product Manager (remote, Remote (UK)). Own the onboarding journey for new small-business customers.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-067",
+  "title": "UX Researcher",
+  "company": "Lucerne Publishing",
+  "location": "Paris",
+  "country": "FR",
+  "arrangement": "hybrid",
+  "salary": [
+   50000,
+   60000,
+   "EUR",
+   "year"
+  ],
+  "days_ago": 5,
+  "description": "Lucerne Publishing is hiring a UX Researcher (hybrid, Paris). Plan and run research with readers and authors.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-068",
+  "title": "Graphic Designer",
+  "company": "Fourth Coffee",
+  "location": "Bristol",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   28000,
+   32000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 4,
+  "description": "Fourth Coffee is hiring a Graphic Designer (hybrid, Bristol). Packaging and campaign design for a coffee brand.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ }
+]

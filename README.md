@@ -6,9 +6,10 @@
 Find, rank and track jobs, and build a tailored CV for each one - for any
 industry, not just tech. Self-hosted, multi-user, open source.
 
-> **Status: early development.** Accounts, profiles with industry presets,
-> onboarding, the API and the background worker are in place. Job search,
-> ranking, the applications tracker and the CV workbench arrive next; see the
+> **Status: early development.** Accounts, onboarding, profiles with
+> industry presets, and job search with deal-breaker checks work today -
+> searching built-in sample jobs until real job boards are added. Ranking,
+> the applications tracker and the CV workbench come next; see the
 > [roadmap](docs/roadmap.md).
 
 ## What works today
@@ -23,6 +24,13 @@ industry, not just tech. Self-hosted, multi-user, open source.
   work permits and minimum salary, editable any time.
 - **Job-title rules** that tell which of your target roles a title is and how
   senior it is - try any title under Settings → Check a job title.
+- **Job search**: saved searches made from your profile, run daily in the
+  background or on demand. Every job is checked against your deal-breakers -
+  role, level, arrangement, location, work permit, salary - and filed under
+  Matches, Flagged or Filtered out, with the reasons. Save or hide as you go.
+- **Pluggable job sources**, each declaring its countries and whether its
+  terms allow commercial use ([docs/job-sources.md](docs/job-sources.md)).
+  Built-in sample jobs make everything work on the first run.
 - **One API** that every feature goes through, scoped to the signed-in user.
 - **A background worker** on a Postgres-backed queue - no Redis to run.
 - **One command to run it all** with Docker Compose, and a production setup with
@@ -41,7 +49,8 @@ docker compose up --build
 
 Then open <http://localhost:3420>, sign in with any email address, and open
 Mailpit at <http://localhost:8025> - it catches the sign-in email locally, so
-nothing is really sent.
+nothing is really sent. After the four-step setup, your first search runs
+against the built-in sample jobs.
 
 To check a running stack end to end: `python3 scripts/smoke_test.py`.
 

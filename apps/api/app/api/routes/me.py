@@ -3,15 +3,21 @@ and checking how a job title would be read."""
 
 from __future__ import annotations
 
+import datetime as dt
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.auth import current_user
 from app.db import profiles
+from app.db.models import SavedSearch
 from app.db.models import Profile, User
 from app.db.session import get_db
 from app.matching.titles import match_title
 from app.presets import get_catalog
+from app.search import runs
+from app.search.matching import rematch
+from app.search.schedule import EVERY
 from app.schemas.me import (
     MeRead,
     OnboardingWrite,
@@ -42,6 +48,8 @@ def get_me(user: User = Depends(current_user)) -> MeRead:
 @router.put("/profile", response_model=ProfileRead)
 def put_profile(payload: ProfileWrite, user: User = Depends(current_user), db: Session = Depends(get_db)) -> Profile:
     profile = profiles.save_profile(db, user, payload)
+    db.flush()
+    rematch(db, user)
     db.commit()
     db.refresh(profile)
     return profile
@@ -51,6 +59,7 @@ def put_profile(payload: ProfileWrite, user: User = Depends(current_user), db: S
 def put_targets(payload: TargetList, user: User = Depends(current_user), db: Session = Depends(get_db)) -> list:
     """Every target role, in order - ones left out are deleted."""
     targets = profiles.replace_targets(db, user, payload)
+    rematch(db, user)
     db.commit()
     return targets
 
@@ -58,11 +67,20 @@ def put_targets(payload: TargetList, user: User = Depends(current_user), db: Ses
 @router.post("/onboarding", response_model=MeRead)
 def post_onboarding(payload: OnboardingWrite, user: User = Depends(current_user), db: Session = Depends(get_db)) -> MeRead:
     """First-run setup: saves the profile and replaces the target roles with
-    the chosen preset roles plus any custom ones."""
+    the chosen preset roles plus any custom ones. The first time, it also
+    makes a saved search from the profile and runs it."""
     industry = get_catalog().industries[payload.industry]
     profile = profiles.save_profile(db, user, payload)
     profiles.replace_targets(db, user, profiles.preset_targets(industry, payload.roles) + payload.custom_roles)
     profiles.finish_onboarding(profile)
+    rematch(db, user)
+    if not user.searches:
+        now = dt.datetime.now(dt.UTC)
+        search = SavedSearch(user_id=user.id, created_at=now, updated_at=now, next_run_at=now + EVERY,
+                             **runs.suggestion(user))
+        user.searches.append(search)
+        db.flush()
+        runs.start_run(db, search, trigger="onboarding")
     db.commit()
     db.refresh(user)
     return _me(user)

@@ -49,6 +49,9 @@ class User(Base):
     targets: Mapped[list["ProfileTarget"]] = relationship(
         back_populates="user", cascade="all, delete-orphan", order_by="ProfileTarget.position"
     )
+    searches: Mapped[list["SavedSearch"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan", order_by="SavedSearch.created_at"
+    )
 
 
 class Account(Base):
@@ -143,6 +146,116 @@ class ProfileTarget(Base):
     updated_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
 
     user: Mapped[User] = relationship(back_populates="targets")
+
+
+class Job(Base):
+    """A posting, stored once however many people's searches find it. What
+    each person makes of it is in UserJob."""
+
+    __tablename__ = "jobs"
+    __table_args__ = (UniqueConstraint("source", "source_id", name="uq_jobs_source_id"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    source: Mapped[str] = mapped_column(String(32))  # app/sources key
+    source_id: Mapped[str] = mapped_column(String(200))
+    url: Mapped[str] = mapped_column(Text)
+    title: Mapped[str] = mapped_column(String(300))
+    company: Mapped[str] = mapped_column(String(200), default="")
+    location: Mapped[str] = mapped_column(String(200), default="")
+    country: Mapped[str] = mapped_column(String(2), default="")  # ISO code; "" when not stated
+    arrangement: Mapped[str] = mapped_column(String(8), default="")  # onsite / hybrid / remote / ""
+    salary_min: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    salary_max: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    salary_currency: Mapped[str] = mapped_column(String(3), default="")
+    salary_period: Mapped[str] = mapped_column(String(8), default="")
+    description: Mapped[str] = mapped_column(Text, default="")
+    posted_at: Mapped[dt.datetime | None] = mapped_column(UtcDateTime, nullable=True)
+    # The same job listed by two sources: company, title and place, normalised.
+    fingerprint: Mapped[str] = mapped_column(String(40), index=True)
+    first_seen_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+    last_seen_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+
+
+class SavedSearch(Base):
+    """What to look for, and how often. The first one is made from the
+    profile at the end of onboarding."""
+
+    __tablename__ = "saved_searches"
+    __table_args__ = (Index("ix_saved_searches_due", "daily", "next_run_at"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    name: Mapped[str] = mapped_column(String(80))
+    terms: Mapped[list[str]] = _list_column()  # "staff nurse", "research nurse"
+    locations: Mapped[list[str]] = _list_column()  # places; [] = anywhere in `countries`
+    countries: Mapped[list[str]] = _list_column()  # ISO codes; [] = anywhere
+    include_remote: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
+    sources: Mapped[list[str]] = _list_column()  # app/sources keys; [] = every enabled source
+    daily: Mapped[bool] = mapped_column(Boolean, default=True, server_default=text("true"))
+    next_run_at: Mapped[dt.datetime | None] = mapped_column(UtcDateTime, nullable=True)
+    last_run_at: Mapped[dt.datetime | None] = mapped_column(UtcDateTime, nullable=True)
+    created_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+    updated_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+
+    user: Mapped[User] = relationship(back_populates="searches")
+    runs: Mapped[list["SearchRun"]] = relationship(
+        back_populates="search", cascade="all, delete-orphan", order_by="SearchRun.created_at.desc()"
+    )
+
+
+RUN_STATUSES = ("queued", "running", "succeeded", "failed")
+
+
+class SearchRun(Base):
+    """One run of a saved search, done by the worker (app/search/runner.py)."""
+
+    __tablename__ = "search_runs"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    search_id: Mapped[str] = mapped_column(ForeignKey("saved_searches.id", ondelete="CASCADE"), index=True)
+    task_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
+    status: Mapped[str] = mapped_column(String(16), default="queued")
+    trigger: Mapped[str] = mapped_column(String(16), default="manual")  # manual / schedule / onboarding
+    counts: Mapped[dict] = mapped_column(JSON, default=dict)
+    errors: Mapped[list[dict]] = mapped_column(JSON, default=list)  # [{"source": "demo", "message": "..."}]
+    created_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+    started_at: Mapped[dt.datetime | None] = mapped_column(UtcDateTime, nullable=True)
+    finished_at: Mapped[dt.datetime | None] = mapped_column(UtcDateTime, nullable=True)
+
+    search: Mapped[SavedSearch] = relationship(back_populates="runs")
+
+
+JOB_STATES = ("new", "saved", "hidden")
+VERDICTS = ("match", "flagged", "filtered")
+
+
+class UserJob(Base):
+    """One person's view of a job: which of their roles it is, how it fares
+    against their deal-breakers (app/matching/evaluate.py), and whether
+    they've saved or hidden it."""
+
+    __tablename__ = "user_jobs"
+    __table_args__ = (
+        UniqueConstraint("user_id", "job_id", name="uq_user_jobs_user_job"),
+        Index("ix_user_jobs_list", "user_id", "verdict", "state"),
+    )
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    job_id: Mapped[str] = mapped_column(ForeignKey("jobs.id", ondelete="CASCADE"), index=True)
+    state: Mapped[str] = mapped_column(String(8), default="new")
+    target_id: Mapped[str | None] = mapped_column(ForeignKey("profile_targets.id", ondelete="SET NULL"), nullable=True)
+    role: Mapped[str] = mapped_column(String(80), default="")  # the target's label when last checked
+    level: Mapped[str] = mapped_column(String(16), default="")
+    verdict: Mapped[str] = mapped_column(String(8), default="match")
+    checks: Mapped[list[dict]] = mapped_column(JSON, default=list)
+    first_run_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
+    first_seen_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+    last_seen_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+    updated_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+
+    job: Mapped[Job] = relationship()
 
 
 TASK_STATUSES = ("queued", "running", "succeeded", "failed")

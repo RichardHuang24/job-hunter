@@ -15,6 +15,8 @@ x-api: &api
     DATABASE_URL: postgresql+psycopg://jobhunter:${POSTGRES_PASSWORD:?run scripts/setup-env.sh first}@db:5432/jobhunter
     BACKEND_JWT_SECRET: ${BACKEND_JWT_SECRET:?run scripts/setup-env.sh first}
     ENVIRONMENT: ${ENVIRONMENT:-development}
+    JOB_SOURCES: ${JOB_SOURCES:-demo}
+    COMMERCIAL_ONLY: ${COMMERCIAL_ONLY:-false}
 
 services:
   db:

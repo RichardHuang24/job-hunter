@@ -80,3 +80,78 @@ export type TitleCheck = {
   wanted: boolean;
   explanation: string;
 };
+
+export type Source = {
+  key: string;
+  label: string;
+  description: string;
+  homepage: string;
+  countries: string[];
+  commercial: boolean;
+  demo: boolean;
+};
+
+export type SearchWrite = {
+  name: string;
+  terms: string[];
+  locations: string[];
+  countries: string[];
+  include_remote: boolean;
+  sources: string[];
+  daily: boolean;
+};
+
+export type Run = {
+  id: string;
+  search_id: string;
+  status: "queued" | "running" | "succeeded" | "failed";
+  trigger: string;
+  counts: { queries?: number; found?: number; new?: number; matches?: number; flagged?: number; filtered?: number; by_source?: Record<string, number> };
+  errors: { source: string; message: string }[];
+  created_at: string;
+  started_at: string | null;
+  finished_at: string | null;
+};
+
+export type Search = SearchWrite & {
+  id: string;
+  next_run_at: string | null;
+  last_run_at: string | null;
+  created_at: string;
+  last_run: Run | null;
+};
+
+export type Check = { key: string; status: "pass" | "flag" | "fail" | "unknown"; detail: string };
+
+export type JobPosting = {
+  id: string;
+  source: string;
+  source_label: string;
+  demo: boolean;
+  url: string;
+  title: string;
+  company: string;
+  location: string;
+  country: string;
+  arrangement: string;
+  salary_min: number | null;
+  salary_max: number | null;
+  salary_currency: string;
+  salary_period: string;
+  posted_at: string | null;
+  description?: string;
+};
+
+export type UserJob = {
+  id: string;
+  state: "new" | "saved" | "hidden";
+  verdict: "match" | "flagged" | "filtered";
+  role: string;
+  level: Option;
+  checks: Check[];
+  first_seen_at: string;
+  job: JobPosting;
+};
+
+export type JobCounts = { matches: number; flagged: number; filtered: number; saved: number; hidden: number };
+export type JobList = { items: UserJob[]; total: number; counts: JobCounts };

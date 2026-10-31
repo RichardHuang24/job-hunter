@@ -27,3 +27,11 @@ def handler(kind: str) -> Callable[[Handler], Handler]:
 def ping(_session: Session, task: Task) -> dict[str, Any]:
     """Proves the queue end to end (the Docker smoke test enqueues one)."""
     return {"pong": task.payload.get("message", "")}
+
+
+@handler("search")
+def search(session: Session, task: Task) -> dict[str, Any]:
+    """Runs a saved search (app/search/runs.py)."""
+    from app.search.runs import run_task
+
+    return run_task(session, task.payload["run_id"])

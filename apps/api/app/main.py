@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.api.routes import health, me, presets
+from app.api.routes import health, jobs, me, presets, searches, sources
 from app.auth import check_secret
 from app.config import get_settings
 from app.presets import get_catalog
@@ -25,3 +25,6 @@ app = FastAPI(title="Job Hunter API", version="0.1.0", lifespan=lifespan)
 app.include_router(health.router)
 app.include_router(me.router)
 app.include_router(presets.router)
+app.include_router(sources.router)
+app.include_router(searches.router)
+app.include_router(jobs.router)
