@@ -29,6 +29,7 @@ class PresetsRead(BaseModel):
     language_levels: list[Option]
     countries: list[Option]  # key: ISO 3166-1 alpha-2 code
     currencies: list[str]
+    application_statuses: list[Option]
 
 
 class RoleRead(Option):

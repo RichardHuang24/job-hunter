@@ -136,6 +136,15 @@ result is stored in `job_scores`, one per user job. Every call is recorded
 in `ai_usage`, which the monthly allowance is checked against before each
 call. Details: [ai-scoring.md](ai-scoring.md).
 
+## Applications
+
+An application (`applications`) is made from one of the user's jobs - the
+job's title, company, place and link are copied in, so it outlives the
+posting - or added by hand. Each change of status adds a row to
+`application_events`, its history (`app/applications.py`). The CSV export
+prefixes any cell starting with `=`, `+`, `-` or `@` with an apostrophe, so
+a spreadsheet never runs it as a formula.
+
 ## CVs and files
 
 Each person's CV is structured data in `cvs` (`app/cv/schema.py`) - started
@@ -155,6 +164,6 @@ version. Details: [billing.md](billing.md).
 
 ## Where the rest goes
 
-See [roadmap.md](roadmap.md). The applications tracker, tailored CVs and
+See [roadmap.md](roadmap.md). Tailored CVs, more job boards and
 paid plans all follow the same rules: data scoped to the user, slow work on
 the worker, every call through the API.

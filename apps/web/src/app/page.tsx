@@ -9,13 +9,62 @@ import TitleCheck from "@/components/TitleCheck";
 import { isActive, runSummary, salaryRange, since } from "@/lib/jobs";
 import { formatSalary, labelOf, listOf } from "@/lib/profile";
 import { backendGet } from "@/lib/session";
-import type { AiStatus, JobList, Me, Presets, Search } from "@/lib/types";
+import { due, STATUS_LABELS } from "@/lib/applications";
+import type { AiStatus, ApplicationList, JobList, Me, Presets, Search } from "@/lib/types";
 
 // What the app will do, in the order it arrives (docs/roadmap.md).
 const COMING = [
-  { title: "Applications", body: "Tracks where every application stands." },
   { title: "Tailored CVs", body: "A version of your CV for each job, built from the posting." },
+  { title: "More job boards", body: "On-site and hybrid jobs from boards for your country." },
 ];
+
+const TONES = { late: "text-red-700 dark:text-red-400", soon: "text-amber-700 dark:text-amber-400", later: "text-ink-secondary" };
+
+function ApplicationsCard({ list }: { list: ApplicationList }) {
+  const { counts } = list;
+  const shown = ["planned", "applied", "interviewing", "offer"].filter((key) => counts.by_status[key]);
+  return (
+    <Card
+      title="Applications"
+      subtitle={counts.active ? `${counts.active} in progress${counts.closed ? `, ${counts.closed} closed` : ""}` : "None in progress yet."}
+      action={
+        <Link href="/applications?sort=next_step" className="shrink-0 rounded-lg border border-edge px-3 py-1.5 text-sm hover:bg-ink/[0.04]">
+          All
+        </Link>
+      }
+    >
+      {shown.length > 0 && (
+        <p className="mb-3 text-sm text-ink-secondary">
+          {shown.map((key) => `${counts.by_status[key]} ${STATUS_LABELS[key].toLowerCase()}`).join(" · ")}
+        </p>
+      )}
+      {list.items.some((a) => a.next_step_on) ? (
+        <ul className="flex flex-col divide-y divide-hairline">
+          {list.items
+            .filter((a) => a.next_step_on)
+            .map((a) => {
+              const when = due(a.next_step_on!);
+              return (
+                <li key={a.id} className="flex items-baseline justify-between gap-3 py-2 text-sm first:pt-0 last:pb-0">
+                  <span className="min-w-0">
+                    <span className="font-medium">{a.next_step || "Next step"}</span>
+                    <span className="text-ink-secondary"> · {a.title}{a.company ? `, ${a.company}` : ""}</span>
+                  </span>
+                  <span className={`shrink-0 text-xs ${TONES[when.tone]}`} suppressHydrationWarning>
+                    {when.text}
+                  </span>
+                </li>
+              );
+            })}
+        </ul>
+      ) : (
+        <p className="text-sm text-ink-secondary">
+          {counts.active ? "No next steps with a date. Add one to an application to see it here." : "Open a job under Jobs and press “I’ve applied” to track it."}
+        </p>
+      )}
+    </Card>
+  );
+}
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
@@ -27,12 +76,13 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
 }
 
 export default async function DashboardPage() {
-  const [me, presets, jobs, searches, ai] = await Promise.all([
+  const [me, presets, jobs, searches, ai, applications] = await Promise.all([
     backendGet<Me>("/me"),
     backendGet<Presets>("/presets"),
     backendGet<JobList>("/jobs?view=matches&sort=fit&limit=5"),
     backendGet<Search[]>("/searches"),
     backendGet<AiStatus>("/me/ai"),
+    backendGet<ApplicationList>("/applications?view=active&sort=next_step&limit=4"),
   ]);
   if (!me) return <ErrorBanner message="The API isn't answering. Check that it's running (see the README), then reload." />;
   const profile = me.profile;
@@ -130,6 +180,7 @@ export default async function DashboardPage() {
         </div>
 
         <div className="flex flex-col gap-4">
+        {applications && <ApplicationsCard list={applications} />}
         {ai && <AiCard ai={ai} />}
         <Card title="Coming next" subtitle="Each of these joins the menu when it’s ready.">
           <ol className="flex flex-col divide-y divide-hairline">

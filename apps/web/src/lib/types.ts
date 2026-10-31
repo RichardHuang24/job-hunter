@@ -49,6 +49,7 @@ export type Presets = {
   arrangements: Option[];
   salary_periods: Option[];
   language_levels: Option[];
+  application_statuses: Option[];
   countries: Option[];
   currencies: string[];
 };
@@ -155,6 +156,7 @@ export type UserJob = {
   first_seen_at: string;
   job: JobPosting;
   score: ScoreBrief | Score | null;
+  application: { id: string; status: string } | null;
 };
 
 export type JobCounts = { matches: number; flagged: number; filtered: number; saved: number; hidden: number };
@@ -231,3 +233,27 @@ export type CvDocument = {
 };
 
 export type Cv = { content: CvContent; saved: boolean; updated_at: string | null; documents: CvDocument[] };
+
+export type ApplicationEvent = { kind: "created" | "status"; status: string; at: string };
+
+export type Application = {
+  id: string;
+  user_job_id: string | null;
+  title: string;
+  company: string;
+  location: string;
+  url: string;
+  status: string;
+  applied_on: string | null;
+  next_step: string;
+  next_step_on: string | null;
+  notes: string;
+  job_closed: boolean;
+  created_at: string;
+  updated_at: string;
+  events?: ApplicationEvent[];
+};
+
+export type ApplicationCounts = { active: number; closed: number; by_status: Record<string, number> };
+
+export type ApplicationList = { items: Application[]; total: number; counts: ApplicationCounts };

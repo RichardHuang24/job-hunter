@@ -14,7 +14,7 @@ from __future__ import annotations
 import datetime as dt
 import uuid
 
-from sqlalchemy import JSON, BigInteger, Boolean, DateTime, Float, ForeignKey, Index, Integer, String, Text, UniqueConstraint, false, text
+from sqlalchemy import JSON, BigInteger, Boolean, Date, DateTime, Float, ForeignKey, Index, Integer, String, Text, UniqueConstraint, false, func, text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -321,6 +321,59 @@ class AiUsage(Base):
     cache_write_tokens: Mapped[int] = mapped_column(Integer, default=0)
     cost_usd: Mapped[float] = mapped_column(Float, default=0.0)
     created_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+
+
+APPLICATION_STATUSES: tuple[tuple[str, str], ...] = (
+    ("planned", "To apply"), ("applied", "Applied"), ("interviewing", "Interviewing"), ("offer", "Offer"),
+    ("accepted", "Accepted"), ("rejected", "Rejected"), ("withdrawn", "Withdrawn"), ("no_response", "No response"),
+)
+ACTIVE_STATUSES = ("planned", "applied", "interviewing", "offer")  # the rest are closed
+
+
+class Application(Base):
+    """A job someone has applied for, or means to - from their jobs, or added
+    by hand. The job's details are copied in, so the application keeps them
+    if the posting closes; `events` is its history of statuses."""
+
+    __tablename__ = "applications"
+    __table_args__ = (
+        UniqueConstraint("user_job_id", name="uq_applications_user_job"),
+        Index("ix_applications_user", "user_id", "status"),
+    )
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    user_job_id: Mapped[str | None] = mapped_column(ForeignKey("user_jobs.id", ondelete="SET NULL"), nullable=True)
+    title: Mapped[str] = mapped_column(String(300))
+    company: Mapped[str] = mapped_column(String(200), default="")
+    location: Mapped[str] = mapped_column(String(200), default="")
+    url: Mapped[str] = mapped_column(Text, default="")
+    status: Mapped[str] = mapped_column(String(16), default="applied")
+    applied_on: Mapped[dt.date | None] = mapped_column(Date, nullable=True)
+    next_step: Mapped[str] = mapped_column(String(200), default="")  # "Phone screen with the ward manager"
+    next_step_on: Mapped[dt.date | None] = mapped_column(Date, nullable=True)
+    notes: Mapped[str] = mapped_column(Text, default="")
+    created_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+    updated_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+
+    events: Mapped[list["ApplicationEvent"]] = relationship(
+        back_populates="application", cascade="all, delete-orphan",
+        order_by="(ApplicationEvent.at, ApplicationEvent.id)")
+
+
+class ApplicationEvent(Base):
+    """A step in an application's history: made, or moved to a status."""
+
+    __tablename__ = "application_events"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    application_id: Mapped[str] = mapped_column(ForeignKey("applications.id", ondelete="CASCADE"), index=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    kind: Mapped[str] = mapped_column(String(16))  # created, status
+    status: Mapped[str] = mapped_column(String(16))
+    at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+
+    application: Mapped[Application] = relationship(back_populates="events")
 
 
 class Cv(Base):

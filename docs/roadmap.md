@@ -63,10 +63,14 @@ terms are cleared ([third-party.md](third-party.md)).
 - A monthly allowance per user (scores and dollars), a usage ledger with
   the cost of every call, and "best fit first" sorting.
 
-## 4. Applications
+## 4. Applications - done
 
-- Track each application from saved to offer, with dates and notes.
-- A dashboard of where everything stands.
+- Track each application from "to apply" to an answer - from one of your
+  jobs ("I've applied") or added by hand - with the date applied, the next
+  step and when, notes, and a history of every status it's had.
+- Lists by status, sorted by what's changed or what's next; the next steps
+  on the dashboard; the job's status shown on its card.
+- Export everything as CSV, safe to open in a spreadsheet.
 
 ## 5. CV workbench - started
 

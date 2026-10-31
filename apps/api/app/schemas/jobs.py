@@ -6,6 +6,7 @@ from typing import Literal
 
 from pydantic import BaseModel
 
+from app.schemas.applications import TrackedRead
 from app.schemas.me import Named, UtcDatetime
 
 
@@ -103,6 +104,7 @@ class UserJobRead(BaseModel):
     first_seen_at: UtcDatetime
     job: JobRead
     score: ScoreBrief | None
+    application: TrackedRead | None = None  # tracked under Applications
 
 
 class UserJobDetail(UserJobRead):

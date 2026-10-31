@@ -23,6 +23,7 @@ export function TextField({
   placeholder,
   maxLength = 255,
   inputMode,
+  type = "text",
 }: {
   label: string;
   value: string;
@@ -31,6 +32,7 @@ export function TextField({
   placeholder?: string;
   maxLength?: number;
   inputMode?: "numeric" | "text";
+  type?: "text" | "date" | "url";
 }) {
   const id = useId();
   return (
@@ -45,6 +47,7 @@ export function TextField({
         placeholder={placeholder}
         maxLength={maxLength}
         inputMode={inputMode}
+        type={type}
         className={`mt-1 ${INPUT}`}
       />
       <Hint>{hint}</Hint>

@@ -27,7 +27,7 @@ from pathlib import Path
 
 from playwright.sync_api import Page, expect, sync_playwright
 
-PAGES = ("/", "/jobs", "/jobs?sort=fit", "/jobs/searches", "/cv", "/settings")
+PAGES = ("/", "/jobs", "/jobs?sort=fit", "/jobs/searches", "/applications", "/cv", "/settings")
 
 
 def step(label: str) -> None:
@@ -99,6 +99,10 @@ def run(page: Page, web: str, mailpit: str, errors: list[str]) -> dict:
     expect(page.get_by_role("heading", name="Against your profile")).to_be_visible()
     step("a job opens with its fit explained and its checks")
 
+    page.get_by_role("button", name="I've applied").click()
+    expect(page.get_by_text("Tracked as")).to_be_visible()
+    step("a job can be tracked as applied")
+
     card = page.locator("li").filter(has=job)
     card.get_by_role("button", name="Save").click()
     expect(card.get_by_role("button", name="Unsave")).to_be_visible()
@@ -110,7 +114,9 @@ def run(page: Page, web: str, mailpit: str, errors: list[str]) -> dict:
     expect(page.get_by_text(re.compile("you’re after mid level or senior"))).to_be_visible()
     step("filtered-out jobs say why")
 
-    page.get_by_role("link", name=re.compile("^Matches")).click()
+    matches = page.get_by_role("link", name=re.compile("^Matches"))
+    matches.click()
+    expect(matches).to_have_attribute("aria-current", "page")  # the matches page has loaded
     page.get_by_role("link", name="Best fit").click()
     page.wait_for_url("**sort=fit**")
     page.wait_for_load_state("networkidle")
@@ -127,6 +133,25 @@ def run(page: Page, web: str, mailpit: str, errors: list[str]) -> dict:
     page.get_by_role("button", name="Check", exact=True).click()
     expect(page.get_by_text("Would be included")).to_be_visible()
     step("the searches and settings pages work")
+
+    page.get_by_role("link", name="Applications", exact=True).click()
+    page.wait_for_url("**/applications")
+    row = page.locator("li").filter(has_text="Staff Nurse - Acute Medicine")
+    expect(row).to_be_visible()
+    row.get_by_label("Status of Staff Nurse - Acute Medicine").select_option("interviewing")
+    expect(page.get_by_role("link", name=re.compile(r"^Interviewing\s+1"))).to_be_visible()
+    row.get_by_role("button", name=re.compile("Staff Nurse - Acute Medicine")).click()
+    row.get_by_label("Next step").fill("Panel interview")
+    row.get_by_label("When").fill("2030-01-15")
+    row.get_by_role("button", name="Save").click()
+    expect(row.get_by_text("Next: Panel interview · 15 Jan 2030")).to_be_visible()
+    with page.expect_download() as info:
+        page.get_by_role("link", name="Export as CSV").click()
+    csv_text = Path(info.value.path()).read_text(encoding="utf-8-sig")
+    assert csv_text.startswith("Company,Job title") and "Panel interview" in csv_text, csv_text[:200]
+    page.goto(f"{web}/")
+    expect(page.get_by_text("Panel interview")).to_be_visible()
+    step("applications move through statuses, show their next step, and export as CSV")
 
     page.get_by_role("link", name="CV", exact=True).click()
     page.wait_for_url("**/cv")

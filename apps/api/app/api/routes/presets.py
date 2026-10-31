@@ -6,6 +6,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException
 
 from app.auth import current_user
+from app.db.models import APPLICATION_STATUSES
 from app.presets import ARRANGEMENTS, LANGUAGE_LEVELS, SALARY_PERIODS, get_catalog
 from app.schemas.presets import IndustryRead, MarketRead, PresetsRead
 
@@ -28,6 +29,7 @@ def get_presets() -> dict:
         "language_levels": _options(LANGUAGE_LEVELS),
         "countries": _options(catalog.countries.items()),
         "currencies": list(catalog.currencies),
+        "application_statuses": _options(APPLICATION_STATUSES),
     }
 
 

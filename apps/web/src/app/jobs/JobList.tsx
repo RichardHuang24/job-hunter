@@ -3,7 +3,9 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import FitBadge from "@/components/FitBadge";
+import Link from "next/link";
 import { api, ApiError } from "@/lib/api";
+import { STATUS_LABELS } from "@/lib/applications";
 import { ARRANGEMENTS, daysAgo, salaryRange } from "@/lib/jobs";
 import type { Check, Evidence, Score, UserJob } from "@/lib/types";
 
@@ -175,6 +177,45 @@ function Fit({ score, onScore, busy }: { score: Score | null; onScore: () => voi
   );
 }
 
+function Track({ item }: { item: UserJob }) {
+  const router = useRouter();
+  const [tracked, setTracked] = useState(item.application);
+  const [error, setError] = useState<string | null>(null);
+
+  async function track(status: string) {
+    setError(null);
+    try {
+      const made = await api<{ id: string; status: string }>("/applications", { method: "POST", body: JSON.stringify({ user_job_id: item.id, status }) });
+      setTracked({ id: made.id, status: made.status });
+      router.refresh();
+    } catch (failure) {
+      setError(failure instanceof Error ? failure.message : "Couldn't track it.");
+    }
+  }
+
+  if (tracked) {
+    return (
+      <p className="text-sm text-ink-secondary">
+        Tracked as <span className="font-medium text-ink">{STATUS_LABELS[tracked.status] ?? tracked.status}</span> ·{" "}
+        <Link href="/applications?view=all" className="underline underline-offset-2">
+          Open in Applications
+        </Link>
+      </p>
+    );
+  }
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <button type="button" onClick={() => track("applied")} className="h-9 rounded-lg bg-foreground px-3.5 text-sm font-medium text-background hover:opacity-90">
+        I&apos;ve applied
+      </button>
+      <button type="button" onClick={() => track("planned")} className="h-9 rounded-lg border border-edge px-3.5 text-sm hover:bg-ink/[0.04]">
+        Plan to apply
+      </button>
+      {error && <p className="text-sm text-red-700 dark:text-red-400">{error}</p>}
+    </div>
+  );
+}
+
 function Detail({ item, onScore, busy }: { item: UserJob; onScore: () => void; busy: boolean }) {
   const [full, setFull] = useState<UserJob | null>(null);
   const [failed, setFailed] = useState(false);
@@ -192,13 +233,20 @@ function Detail({ item, onScore, busy }: { item: UserJob; onScore: () => void; b
   const score = (full?.score as Score | null | undefined) ?? null;
   if (item.job.closed) {
     return (
-      <div className="border-t border-hairline px-4 py-4 text-sm text-ink-secondary sm:px-5">
-        This job has closed, so its posting is no longer shown. Hide it to tidy up, or keep it saved as a reminder.
+      <div className="flex flex-col gap-3 border-t border-hairline px-4 py-4 text-sm text-ink-secondary sm:px-5">
+        <p>This job has closed, so its posting is no longer shown. Hide it to tidy up, or keep it saved as a reminder.</p>
+        {item.application && <Track item={item} />}
       </div>
     );
   }
   return (
     <div className="flex flex-col gap-5 border-t border-hairline px-4 py-4 sm:px-5">
+      <section>
+        <Heading>Application</Heading>
+        <div className="mt-2">
+          <Track item={item} />
+        </div>
+      </section>
       <section>
         <Heading>Fit</Heading>
         <div className="mt-2">{full ? <Fit score={item.score?.status === "queued" ? { ...(score as Score), status: "queued" } : score} onScore={onScore} busy={busy} /> : <p className="text-sm text-ink-muted">Loading...</p>}</div>
@@ -296,6 +344,9 @@ export default function JobList({ initial, view }: { initial: UserJob[]; view: s
                       {job.demo && <span className="rounded-md border border-dashed border-edge px-1.5 py-0.5 text-ink-muted">Sample</span>}
                       {job.closed && <span className="rounded-md border border-edge px-1.5 py-0.5 text-ink-secondary">Closed</span>}
                       {item.state === "saved" && view !== "saved" && <span className="rounded-md bg-foreground px-1.5 py-0.5 text-background">Saved</span>}
+                      {item.application && (
+                        <span className="rounded-md border border-foreground/40 px-1.5 py-0.5 font-medium">{STATUS_LABELS[item.application.status] ?? item.application.status}</span>
+                      )}
                       {problem && (
                         <span className={problem.status === "fail" ? "text-red-700 dark:text-red-400" : "text-amber-700 dark:text-amber-400"}>{problem.detail}</span>
                       )}

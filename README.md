@@ -7,10 +7,10 @@ Find, rank and track jobs, and build a tailored CV for each one - for any
 industry, not just tech. Self-hosted, multi-user, open source.
 
 > **Status: early development.** Accounts, onboarding, profiles with
-> industry presets, job search with deal-breaker checks, AI fit scoring and
-> CV PDFs work today. Real jobs come from two free remote-job boards,
-> Himalayas and Jobicy; job boards for on-site work come next, with the
-> applications tracker and tailored CVs - see the [roadmap](docs/roadmap.md).
+> industry presets, job search with deal-breaker checks, AI fit scoring,
+> application tracking and CV PDFs work today. Real jobs come from two free
+> remote-job boards, Himalayas and Jobicy; job boards for on-site work and
+> tailored CVs come next - see the [roadmap](docs/roadmap.md).
 
 ![Setting up a nurse's profile, then the matches sorted by fit, one job's fit explained, and the jobs left out with the reasons](docs/images/walkthrough.gif)
 
@@ -36,6 +36,9 @@ industry, not just tech. Self-hosted, multi-user, open source.
   dimension, requirements quoted from the posting (and checked to be there),
   gaps and risks; best fit first. Without an Anthropic API key a free,
   clearly labelled simulated scorer stands in ([docs/ai-scoring.md](docs/ai-scoring.md)).
+- **Applications**: track each job from "to apply" to an answer, with the
+  next step and when, notes, and a history of every status - from a job
+  here or added by hand - and export them all as CSV.
 - **Your CV as plain facts, and a PDF of it on demand**: started from your
   profile, edited on the CV page, built with LuaLaTeX on the worker - with
   every character you type escaped, so nothing in a CV can run as code

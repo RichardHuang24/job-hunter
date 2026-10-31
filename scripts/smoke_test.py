@@ -2,7 +2,8 @@
 """Checks a running Job Hunter end to end, the way a person would use it:
 signs in by email (reading the link from Mailpit), goes through the setup,
 waits for the worker to run the first job search and checks what it found
-and how it was scored (simulated, with no API key), builds a CV PDF with
+and how it was scored (simulated, with no API key), tracks an application
+and exports applications as CSV, builds a CV PDF with
 LaTeX and downloads it from storage, checks a few job titles, edits the
 target roles, checks the API door refuses what it should, signs out. Needs
 the worker running. With SMOKE_STRIPE_WEBHOOK_SECRET set (and billing on),
@@ -226,6 +227,22 @@ def main() -> int:
           and all(d["reason"] for d in detail["dimensions"]), detail)
     status, _, page = browser.get("/jobs")
     check("the jobs page lists them", status == 200 and "Staff Nurse - Acute Medicine" in page and "Search now" in page, status)
+
+    acute = next(i for i in view("matches")["items"] if i["job"]["title"] == "Staff Nurse - Acute Medicine")
+    status, _, body = browser.json("POST", "/api/backend/applications", {"user_job_id": acute["id"]})
+    application = json.loads(body)
+    check("a job can be tracked as applied", status == 201 and application["status"] == "applied"
+          and application["company"] == "Contoso Health" and application["applied_on"], body[:300])
+    status, _, body = browser.json("PATCH", f"/api/backend/applications/{application['id']}",
+                                   {"status": "interviewing", "next_step": "Panel interview", "next_step_on": "2030-01-15"})
+    moved = json.loads(body)
+    check("and moved on, keeping its history", status == 200 and [e["status"] for e in moved["events"]] == ["applied", "interviewing"],
+          body[:300])
+    status, headers, csv_text = browser.get("/api/backend/applications/export.csv")
+    check("applications export as CSV", status == 200 and headers.get("content-type", "").startswith("text/csv")
+          and "Staff Nurse - Acute Medicine" in csv_text and "Interviewing" in csv_text, (status, headers.get("content-type")))
+    status, _, page = browser.get("/applications")
+    check("the applications page lists it", status == 200 and "Staff Nurse - Acute Medicine" in page and "Panel interview" in page, status)
     status, _, page = browser.get("/jobs/searches")
     check("the searches page renders", status == 200 and "From your profile" in page, status)
 

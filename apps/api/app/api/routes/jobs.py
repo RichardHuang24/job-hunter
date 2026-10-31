@@ -16,6 +16,7 @@ from app.auth import current_user
 from app.db.models import Job, JobScore, User, UserJob
 from app.db.session import get_db
 from app.presets import get_catalog
+from app import applications
 from app.schemas.jobs import JobList, JobPatch, ScoreRead, UserJobDetail, UserJobRead
 from app.scoring import service as scoring
 from app.sources import SOURCES
@@ -50,7 +51,8 @@ def _job(job: Job, detail: bool = False) -> dict:
     return out
 
 
-def _read(user_job: UserJob, job: Job, labels: dict[str, str], context: scoring.Context, detail: bool = False) -> dict:
+def _read(user_job: UserJob, job: Job, labels: dict[str, str], context: scoring.Context, detail: bool = False,
+          tracked: dict[str, dict] | None = None) -> dict:
     score = user_job.score
     digest = context.request(user_job, job)[1] if score is not None else None
     return {
@@ -58,6 +60,7 @@ def _read(user_job: UserJob, job: Job, labels: dict[str, str], context: scoring.
         "level": {"key": user_job.level, "label": labels.get(user_job.level, user_job.level)},
         "checks": user_job.checks, "first_seen_at": user_job.first_seen_at, "job": _job(job, detail),
         "score": (scoring.full if detail else scoring.brief)(score, digest),
+        "application": (tracked or {}).get(user_job.id),
     }
 
 
@@ -96,7 +99,8 @@ def list_jobs(view: View = "matches", q: str = Query("", max_length=100), sort: 
     for state, n in by_state:
         counts[state] += n
     labels, context = _labels(), scoring.Context.of(user)
-    return {"items": [_read(uj, job, labels, context) for uj, job in rows], "total": total, "counts": counts}
+    tracked = applications.tracked(db, [uj.id for uj, _ in rows])
+    return {"items": [_read(uj, job, labels, context, tracked=tracked) for uj, job in rows], "total": total, "counts": counts}
 
 
 def _mine(db: Session, user: User, user_job_id: str) -> tuple[UserJob, Job]:
@@ -109,7 +113,8 @@ def _mine(db: Session, user: User, user_job_id: str) -> tuple[UserJob, Job]:
 @router.get("/{user_job_id}", response_model=UserJobDetail)
 def get_job(user_job_id: str, user: User = Depends(current_user), db: Session = Depends(get_db)) -> dict:
     user_job, job = _mine(db, user, user_job_id)
-    return _read(user_job, job, _labels(), scoring.Context.of(user), detail=True)
+    return _read(user_job, job, _labels(), scoring.Context.of(user), detail=True,
+                 tracked=applications.tracked(db, [user_job.id]))
 
 
 @router.patch("/{user_job_id}", response_model=UserJobRead)
@@ -119,7 +124,7 @@ def patch_job(user_job_id: str, payload: JobPatch, user: User = Depends(current_
     user_job.state = payload.state
     user_job.updated_at = dt.datetime.now(dt.UTC)
     db.commit()
-    return _read(user_job, job, _labels(), scoring.Context.of(user))
+    return _read(user_job, job, _labels(), scoring.Context.of(user), tracked=applications.tracked(db, [user_job.id]))
 
 
 @router.post("/{user_job_id}/score", response_model=ScoreRead, status_code=202)
