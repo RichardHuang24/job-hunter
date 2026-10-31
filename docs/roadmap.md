@@ -68,14 +68,20 @@ terms are cleared ([third-party.md](third-party.md)).
 - Track each application from saved to offer, with dates and notes.
 - A dashboard of where everything stands.
 
-## 5. CV workbench
+## 5. CV workbench - started
 
-- CV content kept as structured data, with a tailored PDF per job.
-- Storage for generated documents.
+- Done: each person's CV kept as structured data, started from their
+  profile, edited on the CV page; a PDF built with LuaLaTeX on the worker,
+  with all text escaped and LaTeX sealed off ([cv.md](cv.md)); generated
+  files in S3-compatible storage - a gateway in the stack, or R2 or S3.
+- To come: a tailored version per job, built from the posting.
 
 ## 6. Hosted version
 
-- Billing with Stripe, usage limits per plan.
-- A public demo.
+- Done: billing's switch (off by default) and Stripe's signed webhook,
+  recording each event once; the Stripe CLI for development
+  ([billing.md](billing.md)).
+- To come: plans and prices, checkout, usage limits per plan, and a public
+  demo.
 
 Self-hosting stays free under the AGPL.

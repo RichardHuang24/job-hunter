@@ -19,7 +19,15 @@ its own license:
 | [SQLAlchemy](https://www.sqlalchemy.org), [Alembic](https://alembic.sqlalchemy.org) | Database models, migrations | MIT |
 | [psycopg](https://www.psycopg.org) | API's Postgres driver | LGPL-3.0 |
 | [PyJWT](https://pyjwt.readthedocs.io) | Checking API tokens | MIT |
-| [HTTPX](https://github.com/encode/httpx) (`httpx2`) | Calling job sources | BSD-3-Clause |
+| [httpx2](https://pypi.org/project/httpx2/) | Calling job sources | BSD-3-Clause |
+| [boto3](https://github.com/boto/boto3) | File storage over the S3 API | Apache-2.0 |
+| [Stripe Python library](https://github.com/stripe/stripe-python) | Checking Stripe webhook signatures | MIT |
+| [TeX Live](https://tug.org/texlive/): LuaLaTeX, fontspec, geometry, xcolor, enumitem, hyperref | Building CV PDFs (installed from Debian in the API image) | LPPL-1.3c and GPL-2.0-or-later, per package |
+| [Lato](https://www.latofonts.com) (`fonts-lato`) | The CV font, embedded in each PDF | OFL-1.1 |
+| [DejaVu fonts](https://dejavu-fonts.github.io) (`fonts-dejavu-core`) | Characters Lato lacks, in CV PDFs | Bitstream Vera license |
+| [Versity S3 Gateway](https://github.com/versity/versitygw) | The file store in the Docker setup | Apache-2.0 |
+| [Stripe CLI](https://github.com/stripe/stripe-cli) | Forwarding Stripe test events in development (`--profile billing`) | Apache-2.0 |
+| [Playwright](https://playwright.dev), [Pillow](https://python-pillow.org) | The browser test and the README pictures (development only) | Apache-2.0, MIT-CMU |
 | [Anthropic Python SDK](https://github.com/anthropics/anthropic-sdk-python) | AI scoring | Apache-2.0 |
 | [PostgreSQL](https://www.postgresql.org) | Database | PostgreSQL License |
 | [Caddy](https://caddyserver.com) | HTTPS in production | Apache-2.0 |
@@ -34,6 +42,8 @@ The exact versions are in `apps/web/package-lock.json` and
 | --- | --- | --- |
 | [Anthropic API](https://www.anthropic.com/api) (Claude) | AI scoring - your profile and the posting are sent; see [ai-scoring.md](ai-scoring.md) | Only when `ANTHROPIC_API_KEY` is set |
 | [Himalayas API](https://himalayas.app/api), [Jobicy API](https://jobicy.com/jobs-rss-feed) | Remote job listings - only the search terms and countries are sent, never anything about a person | When `JOB_SOURCES` includes them |
+| [Stripe](https://stripe.com) | Billing - Stripe sends events to the webhook; nothing about a person is sent to Stripe yet | Only when `BILLING_ENABLED=true` |
+| Cloudflare R2, AWS S3 or another S3-compatible service | Keeping generated files (CV PDFs) instead of the built-in file store | Only when `S3_*` point there |
 
 ## Job data
 

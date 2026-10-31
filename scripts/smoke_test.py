@@ -2,9 +2,11 @@
 """Checks a running Job Hunter end to end, the way a person would use it:
 signs in by email (reading the link from Mailpit), goes through the setup,
 waits for the worker to run the first job search and checks what it found
-and how it was scored (simulated, with no API key),
-checks a few job titles, edits the target roles, checks the API door
-refuses what it should, signs out. Needs the worker running.
+and how it was scored (simulated, with no API key), builds a CV PDF with
+LaTeX and downloads it from storage, checks a few job titles, edits the
+target roles, checks the API door refuses what it should, signs out. Needs
+the worker running. With SMOKE_STRIPE_WEBHOOK_SECRET set (and billing on),
+it also sends Stripe's webhook a signed event and a forged one.
 
     docker compose up --build -d
     python3 scripts/smoke_test.py            # defaults suit docker-compose.yml
@@ -17,8 +19,11 @@ a new user (smoke-<random>@example.com). Standard library only.
 from __future__ import annotations
 
 import argparse
+import hashlib
+import hmac
 import html
 import json
+import os
 import re
 import sys
 import time
@@ -122,6 +127,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="End-to-end check of a running Job Hunter.")
     parser.add_argument("--web", default="http://localhost:3420")
     parser.add_argument("--mailpit", default="http://localhost:8025")
+    parser.add_argument("--api", default="http://localhost:8420", help="the API itself, for the Stripe webhook")
     args = parser.parse_args()
     address = f"smoke-{uuid.uuid4().hex[:10]}@example.com"
     browser = Client(args.web)
@@ -222,6 +228,45 @@ def main() -> int:
     check("the jobs page lists them", status == 200 and "Staff Nurse - Acute Medicine" in page and "Search now" in page, status)
     status, _, page = browser.get("/jobs/searches")
     check("the searches page renders", status == 200 and "From your profile" in page, status)
+
+    status, _, body = browser.get("/api/backend/cv")
+    cv = json.loads(body)
+    check("the CV starts from the profile", status == 200 and not cv["saved"] and cv["content"]["name"] == "Smoke Test"
+          and cv["content"]["email"] == address, body[:300])
+    content = {**cv["content"], "phone": "+44 7700 900123",  # Ofcom's range for fiction, not a real number - public-data: ok
+               "experience": [{"title": "Staff Nurse", "employer": "Contoso Health", "location": "Manchester",
+                               "start": "2022", "bullets": ["Led a team of 6 & cut errors by 30% {really}"]}],
+               "education": [{"qualification": "BSc Adult Nursing", "institution": "University of Manchester"}]}
+    status, _, body = browser.json("PUT", "/api/backend/cv", content)
+    check("the CV saves", status == 200 and json.loads(body)["saved"], body[:300])
+    status, _, body = browser.request("POST", "/api/backend/cv/pdf")
+    document = json.loads(body)
+    check("a CV PDF is queued", status == 202 and document["status"] == "queued", body[:300])
+    deadline = time.monotonic() + 120
+    while document["status"] == "queued" and time.monotonic() < deadline:
+        time.sleep(1)
+        document = json.loads(browser.get(f"/api/backend/documents/{document['id']}")[2])
+    check("the worker built it with LaTeX", document["status"] == "done" and document["pages"] >= 1, document)
+    status, headers, pdf = browser.get(f"/api/backend/documents/{document['id']}/file")
+    check("and it downloads from storage as a PDF", status == 200 and pdf.startswith("%PDF")
+          and headers.get("content-type") == "application/pdf"
+          and 'filename="CV - Smoke Test.pdf"' in headers.get("content-disposition", ""), (status, headers))
+    status, _, page = browser.get("/cv")
+    check("the CV page renders", status == 200 and "Your CV" in page and "CV - Smoke Test.pdf" in page, status)
+
+    secret = os.environ.get("SMOKE_STRIPE_WEBHOOK_SECRET", "")
+    if secret:
+        api = Client(args.api)
+        event = json.dumps({"id": f"evt_smoke_{uuid.uuid4().hex[:16]}", "object": "event", "type": "smoke.test",
+                            "livemode": False}).encode()
+        at = int(time.time())
+        signature = hmac.new(secret.encode(), f"{at}.".encode() + event, hashlib.sha256).hexdigest()
+        status, _, body = api.request("POST", "/billing/webhook", event,
+                                      {"content-type": "application/json", "stripe-signature": f"t={at},v1={signature}"})
+        check("a signed Stripe event reaches the API", status == 200 and json.loads(body).get("duplicate") is False, body)
+        status, _, _ = api.request("POST", "/billing/webhook", event,
+                                   {"content-type": "application/json", "stripe-signature": f"t={at},v1={'0' * 64}"})
+        check("and a forged one is refused", status == 400, status)
     status, headers, _ = browser.get("/onboarding")
     check("the setup now leads to settings", status == 307 and "/settings" in headers.get("location", ""), status)
 

@@ -323,6 +323,51 @@ class AiUsage(Base):
     created_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
 
 
+class Cv(Base):
+    """A person's CV as structured data (app/cv/schema.py). One per person;
+    until they save it, the CV page starts from their profile."""
+
+    __tablename__ = "cvs"
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
+    content: Mapped[dict] = mapped_column(JSON, default=dict)
+    created_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+    updated_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+
+
+class Document(Base):
+    """A file made for someone - a CV PDF, built by the worker and kept in
+    storage (app/storage.py) under `storage_key`."""
+
+    __tablename__ = "documents"
+    __table_args__ = (Index("ix_documents_user", "user_id", "requested_at"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    kind: Mapped[str] = mapped_column(String(16), default="cv")
+    status: Mapped[str] = mapped_column(String(8), default="queued")  # queued, done, failed
+    filename: Mapped[str] = mapped_column(String(200), default="")  # what it downloads as
+    storage_key: Mapped[str] = mapped_column(String(255), default="")
+    size_bytes: Mapped[int] = mapped_column(Integer, default=0)
+    pages: Mapped[int] = mapped_column(Integer, default=0)
+    error: Mapped[str] = mapped_column(Text, default="")
+    requested_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+    finished_at: Mapped[dt.datetime | None] = mapped_column(UtcDateTime, nullable=True)
+
+
+class BillingEvent(Base):
+    """Every Stripe webhook event received, once (Stripe retries), so billing
+    can be rebuilt from them (app/billing.py)."""
+
+    __tablename__ = "billing_events"
+
+    id: Mapped[str] = mapped_column(String(255), primary_key=True)  # Stripe's event id, evt_...
+    type: Mapped[str] = mapped_column(String(100))
+    livemode: Mapped[bool] = mapped_column(Boolean, default=False)
+    payload: Mapped[dict] = mapped_column(JSON, default=dict)
+    received_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+
+
 TASK_STATUSES = ("queued", "running", "succeeded", "failed")
 
 

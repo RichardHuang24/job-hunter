@@ -26,6 +26,17 @@ x-api: &api
     AI_AUTO_SCORE: ${AI_AUTO_SCORE:-true}
     AI_SCORES_PER_MONTH: ${AI_SCORES_PER_MONTH:-300}
     AI_BUDGET_USD_PER_MONTH: ${AI_BUDGET_USD_PER_MONTH:-5}
+    # Generated files (CV PDFs): the storage service below, unless S3_* point
+    # elsewhere - Cloudflare R2, AWS S3 (docs/self-hosting.md).
+    STORAGE_BACKEND: s3
+    S3_ENDPOINT_URL: ${S3_ENDPOINT_URL:-http://storage:7070}
+    S3_REGION: ${S3_REGION:-us-east-1}
+    S3_BUCKET: ${S3_BUCKET:-job-hunter}
+    S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:-${STORAGE_ACCESS_KEY:?run scripts/setup-env.sh first}}
+    S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:-${STORAGE_SECRET_KEY:?run scripts/setup-env.sh first}}
+    BILLING_ENABLED: ${BILLING_ENABLED:-false}
+    STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+    STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
 
 services:
   db:
@@ -61,6 +72,8 @@ services:
     depends_on:
       migrate:
         condition: service_completed_successfully
+      storage:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
       interval: 5s
@@ -73,6 +86,8 @@ services:
     depends_on:
       migrate:
         condition: service_completed_successfully
+      storage:
+        condition: service_healthy
     # Healthy while its loop keeps turning (a heartbeat file; app/worker.py).
     healthcheck:
       test: ["CMD", "python", "-m", "app.worker", "--alive"]
@@ -111,6 +126,40 @@ services:
       timeout: 5s
       retries: 20
 
+  # S3-compatible storage for generated files (CV PDFs): the Versity S3
+  # Gateway, keeping them as plain files in the storage-data volume.
+  storage:
+    image: versity/versitygw:v1.10.0
+    restart: unless-stopped
+    environment:
+      ROOT_ACCESS_KEY: ${STORAGE_ACCESS_KEY:?run scripts/setup-env.sh first}
+      ROOT_SECRET_KEY: ${STORAGE_SECRET_KEY:?run scripts/setup-env.sh first}
+      VGW_BACKEND: posix
+      VGW_BACKEND_ARG: /data
+      VGW_PORT: ":7070"
+      VGW_HEALTH: /health
+    volumes:
+      - storage-data:/data
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:7070/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Billing in development: forwards Stripe's test-mode events to the API.
+  # Only with `docker compose --profile billing up`, and STRIPE_SECRET_KEY (a
+  # test key) in .env - see docs/billing.md.
+  stripe:
+    image: stripe/stripe-cli:v1.55.6
+    profiles: ["billing"]
+    restart: unless-stopped
+    command: ["listen", "--forward-to", "http://api:8000/billing/webhook"]
+    environment:
+      STRIPE_API_KEY: ${STRIPE_SECRET_KEY:-}
+    depends_on:
+      api:
+        condition: service_healthy
+
   # Catches every email the app sends (sign-in links): http://localhost:8025
   # Its image has its own health check.
   mailpit:
@@ -122,3 +171,4 @@ services:
 
 volumes:
   db-data:
+  storage-data:

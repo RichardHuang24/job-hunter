@@ -7,7 +7,7 @@ export default async function Nav() {
   const session = await auth();
   return (
     <header className="sticky top-0 z-30 border-b border-edge bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-4 sm:gap-8 sm:px-6">
+      <div className="mx-auto flex h-14 max-w-6xl items-center gap-2 px-4 sm:gap-8 sm:px-6">
         <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="Job Hunter - home">
           <span
             aria-hidden
@@ -28,7 +28,7 @@ export default async function Nav() {
               }}
             >
               <span className="hidden max-w-48 truncate text-ink-secondary md:inline">{session.user.email}</span>
-              <button type="submit" className="rounded-lg px-2.5 py-1.5 text-ink-secondary hover:bg-ink/[0.04] hover:text-ink">
+              <button type="submit" className="rounded-lg px-2 py-1.5 whitespace-nowrap text-ink-secondary hover:bg-ink/[0.04] hover:text-ink sm:px-2.5">
                 Sign out
               </button>
             </form>

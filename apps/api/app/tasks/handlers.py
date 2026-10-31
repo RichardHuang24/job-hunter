@@ -51,3 +51,11 @@ def recheck(session: Session, task: Task) -> dict[str, Any]:
     from app.search.recheck import recheck_due
 
     return recheck_due(session)
+
+
+@handler("cv_pdf")
+def cv_pdf(session: Session, task: Task) -> dict[str, Any]:
+    """Builds a CV PDF and puts it in storage (app/cv/service.py)."""
+    from app.cv.service import run_task
+
+    return run_task(session, task.payload["document_id"])

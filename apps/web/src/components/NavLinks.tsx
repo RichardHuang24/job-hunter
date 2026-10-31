@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 const LINKS = [
   { href: "/", label: "Dashboard" },
   { href: "/jobs", label: "Jobs" },
+  { href: "/cv", label: "CV" },
   { href: "/settings", label: "Settings" },
 ];
 
@@ -21,7 +22,7 @@ export default function NavLinks() {
             key={link.href}
             href={link.href}
             aria-current={active ? "page" : undefined}
-            className={`rounded-lg px-2.5 py-1.5 transition-colors sm:px-3 ${
+            className={`rounded-lg px-2 py-1.5 transition-colors sm:px-3 ${
               active ? "bg-ink/[0.07] font-medium text-ink" : "text-ink-secondary hover:bg-ink/[0.04] hover:text-ink"
             }`}
           >

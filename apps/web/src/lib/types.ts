@@ -199,3 +199,35 @@ export type AiStatus = {
   cost_usd: number;
   budget_usd: number;
 };
+
+export type Experience = { title: string; employer: string; location: string; start: string; end: string; bullets: string[] };
+
+export type Education = { qualification: string; institution: string; location: string; start: string; end: string; details: string };
+
+export type CvContent = {
+  name: string;
+  headline: string;
+  email: string;
+  phone: string;
+  location: string;
+  links: string[];
+  summary: string;
+  experience: Experience[];
+  education: Education[];
+  skills: string[];
+  languages: Language[];
+};
+
+export type CvDocument = {
+  id: string;
+  kind: string;
+  status: "queued" | "done" | "failed";
+  filename: string;
+  size_bytes: number;
+  pages: number;
+  error: string;
+  requested_at: string;
+  finished_at: string | null;
+};
+
+export type Cv = { content: CvContent; saved: boolean; updated_at: string | null; documents: CvDocument[] };

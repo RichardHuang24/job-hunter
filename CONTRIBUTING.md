@@ -41,6 +41,11 @@ export BACKEND_JWT_SECRET="<from .env>"
 .venv/bin/python -m app.worker        # in another terminal
 ```
 
+Run directly like this, files go to `apps/api/data/files` (`STORAGE_BACKEND`
+defaults to `local`), and CV PDFs need LuaLaTeX and the fonts on your
+machine - `texlive-luatex texlive-latex-recommended fonts-lato
+fonts-dejavu-core` on Debian or Ubuntu ([docs/cv.md](docs/cv.md)).
+
 **Web** (Node 22.18 or newer): put the same values in `apps/web/.env.local` -
 `DATABASE_URL` (written `postgresql://...`, without `+psycopg`), `AUTH_SECRET`,
 `BACKEND_JWT_SECRET`, `BACKEND_URL=http://localhost:8420`,

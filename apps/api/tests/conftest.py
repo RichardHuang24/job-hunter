@@ -20,12 +20,15 @@ SECRET = "test-secret-" + "x" * 40
 
 
 @pytest.fixture(autouse=True)
-def _settings(monkeypatch):
+def _settings(monkeypatch, tmp_path):
     monkeypatch.setenv("BACKEND_JWT_SECRET", SECRET)
     monkeypatch.setenv("ENVIRONMENT", "test")
     monkeypatch.setenv("ANTHROPIC_API_KEY", "")  # tests never call the real API
     monkeypatch.setenv("JOB_SOURCES", "demo")  # nor a real job board
     monkeypatch.setenv("HIMALAYAS_API_KEY", "")
+    monkeypatch.setenv("STORAGE_BACKEND", "local")  # files go to a folder per test
+    monkeypatch.setenv("STORAGE_DIR", str(tmp_path / "files"))
+    monkeypatch.setenv("BILLING_ENABLED", "false")
     get_settings.cache_clear()
     yield
     get_settings.cache_clear()

@@ -19,7 +19,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-function Languages({ values, onChange, levels }: { values: Language[]; onChange: (values: Language[]) => void; levels: Presets["language_levels"] }) {
+export function Languages({ values, onChange, levels }: { values: Language[]; onChange: (values: Language[]) => void; levels: Presets["language_levels"] }) {
   const update = (index: number, change: Partial<Language>) => onChange(values.map((v, i) => (i === index ? { ...v, ...change } : v)));
   return (
     <div>

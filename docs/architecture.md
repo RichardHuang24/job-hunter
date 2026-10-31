@@ -1,6 +1,7 @@
 # Architecture
 
-Job Hunter is two apps and a database, deployed as one Docker Compose stack.
+Job Hunter is two apps, a database and a file store, deployed as one Docker
+Compose stack.
 
 ```mermaid
 flowchart LR
@@ -11,11 +12,14 @@ flowchart LR
         K["worker<br/>python -m app.worker"]
         M["migrate<br/>alembic upgrade head"]
         D[(Postgres 17)]
+        S[("storage<br/>S3-compatible")]
     end
     W -- "/api/backend/* forwarded<br/>with a signed token" --> A
     W -- "users, sessions" --> D
     A --> D
+    A -- "downloads" --> S
     K -- "task queue" --> D
+    K -- "CV PDFs" --> S
     M -. "runs first" .-> D
 ```
 
@@ -25,11 +29,13 @@ flowchart LR
 | --- | --- | --- |
 | `web` | Pages, sign-in, and the only door to the API | `apps/web` |
 | `api` | Every feature's logic and data, per user | `apps/api/app` |
-| `worker` | Runs searches and AI scoring (and later PDF builds) from the queue, and queues daily searches | `apps/api/app/worker.py` |
+| `worker` | Runs searches, AI scoring and CV PDF builds (LuaLaTeX) from the queue; queues daily searches and checks for closed jobs | `apps/api/app/worker.py` |
 | `migrate` | Brings the schema up to date, then exits; the others wait for it | `apps/api/alembic` |
-| `db` | Postgres: users, sessions, profiles, searches, jobs, scores, tasks - everything | |
+| `db` | Postgres: users, sessions, profiles, searches, jobs, scores, CVs, tasks - everything but files | |
+| `storage` | Generated files (CV PDFs), through the S3 API: the [Versity S3 Gateway](https://github.com/versity/versitygw), keeping plain files in a volume - or Cloudflare R2, AWS S3 and the like | `apps/api/app/storage.py` |
+| `stripe` | Development only, `--profile billing`: forwards Stripe test events to the API ([billing.md](billing.md)) | |
 | `mailpit` | Development only: catches outgoing email | |
-| `caddy` | Production only: HTTPS in front of `web` | `deploy/Caddyfile` |
+| `caddy` | Production only: HTTPS in front of `web`, and Stripe's webhook to `api` | `deploy/Caddyfile` |
 
 ## A request, end to end
 
@@ -44,7 +50,10 @@ flowchart LR
    write only that user's rows.
 
 Server components skip the hop and call the API directly with the same token
-(`src/lib/session.ts`). The API is never exposed outside the stack.
+(`src/lib/session.ts`). The API is never exposed outside the stack, with one
+exception: in production Caddy sends `/billing/webhook` straight to it,
+because Stripe calls that path itself - Stripe's signature is checked there
+instead of a user token ([billing.md](billing.md)).
 
 ## Sign-in
 
@@ -127,8 +136,25 @@ result is stored in `job_scores`, one per user job. Every call is recorded
 in `ai_usage`, which the monthly allowance is checked against before each
 call. Details: [ai-scoring.md](ai-scoring.md).
 
+## CVs and files
+
+Each person's CV is structured data in `cvs` (`app/cv/schema.py`) - started
+from their profile until they save it. **Make PDF** queues a `cv_pdf` task;
+the worker turns the CV into LaTeX with every piece of text escaped
+(`app/cv/latex.py`), builds it with LuaLaTeX in a sealed-off folder
+(`app/cv/build.py`), and puts the PDF in storage (`app/storage.py`) under
+`users/<id>/documents/<id>.pdf`. The `documents` table tracks each file;
+downloads go through the API, to their owner only. Details: [cv.md](cv.md).
+
+## Billing
+
+Off by default (`BILLING_ENABLED=false`): every feature is free. When it's
+on, Stripe's signed webhook events are recorded once each in
+`billing_events` (`app/billing.py`); plans and checkout come with the hosted
+version. Details: [billing.md](billing.md).
+
 ## Where the rest goes
 
-See [roadmap.md](roadmap.md). The applications tracker, the CV workbench
-and billing all follow the same rules: data scoped to the user,
-slow work on the worker, every call through the API.
+See [roadmap.md](roadmap.md). The applications tracker, tailored CVs and
+paid plans all follow the same rules: data scoped to the user, slow work on
+the worker, every call through the API.

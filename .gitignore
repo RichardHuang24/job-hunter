@@ -15,7 +15,8 @@ node_modules/
 next-env.d.ts
 *.tsbuildinfo
 
-# Local databases and backups
+# Local databases, backups and generated files (STORAGE_BACKEND=local)
+apps/api/data/
 *.db
 *.sqlite
 *.sqlite3

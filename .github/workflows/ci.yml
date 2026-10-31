@@ -28,6 +28,17 @@ jobs:
         options: >-
           --health-cmd "pg_isready -U jobhunter -d jobhunter_test"
           --health-interval 2s --health-timeout 3s --health-retries 30
+      # A real S3-compatible server for the storage tests.
+      storage:
+        image: versity/versitygw:v1.10.0
+        env:
+          ROOT_ACCESS_KEY: ci-access-key
+          ROOT_SECRET_KEY: ci-secret-key-0123456789
+          VGW_BACKEND: posix
+          VGW_BACKEND_ARG: /tmp/vgw
+          VGW_PORT: ":7070"
+          VGW_HEALTH: /health
+        ports: ["7070:7070"]
     defaults:
       run:
         working-directory: apps/api
@@ -39,8 +50,16 @@ jobs:
           cache: pip
           cache-dependency-path: apps/api/requirements*.txt
       - run: pip install -r requirements-dev.txt
+      - name: LuaLaTeX and fonts, as in the Docker image, for real CV PDFs
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends texlive-luatex texlive-latex-recommended fonts-lato fonts-dejavu-core
       - name: Tests on SQLite
-        run: pytest
+        run: pytest -rs
+        env:
+          TEST_S3_ENDPOINT: http://localhost:7070
+          TEST_S3_KEY: ci-access-key
+          TEST_S3_SECRET: ci-secret-key-0123456789
       - name: Tests on Postgres
         run: pytest
         env:
@@ -108,8 +127,15 @@ jobs:
       - run: scripts/setup-env.sh
       - name: Use the sample jobs, so the run is predictable and calls no job board
         run: sed -i 's/^JOB_SOURCES=.*/JOB_SOURCES=demo/' .env
-      - name: The production setup is valid
-        run: docker compose -f docker-compose.yml -f deploy/docker-compose.prod.yml config --quiet
+      - name: Turn billing on with a test webhook secret, so the webhook is checked too
+        run: |
+          sed -i 's/^BILLING_ENABLED=.*/BILLING_ENABLED=true/; s/^STRIPE_WEBHOOK_SECRET=.*/STRIPE_WEBHOOK_SECRET=whsec_ci_only_not_secret/' .env
+      - name: The production setup and the billing profile are valid
+        run: |
+          docker compose -f docker-compose.yml -f deploy/docker-compose.prod.yml config --quiet
+          docker compose --profile billing config --quiet
+          docker run --rm -e DOMAIN=jobs.example.com -v "$PWD/deploy/Caddyfile:/etc/caddy/Caddyfile:ro" \
+            caddy:2.11-alpine caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
         env:
           DOMAIN: jobs.example.com
           EMAIL_SERVER: smtp://user:password@smtp.example.com:587
@@ -117,7 +143,7 @@ jobs:
         run: docker compose up --build --detach
       - name: Every service is healthy
         run: |
-          services="db api worker web mailpit"
+          services="db api worker web storage mailpit"
           for _ in $(seq 1 120); do
             healthy=$(docker compose ps --format '{{.Service}} {{.Health}}' | awk '$2 == "healthy" {print $1}' | sort | xargs)
             [ "$healthy" = "$(echo $services | tr ' ' '\n' | sort | xargs)" ] && { echo "Healthy: $healthy"; exit 0; }
@@ -128,8 +154,10 @@ jobs:
       - name: The migrations ran
         run: test "$(docker compose ps --all --format '{{.Service}} {{.State}} {{.ExitCode}}' | grep '^migrate ')" = "migrate exited 0"
       - run: curl -fsS http://localhost:8420/health
-      - name: Sign in by email, set up, search, score - over HTTP
+      - name: Sign in by email, set up, search, score, build a CV PDF - over HTTP
         run: python3 scripts/smoke_test.py
+        env:
+          SMOKE_STRIPE_WEBHOOK_SECRET: whsec_ci_only_not_secret
       - name: The worker runs tasks
         run: docker compose exec -T worker python -m app.worker --check --timeout 30
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0

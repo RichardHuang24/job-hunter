@@ -27,7 +27,7 @@ from pathlib import Path
 
 from playwright.sync_api import Page, expect, sync_playwright
 
-PAGES = ("/", "/jobs", "/jobs?sort=fit", "/jobs/searches", "/settings")
+PAGES = ("/", "/jobs", "/jobs?sort=fit", "/jobs/searches", "/cv", "/settings")
 
 
 def step(label: str) -> None:
@@ -127,6 +127,22 @@ def run(page: Page, web: str, mailpit: str, errors: list[str]) -> dict:
     page.get_by_role("button", name="Check", exact=True).click()
     expect(page.get_by_text("Would be included")).to_be_visible()
     step("the searches and settings pages work")
+
+    page.get_by_role("link", name="CV", exact=True).click()
+    page.wait_for_url("**/cv")
+    expect(page.get_by_label("Name", exact=True)).to_have_value("Robin Example")
+    page.get_by_role("button", name="+ Add a job").click()
+    page.get_by_label("Job title").fill("Staff Nurse")
+    page.get_by_label("Employer").fill("Contoso Health")
+    page.get_by_label("What you did").fill("Led a team of 6\nCut medication errors by 30%")
+    page.get_by_role("button", name="Save and make PDF").click()
+    download_link = page.get_by_role("link", name="Download")
+    expect(download_link).to_be_visible(timeout=120_000)
+    with page.expect_download() as info:
+        download_link.click()
+    pdf = Path(info.value.path()).read_bytes()
+    assert pdf.startswith(b"%PDF") and info.value.suggested_filename == "CV - Robin Example.pdf", info.value.suggested_filename
+    step("the CV page saves a CV and makes a PDF that downloads")
     return page.context.storage_state()
 
 

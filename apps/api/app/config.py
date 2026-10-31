@@ -60,6 +60,27 @@ class Settings(BaseSettings):
     ai_price_input: float = 0.0  # USD per million tokens, for a model not in app/scoring/providers.py
     ai_price_output: float = 0.0
 
+    # Files the app makes - CV PDFs (app/storage.py). "local": under STORAGE_DIR
+    # ("" = data/files beside the code). "s3": any S3-compatible service.
+    storage_backend: str = "local"  # local | s3
+    storage_dir: str = ""
+    s3_endpoint_url: str = ""  # "" = AWS itself; http://storage:7070 in Docker
+    s3_region: str = ""  # "auto" for Cloudflare R2
+    s3_bucket: str = "job-hunter"
+    s3_access_key_id: str = ""
+    s3_secret_access_key: str = ""
+
+    # CV PDFs (app/cv): the LaTeX engine and how long a build may take.
+    cv_latex: str = "lualatex"
+    cv_timeout_seconds: float = 90.0
+    cv_files_kept: int = 10  # per person; older PDFs are deleted
+
+    # Billing (app/billing.py). Off: every feature is free - the self-hosted
+    # default. The Stripe keys are only read when it's on.
+    billing_enabled: bool = False
+    stripe_secret_key: str = ""
+    stripe_webhook_secret: str = ""
+
     # Where the industry and market presets are. Empty: the presets/ folder
     # found above the code (the repo's, or /app/presets in Docker).
     presets_dir: str = ""

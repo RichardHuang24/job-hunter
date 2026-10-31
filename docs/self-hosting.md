@@ -30,9 +30,10 @@ Edit `.env`:
 | `EMAIL_FROM` | a sender address your SMTP provider accepts |
 | `AUTH_GITHUB_*`, `AUTH_GOOGLE_*` | optional; callback URL `https://<DOMAIN>/api/auth/callback/github` (or `/google`) |
 
-`AUTH_URL` is set from `DOMAIN` for you. Keep the three generated secrets;
-changing `AUTH_SECRET` signs everyone out, and `POSTGRES_PASSWORD` is only read
-when the database is first created.
+`AUTH_URL` is set from `DOMAIN` for you. Keep the generated secrets:
+changing `AUTH_SECRET` signs everyone out, and `POSTGRES_PASSWORD` and the
+`STORAGE_*` keys are only read when the database and the file store are
+first created.
 
 Open the firewall for SSH, HTTP and HTTPS only - for example with `ufw`:
 
@@ -58,15 +59,36 @@ docker compose exec worker python -m app.worker --check
 
 ```sh
 git pull
+./scripts/setup-env.sh    # adds any secret a newer version needs; changes nothing else
 docker compose -f docker-compose.yml -f deploy/docker-compose.prod.yml up -d --build
 ```
 
 Database migrations run by themselves before the API and worker start.
 
+## Files
+
+Generated files - CV PDFs - go to the `storage` service: the
+[Versity S3 Gateway](https://github.com/versity/versitygw), which keeps them
+as plain files in the `storage-data` volume and speaks the S3 API to the
+API and worker. Nothing outside the stack can reach it.
+
+To keep files in Cloudflare R2, AWS S3 or another S3-compatible service
+instead, set these in `.env` (the `storage` service then sits idle):
+
+| Setting | Cloudflare R2 | AWS S3 |
+| --- | --- | --- |
+| `S3_ENDPOINT_URL` | `https://<account id>.r2.cloudflarestorage.com` | empty |
+| `S3_REGION` | `auto` | your bucket's region, e.g. `eu-west-2` |
+| `S3_BUCKET` | your bucket | your bucket |
+| `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | an R2 API token's keys | an IAM user's keys, allowed to get, put and delete objects in the bucket |
+
+The bucket is created if it's missing and the keys allow it. Files are only
+ever served through the API, to their owner, so keep the bucket private.
+
 ## Back up
 
-The database is the only state. A nightly dump, kept off the server, is
-enough:
+The state is the database and the stored files. A nightly dump of the
+database, kept off the server, is the part that matters:
 
 ```sh
 docker compose exec -T db pg_dump -U jobhunter -Fc jobhunter > jobhunter-$(date +%F).dump
@@ -74,10 +96,18 @@ docker compose exec -T db pg_dump -U jobhunter -Fc jobhunter > jobhunter-$(date 
 
 Restore into a fresh stack with `pg_restore -U jobhunter -d jobhunter --clean`.
 
+The stored files are CV PDFs, which anyone can make again from their CV. To
+keep them too, archive the `storage-data` volume:
+
+```sh
+docker run --rm -v job-hunter_storage-data:/data:ro -v "$PWD":/backup alpine \
+  tar czf /backup/files-$(date +%F).tgz -C /data .
+```
+
 ## Health and logs
 
 Every long-running service has a health check - the database, the API, the
-worker (its loop is still turning), the web app and Caddy. `migrate` runs
+worker (its loop is still turning), the web app, the file store and Caddy. `migrate` runs
 once at each start and exits:
 
 ```sh

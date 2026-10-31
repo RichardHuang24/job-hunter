@@ -14,7 +14,7 @@ import type { AiStatus, JobList, Me, Presets, Search } from "@/lib/types";
 // What the app will do, in the order it arrives (docs/roadmap.md).
 const COMING = [
   { title: "Applications", body: "Tracks where every application stands." },
-  { title: "CV workbench", body: "Keeps your CV content in one place and builds a tailored PDF per job." },
+  { title: "Tailored CVs", body: "A version of your CV for each job, built from the posting." },
 ];
 
 function Row({ label, children }: { label: string; children: ReactNode }) {

@@ -7,10 +7,10 @@ Find, rank and track jobs, and build a tailored CV for each one - for any
 industry, not just tech. Self-hosted, multi-user, open source.
 
 > **Status: early development.** Accounts, onboarding, profiles with
-> industry presets, job search with deal-breaker checks, and AI fit scoring
-> work today. Real jobs come from two free remote-job boards, Himalayas and
-> Jobicy; job boards for on-site work come next, with the applications
-> tracker and the CV workbench - see the [roadmap](docs/roadmap.md).
+> industry presets, job search with deal-breaker checks, AI fit scoring and
+> CV PDFs work today. Real jobs come from two free remote-job boards,
+> Himalayas and Jobicy; job boards for on-site work come next, with the
+> applications tracker and tailored CVs - see the [roadmap](docs/roadmap.md).
 
 ![Setting up a nurse's profile, then the matches sorted by fit, one job's fit explained, and the jobs left out with the reasons](docs/images/walkthrough.gif)
 
@@ -36,6 +36,10 @@ industry, not just tech. Self-hosted, multi-user, open source.
   dimension, requirements quoted from the posting (and checked to be there),
   gaps and risks; best fit first. Without an Anthropic API key a free,
   clearly labelled simulated scorer stands in ([docs/ai-scoring.md](docs/ai-scoring.md)).
+- **Your CV as plain facts, and a PDF of it on demand**: started from your
+  profile, edited on the CV page, built with LuaLaTeX on the worker - with
+  every character you type escaped, so nothing in a CV can run as code
+  ([docs/cv.md](docs/cv.md)).
 - **Real remote jobs** from [Himalayas](https://himalayas.app) and
   [Jobicy](https://jobicy.com) - free, used within their terms, credited on
   every job, and taken down when they close. Remote jobs carry the countries
@@ -45,8 +49,14 @@ industry, not just tech. Self-hosted, multi-user, open source.
   Built-in sample jobs (`JOB_SOURCES=demo`) work with no network at all.
 - **One API** that every feature goes through, scoped to the signed-in user.
 - **A background worker** on a Postgres-backed queue - no Redis to run.
-- **One command to run it all** with Docker Compose, and a production setup with
+- **Files in S3-compatible storage**: a small gateway in the stack keeps them
+  as plain files; point it at Cloudflare R2 or AWS S3 instead with a few
+  settings.
+- **One command to run it all** with Docker Compose - no keys needed, every
+  service health-checked, on Intel/AMD and ARM - and a production setup with
   automatic HTTPS for a single VPS.
+- **Billing groundwork**, off by default: a switch and Stripe's signed
+  webhook, for the hosted version ([docs/billing.md](docs/billing.md)).
 
 ## Screenshots
 
@@ -104,6 +114,8 @@ flowchart LR
     A --> D[(Postgres)]
     K["Worker<br/>same image as the API"] -- "claims tasks<br/>(SKIP LOCKED)" --> D
     W -- sessions --> D
+    K -- "CV PDFs" --> S[("Storage<br/>S3-compatible")]
+    A -- downloads --> S
 ```
 
 The browser only ever talks to the web app. The web app checks the session and

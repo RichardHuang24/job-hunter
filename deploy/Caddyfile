@@ -11,5 +11,12 @@
 		-Server
 	}
 
-	reverse_proxy web:3000
+	# Stripe calls the API directly; the Stripe signature is checked there.
+	handle /billing/webhook {
+		reverse_proxy api:8000
+	}
+
+	handle {
+		reverse_proxy web:3000
+	}
 }
