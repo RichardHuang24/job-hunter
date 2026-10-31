@@ -1,0 +1,4 @@
+# Findings gitleaks may ignore - each one checked by hand. Format: commit:file:rule:line.
+# 9f59ed5: made-up credentials for CI's throwaway S3 test container (not a secret; replaced since).
+9f59ed5823f848825b22360685898f6eb7058a22:.github/workflows/ci.yml:generic-api-key:36
+9f59ed5823f848825b22360685898f6eb7058a22:.github/workflows/ci.yml:generic-api-key:62

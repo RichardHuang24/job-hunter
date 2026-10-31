@@ -32,8 +32,9 @@ jobs:
       storage:
         image: versity/versitygw:v1.10.0
         env:
+          # Made up per run, for a container that lives only as long as the job.
           ROOT_ACCESS_KEY: ci-access-key
-          ROOT_SECRET_KEY: ci-secret-key-0123456789
+          ROOT_SECRET_KEY: ci-only-${{ github.run_id }}
           VGW_BACKEND: posix
           VGW_BACKEND_ARG: /tmp/vgw
           VGW_PORT: ":7070"
@@ -59,7 +60,7 @@ jobs:
         env:
           TEST_S3_ENDPOINT: http://localhost:7070
           TEST_S3_KEY: ci-access-key
-          TEST_S3_SECRET: ci-secret-key-0123456789
+          TEST_S3_SECRET: ci-only-${{ github.run_id }}
       - name: Tests on Postgres
         run: pytest
         env:
