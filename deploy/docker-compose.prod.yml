@@ -49,6 +49,11 @@ services:
     depends_on:
       web:
         condition: service_healthy
+    healthcheck:  # Caddy's admin endpoint, only reachable inside the container
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:2019/config/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
 
 volumes:
   caddy-data:

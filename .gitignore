@@ -25,3 +25,6 @@ next-env.d.ts
 .DS_Store
 .idea/
 .vscode/
+
+# Screenshots from a failed scripts/browser_test.py run
+browser-test/

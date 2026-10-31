@@ -91,7 +91,9 @@ nothing is really sent. After the four-step setup, your first search runs
 against Himalayas and Jobicy (remote jobs). To try it with the built-in
 sample jobs instead, set `JOB_SOURCES=demo` in `.env`.
 
-To check a running stack end to end, with `JOB_SOURCES=demo`: `python3 scripts/smoke_test.py`.
+To check a running stack end to end, with `JOB_SOURCES=demo`: `python3 scripts/smoke_test.py`
+over HTTP, and `python3 scripts/browser_test.py` in a real browser. CI does both on
+every push, on Intel/AMD and ARM.
 
 ## How it fits together
 
@@ -114,7 +116,7 @@ nothing else. More in [docs/architecture.md](docs/architecture.md).
 | [`apps/api`](apps/api) | FastAPI service, SQLAlchemy models, Alembic migrations, the worker |
 | [`presets`](presets) | Industries and job markets, as data files |
 | [`deploy`](deploy) | Dockerfiles, the production Compose file, Caddy |
-| [`scripts`](scripts) | `.env` setup, the end-to-end smoke test, the personal-data check, the README pictures |
+| [`scripts`](scripts) | `.env` setup, the end-to-end smoke and browser tests, the personal-data check, the README pictures |
 | [`docs`](docs) | Architecture, roadmap, self-hosting, third-party notices |
 
 ## Running it on a server

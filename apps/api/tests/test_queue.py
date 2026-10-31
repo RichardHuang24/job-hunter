@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 import datetime as dt
+import os
 import threading
 import time
 
 from app.db.models import Task
 from app.tasks import queue
 from app.tasks.handlers import HANDLERS
-from app.worker import check, run_one
+from app.worker import alive, beat, check, run_one, serve
 
 NOW = dt.datetime(2026, 10, 30, 12, 0, tzinfo=dt.UTC)
 
@@ -90,3 +91,39 @@ def test_the_check_answers_only_when_a_worker_runs(sessions):
     finally:
         stop.set()
         thread.join()
+
+
+def test_the_heartbeat_says_whether_the_loop_runs(tmp_path):
+    path = tmp_path / "alive"
+    assert not alive(path, 60)  # never started
+    beat(path)
+    assert alive(path, 60)
+    os.utime(path, (time.time() - 120, time.time() - 120))
+    assert not alive(path, 60)  # stuck for longer than allowed
+
+
+def test_the_loop_survives_the_database_going_away(sessions, tmp_path, monkeypatch):
+    from app.config import get_settings
+
+    monkeypatch.setenv("WORKER_HEARTBEAT_FILE", str(tmp_path / "alive"))
+    get_settings.cache_clear()
+    with sessions() as session:
+        queue.enqueue(session, "ping", {"message": "after the outage"})
+        session.commit()
+
+    calls = {"n": 0}
+
+    def flaky():
+        calls["n"] += 1
+        if calls["n"] <= 6:  # the first turns: the database is down
+            raise ConnectionError("database restarting")
+        return sessions()
+
+    waits: list[float] = []
+    turns = iter(range(12))
+    serve(flaky, "w1", lambda: next(turns, None) is None, sleep=waits.append)
+    assert waits[:2] == [1.0, 2.0]  # backing off while it's down
+    assert alive(tmp_path / "alive", 60)
+    with sessions() as session:
+        [task] = session.query(Task).filter_by(kind="ping").all()
+        assert task.status == "succeeded" and task.result == {"pong": "after the outage"}

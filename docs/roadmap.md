@@ -10,9 +10,12 @@ end-to-end smoke test in CI.
 - Profiles with an industry and market from shared presets.
 - The API door: session check, short-lived signed tokens, per-user data.
 - Background worker on a Postgres queue.
-- Docker Compose for local use; a production setup with Caddy and HTTPS.
+- Docker Compose for local use - one command, no keys needed - and a
+  production setup with Caddy and HTTPS. Every service has a health check;
+  images run on amd64 and arm64.
 - CI: tests on SQLite and Postgres, lint, types, build, secret and
-  personal-data scans, and an end-to-end run against the Docker images.
+  personal-data scans, and an end-to-end run against the Docker images on
+  amd64 and arm64 - over HTTP and in a real browser.
 
 ## 1. Profiles and presets - done
 

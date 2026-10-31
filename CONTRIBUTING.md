@@ -57,11 +57,13 @@ npm run dev                           # http://localhost:3420
 ```sh
 cd apps/api && .venv/bin/pytest       # SQLite; set TEST_DATABASE_URL to run on Postgres
 cd apps/web && npm run lint && npm run typecheck && npm test
-python3 scripts/smoke_test.py         # against a running stack
+python3 scripts/smoke_test.py         # over HTTP, against a running stack with JOB_SOURCES=demo
+python3 scripts/browser_test.py       # the same in a real browser - setup in the script's header
 ```
 
-CI runs all of these, builds the Docker images, and runs the smoke test
-against them.
+CI runs all of these, then builds the Docker images on amd64 and arm64,
+starts the stack, waits for every health check, and runs the smoke test and
+the browser test against it.
 
 ## Conventions
 

@@ -28,6 +28,7 @@ class Settings(BaseSettings):
     # task may run before another worker may take it over.
     worker_poll_seconds: float = 1.0
     task_lease_seconds: int = 600
+    worker_heartbeat_file: str = ""  # for the health check; "" = job-hunter-worker.alive in the temp folder
 
     # Job sources (app/sources): which to use, comma-separated. A hosted,
     # paid deployment sets COMMERCIAL_ONLY so sources whose terms don't allow

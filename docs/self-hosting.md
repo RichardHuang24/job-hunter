@@ -6,7 +6,8 @@ the web app stay inside Docker's network.
 
 ## You need
 
-- A Linux server with at least 2 GB of RAM (the web image builds on it).
+- A Linux server with at least 2 GB of RAM (the web image builds on it),
+  Intel/AMD (amd64) or ARM (arm64) - CI builds and tests both.
 - Docker Engine with Compose 2.24 or newer (`docker compose version`).
 - A domain or subdomain, with an `A` (and `AAAA` if you use IPv6) record
   pointing at the server.
@@ -73,8 +74,15 @@ docker compose exec -T db pg_dump -U jobhunter -Fc jobhunter > jobhunter-$(date 
 
 Restore into a fresh stack with `pg_restore -U jobhunter -d jobhunter --clean`.
 
-## Logs
+## Health and logs
+
+Every long-running service has a health check - the database, the API, the
+worker (its loop is still turning), the web app and Caddy. `migrate` runs
+once at each start and exits:
 
 ```sh
+docker compose -f docker-compose.yml -f deploy/docker-compose.prod.yml ps      # look for "(healthy)"
 docker compose -f docker-compose.yml -f deploy/docker-compose.prod.yml logs -f web api worker
 ```
+
+If the database restarts, the worker waits and carries on by itself.
