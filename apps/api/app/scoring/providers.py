@@ -28,6 +28,14 @@ MAX_TOKENS = 16_000  # thinking and the JSON share it; only what's used is bille
 # Models the API can re-run on another model server-side when they decline a request.
 SERVER_FALLBACK_MODELS = frozenset({"claude-opus-5-5", "claude-opus-5", "claude-fable-5-1", "claude-fable-5", "claude-sonnet-5-5"})
 FALLBACK_BETA = "server-side-fallback-2026-07-01"
+# How each model turns thinking off (with AI_THINKING=false), where it can:
+# only at effort high or lower. Others (Opus 5.5, for one) always think.
+THINKING_OFF: dict[str, dict[str, str]] = {
+    "claude-haiku-5-5": {"type": "disabled"},
+    "claude-opus-5": {"type": "disabled"},
+    "claude-sonnet-5-5": {"type": "between_tools"},  # with no tools, that's no thinking
+}
+THINKING_OFF_EFFORTS = frozenset({"low", "medium", "high"})
 
 # USD per million tokens (input, output), Anthropic's list prices as of
 # October 2026. Cache reads cost 0.1x input, 5-minute cache writes 1.25x.
@@ -152,20 +160,25 @@ def parse_response(response: Any, posting: str) -> Analysis:
 class AnthropicScorer:
     provider = "anthropic"
 
-    def __init__(self, client: Any, model: str, effort: str, settings: Settings | None = None):
-        self.client, self.model, self.effort = client, model, effort
+    def __init__(self, client: Any, model: str, effort: str, settings: Settings | None = None, *, thinking: bool = True):
+        self.client, self.model, self.effort, self.thinking = client, model, effort, thinking
         self.settings = settings or get_settings()
 
     def params(self, request: ScoreRequest) -> dict[str, Any]:
-        """The request. No sampling parameters (current models reject them);
-        thinking is left at each model's default (adaptive)."""
-        return {
+        """The request. No sampling parameters (current models reject them).
+        Thinking is off when asked and the model allows it, otherwise left at
+        the model's default (adaptive)."""
+        params: dict[str, Any] = {
             "model": self.model,
             "max_tokens": MAX_TOKENS,
             "system": [{"type": "text", "text": request.system, "cache_control": {"type": "ephemeral"}}],
             "messages": [{"role": "user", "content": request.message}],
             "output_config": {"effort": self.effort, "format": {"type": "json_schema", "schema": answer_schema()}},
         }
+        off = THINKING_OFF.get(self.model)
+        if not self.thinking and off and self.effort in THINKING_OFF_EFFORTS:
+            params["thinking"] = dict(off)
+        return params
 
     def _send(self, params: dict[str, Any]) -> Any:
         if self.model in SERVER_FALLBACK_MODELS:
@@ -270,7 +283,7 @@ def get_scorer(settings: Settings | None = None) -> Scorer:
     if not settings.anthropic_api_key:
         raise NotConfigured("AI_PROVIDER is anthropic but ANTHROPIC_API_KEY isn't set.")
     return AnthropicScorer(_client(settings.anthropic_api_key, settings.ai_timeout_seconds), settings.ai_model,
-                           settings.ai_effort, settings)
+                           settings.ai_effort, settings, thinking=settings.ai_thinking)
 
 
 def describe(settings: Settings | None = None) -> dict[str, str]:

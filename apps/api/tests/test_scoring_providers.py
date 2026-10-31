@@ -72,6 +72,29 @@ def test_haiku_has_no_server_side_fallback():
     assert where == "messages" and "fallbacks" not in sent and "betas" not in sent
 
 
+@pytest.mark.parametrize("model, effort, sent", [
+    ("claude-haiku-5-5", "low", {"type": "disabled"}),
+    ("claude-haiku-5-5", "high", {"type": "disabled"}),
+    ("claude-haiku-5-5", "xhigh", None),  # thinking can't be off above high
+    ("claude-sonnet-5-5", "low", {"type": "between_tools"}),
+    ("claude-opus-5", "medium", {"type": "disabled"}),
+    ("claude-opus-5-5", "low", None),  # always thinks
+    ("claude-some-future-model", "low", None),  # unknown: left at its default
+])
+def test_thinking_off(model, effort, sent):
+    params = AnthropicScorer(Client(response()), model, effort, Settings(), thinking=False).params(REQUEST)
+    assert params.get("thinking") == sent
+    assert "thinking" not in AnthropicScorer(Client(response()), model, effort, Settings()).params(REQUEST)
+
+
+def test_the_default_is_the_cheapest_model_without_thinking():
+    settings = Settings(anthropic_api_key="sk-test")
+    scorer = get_scorer(settings)
+    assert (settings.ai_model, settings.ai_effort, settings.ai_thinking) == ("claude-haiku-5-5", "low", False)
+    assert scorer.params(REQUEST)["thinking"] == {"type": "disabled"}
+    assert scorer.params(REQUEST)["output_config"]["effort"] == "low"
+
+
 def test_a_fallback_is_billed_per_attempt():
     usage = SimpleNamespace(input_tokens=500, output_tokens=400, cache_read_input_tokens=0, cache_creation_input_tokens=0,
                             iterations=[

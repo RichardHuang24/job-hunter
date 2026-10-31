@@ -66,8 +66,9 @@ RUN_LIVE_AI=1 ANTHROPIC_API_KEY=sk-ant-... .venv/bin/pytest tests/test_scoring_l
 | --- | --- | --- |
 | `ANTHROPIC_API_KEY` | empty | Your Anthropic API key. Never logged or shown. |
 | `AI_PROVIDER` | `auto` | `auto`, `anthropic` or `simulated` |
-| `AI_MODEL` | `claude-opus-5-5` | Any current Claude model, e.g. `claude-sonnet-5-5` or `claude-haiku-5-5` |
-| `AI_EFFORT` | `medium` | How hard the model thinks: `low`, `medium`, `high`, `xhigh`, `max` |
+| `AI_MODEL` | `claude-haiku-5-5` | Any current Claude model, e.g. `claude-sonnet-5-5` or `claude-opus-5-5` |
+| `AI_EFFORT` | `low` | How much effort the model puts in: `low`, `medium`, `high`, `xhigh`, `max` |
+| `AI_THINKING` | `false` | `false` turns the model's thinking off where it allows that (Haiku 5.5, Sonnet 5.5, Opus 5 at effort `high` or lower); `true` leaves it on |
 | `AI_AUTO_SCORE` | `true` | Score new matches and flagged jobs after each search |
 | `AI_SCORES_PER_MONTH` | `300` | Per user |
 | `AI_BUDGET_USD_PER_MONTH` | `5.0` | Per user; scoring stops for the month when it's spent |
@@ -75,26 +76,30 @@ RUN_LIVE_AI=1 ANTHROPIC_API_KEY=sk-ant-... .venv/bin/pytest tests/test_scoring_l
 
 ## Cost
 
-Each score is one API call: roughly 1,200 tokens in (most of it cached after
-the first job) and 1,000-2,000 out, depending on the model and effort.
-Rough estimates per score at October 2026 list prices - measure your own
-from the cost shown on each score and on the AI scoring card:
+Scoring is reading a posting and comparing it with a profile - no
+multi-step reasoning - so the default is the cheapest Claude model, Haiku
+5.5, at low effort with thinking off. Each score is one API call: roughly
+1,000-3,000 tokens in (the instructions and profile are cached after the
+first job) and 600-1,000 out. Rough estimates per score at October 2026
+list prices - measure your own from the cost shown on each score and on the
+AI scoring card:
 
 | Model | Input / output per million tokens | About per score | 300 scores |
 | --- | --- | --- | --- |
-| `claude-opus-5-5` (default) | $4 / $20 | $0.02-0.04 | $6-12 |
+| `claude-haiku-5-5` (default, thinking off) | $0.10 / $0.50 | under $0.001 | about $0.20-0.30 |
 | `claude-sonnet-5-5` | $2 / $10 | $0.01-0.02 | $3-6 |
-| `claude-haiku-5-5` | $0.10 / $0.50 | about $0.001 | about $0.30 |
+| `claude-opus-5-5` (always thinks) | $4 / $20 | $0.02-0.04 | $6-12 |
 
-With the default model, the default $5 budget runs out before 300 scores -
-raise `AI_BUDGET_USD_PER_MONTH` or pick a cheaper model.
+There is no free Claude model. With no API key the simulated scorer runs
+instead: free, but it only counts skills and reads the deal-breaker checks.
 
 ## Safety, errors and privacy
 
-- On models that support it (Opus 5.5, Sonnet 5.5 and others), if Claude
-  declines a request for safety reasons, the API re-runs it on the model
-  Anthropic recommends, in the same call (server-side fallback). The cost of
-  each attempt is recorded.
+- On models that support it (Opus 5.5, Sonnet 5.5 and others, not Haiku
+  5.5), if Claude declines a request for safety reasons, the API re-runs it
+  on the model Anthropic recommends, in the same call (server-side
+  fallback). The cost of each attempt is recorded. On Haiku 5.5 a refusal
+  fails just that job.
 - A rejected key, rate limits or an unreachable API stop the batch and mark
   its scores failed with the reason; nothing is retried in a loop. A refusal
   or an unusable answer fails just that job. **Try again** queues it again.

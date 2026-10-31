@@ -42,8 +42,11 @@ class Settings(BaseSettings):
     # "auto" uses the simulated scorer: free, local, and labelled as such.
     anthropic_api_key: str = ""
     ai_provider: str = "auto"  # auto | anthropic | simulated
-    ai_model: str = "claude-opus-5-5"
-    ai_effort: str = "medium"  # low | medium | high | xhigh | max
+    # Scoring is reading and comparing, not reasoning: the cheapest model,
+    # low effort and no thinking. Any current Claude model works.
+    ai_model: str = "claude-haiku-5-5"
+    ai_effort: str = "low"  # low | medium | high | xhigh | max
+    ai_thinking: bool = False  # True: the model's own (adaptive) thinking
     ai_timeout_seconds: float = 120.0
     ai_auto_score: bool = True  # score new matches and flagged jobs after each search
     ai_scores_per_month: int = 300  # per user

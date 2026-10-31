@@ -22,8 +22,8 @@ def test_one_real_score():
     from app.scoring.providers import AnthropicScorer
     from tests.test_scoring_providers import REQUEST
 
-    model = os.environ.get("AI_MODEL", "claude-opus-5-5")
-    scorer = AnthropicScorer(anthropic.Anthropic(api_key=LIVE_KEY, timeout=120), model, "low", Settings())
+    model = os.environ.get("AI_MODEL", "claude-haiku-5-5")
+    scorer = AnthropicScorer(anthropic.Anthropic(api_key=LIVE_KEY, timeout=120), model, "low", Settings(), thinking=False)
     result = scorer.score(REQUEST)
     assert 0 <= result.analysis.scores.skills.score <= 100
     assert result.usage.output_tokens > 0 and result.cost_usd > 0
