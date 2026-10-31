@@ -38,6 +38,19 @@ class Settings(BaseSettings):
     # How often the worker looks for saved searches due to run (seconds).
     schedule_seconds: float = 60.0
 
+    # AI scoring (app/scoring, docs/ai-scoring.md). With no ANTHROPIC_API_KEY,
+    # "auto" uses the simulated scorer: free, local, and labelled as such.
+    anthropic_api_key: str = ""
+    ai_provider: str = "auto"  # auto | anthropic | simulated
+    ai_model: str = "claude-opus-5-5"
+    ai_effort: str = "medium"  # low | medium | high | xhigh | max
+    ai_timeout_seconds: float = 120.0
+    ai_auto_score: bool = True  # score new matches and flagged jobs after each search
+    ai_scores_per_month: int = 300  # per user
+    ai_budget_usd_per_month: float = 5.0  # per user
+    ai_price_input: float = 0.0  # USD per million tokens, for a model not in app/scoring/providers.py
+    ai_price_output: float = 0.0
+
     # Where the industry and market presets are. Empty: the presets/ folder
     # found above the code (the repo's, or /app/presets in Docker).
     presets_dir: str = ""

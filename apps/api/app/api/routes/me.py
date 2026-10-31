@@ -18,6 +18,10 @@ from app.presets import get_catalog
 from app.search import runs
 from app.search.matching import rematch
 from app.search.schedule import EVERY
+from app.config import get_settings
+from app.schemas.jobs import AiStatus
+from app.scoring import providers as scorers
+from app.scoring import service as scoring
 from app.schemas.me import (
     MeRead,
     OnboardingWrite,
@@ -118,3 +122,14 @@ def post_title_check(payload: TitleCheckWrite, user: User = Depends(current_user
         wanted=wanted,
         explanation=explanation,
     )
+
+
+@router.get("/ai", response_model=AiStatus)
+def get_ai(user: User = Depends(current_user), db: Session = Depends(get_db)) -> dict:
+    """Which scorer this deployment uses, and this user's allowance this month."""
+    settings = get_settings()
+    used, spent = scoring.usage_this_month(db, user.id)
+    return {**scorers.describe(settings), "auto_score": settings.ai_auto_score,
+            "month": dt.datetime.now(dt.UTC).strftime("%Y-%m"), "scores_used": used,
+            "scores_limit": settings.ai_scores_per_month, "queued": scoring.queued_count(db, user.id),
+            "cost_usd": round(spent, 4), "budget_usd": settings.ai_budget_usd_per_month}

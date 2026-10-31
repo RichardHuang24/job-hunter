@@ -13,7 +13,7 @@
    "year"
   ],
   "days_ago": 2,
-  "description": "Contoso Health is hiring a Staff Nurse - Acute Medicine (on-site, Manchester). Join a 28-bed acute medical ward with a structured preceptorship and protected study time.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Contoso Health is hiring a Staff Nurse - Acute Medicine (on-site, Manchester). Join a 28-bed acute medical ward with a structured preceptorship and protected study time.\n\nWhat you'll need: patient assessment, medication administration, care planning and infection prevention and control.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-002",
@@ -29,7 +29,7 @@
    "year"
   ],
   "days_ago": 1,
-  "description": "Contoso Health is hiring a Senior Staff Nurse - Band 6 (on-site, Manchester). Lead shifts on a busy respiratory ward and support newly qualified nurses.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Contoso Health is hiring a Senior Staff Nurse - Band 6 (on-site, Manchester). Lead shifts on a busy respiratory ward and support newly qualified nurses.\n\nWhat you'll need: infection prevention and control, clinical documentation, basic life support and wound care.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-003",
@@ -45,7 +45,7 @@
    "year"
   ],
   "days_ago": 4,
-  "description": "Fabrikam Clinics is hiring a Registered Nurse - Day Surgery (on-site, Salford, Greater Manchester). Weekday-only day surgery unit; no nights or weekends.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Fabrikam Clinics is hiring a Registered Nurse - Day Surgery (on-site, Salford, Greater Manchester). Weekday-only day surgery unit; no nights or weekends.\n\nWhat you'll need: wound care, safeguarding, electronic patient records and phlebotomy.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-004",
@@ -61,7 +61,7 @@
    "year"
   ],
   "days_ago": 3,
-  "description": "Contoso Health is hiring a Lead Staff Nurse - Band 7 (on-site, Manchester). Manage the ward's day-to-day running and a team of twelve nurses.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Contoso Health is hiring a Lead Staff Nurse - Band 7 (on-site, Manchester). Manage the ward's day-to-day running and a team of twelve nurses.\n\nWhat you'll need: phlebotomy, manual handling, mental health awareness and professional registration.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-005",
@@ -77,7 +77,7 @@
    "year"
   ],
   "days_ago": 5,
-  "description": "Lucerne Care Homes is hiring a Registered Nurse - Nights (on-site, Stockport, Greater Manchester). Night shifts in a 40-bed nursing home with a close, long-serving team.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Lucerne Care Homes is hiring a Registered Nurse - Nights (on-site, Stockport, Greater Manchester). Night shifts in a 40-bed nursing home with a close, long-serving team.\n\nWhat you'll need: professional registration, patient assessment, medication administration and care planning.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-006",
@@ -93,7 +93,7 @@
    "year"
   ],
   "days_ago": 6,
-  "description": "Woodgrove Private Hospital is hiring a Registered Nurse (on-site, London). Surgical ward in a private hospital; enhanced pay for weekends.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Woodgrove Private Hospital is hiring a Registered Nurse (on-site, London). Surgical ward in a private hospital; enhanced pay for weekends.\n\nWhat you'll need: care planning, infection prevention and control, clinical documentation and basic life support.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-007",
@@ -109,7 +109,7 @@
    "year"
   ],
   "days_ago": 2,
-  "description": "Trey Research is hiring a Research Nurse (hybrid, Manchester). Run clinical trial visits and collect study data; two days a week from home.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Trey Research is hiring a Research Nurse (hybrid, Manchester). Run clinical trial visits and collect study data; two days a week from home.\n\nWhat you'll need: basic life support, wound care, safeguarding and electronic patient records.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-008",
@@ -125,7 +125,7 @@
    "year"
   ],
   "days_ago": 3,
-  "description": "Contoso Health is hiring a Registered Nurse - Telephone Triage (remote, Remote (UK)). Assess patients by phone and video from home; full training given.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Contoso Health is hiring a Registered Nurse - Telephone Triage (remote, Remote (UK)). Assess patients by phone and video from home; full training given.\n\nWhat you'll need: electronic patient records, phlebotomy, manual handling and mental health awareness.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-009",
@@ -141,7 +141,7 @@
    "year"
   ],
   "days_ago": 2,
-  "description": "Lucerne Care Homes is hiring a Healthcare Assistant (on-site, Manchester). Support residents with daily care; the Care Certificate is provided.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Lucerne Care Homes is hiring a Healthcare Assistant (on-site, Manchester). Support residents with daily care; the Care Certificate is provided.\n\nWhat you'll need: mental health awareness, professional registration, patient assessment and medication administration.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-010",
@@ -157,7 +157,7 @@
    "year"
   ],
   "days_ago": 7,
-  "description": "Fabrikam Clinics is hiring a Physiotherapist - Musculoskeletal (hybrid, Leeds). Outpatient MSK clinic with a mix of face-to-face and virtual appointments.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Fabrikam Clinics is hiring a Physiotherapist - Musculoskeletal (hybrid, Leeds). Outpatient MSK clinic with a mix of face-to-face and virtual appointments.\n\nWhat you'll need: medication administration, care planning, infection prevention and control and clinical documentation.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-011",
@@ -173,7 +173,7 @@
    "year"
   ],
   "days_ago": 3,
-  "description": "Northwind Health is hiring a Registered Nurse - Community (on-site, Toronto, ON). Home visits across the city; car allowance included.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Northwind Health is hiring a Registered Nurse - Community (on-site, Toronto, ON). Home visits across the city; car allowance included.\n\nWhat you'll need: clinical documentation, basic life support, wound care and safeguarding.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-012",
@@ -189,7 +189,7 @@
    "year"
   ],
   "days_ago": 8,
-  "description": "Wide World Pharmacy is hiring a Pharmacist (on-site, Dublin). Community pharmacy with a strong clinical services offer.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Wide World Pharmacy is hiring a Pharmacist (on-site, Dublin). Community pharmacy with a strong clinical services offer.\n\nWhat you'll need: safeguarding, electronic patient records, phlebotomy and manual handling.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-013",
@@ -205,7 +205,7 @@
    "year"
   ],
   "days_ago": 4,
-  "description": "Bellows Primary School is hiring a Primary Teacher (KS2) (on-site, Bristol). Year 5 class in a two-form-entry school with a supportive leadership team.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Bellows Primary School is hiring a Primary Teacher (KS2) (on-site, Bristol). Year 5 class in a two-form-entry school with a supportive leadership team.\n\nWhat you'll need: parent communication, google Classroom, teaching qualification and lesson planning.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-014",
@@ -221,7 +221,7 @@
    "year"
   ],
   "days_ago": 6,
-  "description": "Bellows Academy is hiring a Secondary Teacher - Mathematics (on-site, Birmingham). Teach maths across KS3 and KS4 in a department of nine.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Bellows Academy is hiring a Secondary Teacher - Mathematics (on-site, Birmingham). Teach maths across KS3 and KS4 in a department of nine.\n\nWhat you'll need: lesson planning, classroom management, differentiation and behaviour management.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-015",
@@ -237,7 +237,7 @@
    "year"
   ],
   "days_ago": 2,
-  "description": "Bellows Primary School is hiring a Teaching Assistant (on-site, Bristol). Support a Year 2 class, including one-to-one SEND support.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Bellows Primary School is hiring a Teaching Assistant (on-site, Bristol). Support a Year 2 class, including one-to-one SEND support.\n\nWhat you'll need: behaviour management, assessment and feedback, curriculum design and safeguarding.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-016",
@@ -253,7 +253,7 @@
    "year"
   ],
   "days_ago": 9,
-  "description": "Bellows College is hiring a Lecturer in Nursing (hybrid, Manchester). Teach on the pre-registration nursing degree and supervise placements.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Bellows College is hiring a Lecturer in Nursing (hybrid, Manchester). Teach on the pre-registration nursing degree and supervise placements.\n\nWhat you'll need: safeguarding, SEND support, pastoral care and phonics.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-017",
@@ -264,7 +264,7 @@
   "arrangement": "onsite",
   "salary": null,
   "days_ago": 5,
-  "description": "Bellows Academy is hiring a Head of Year 9 (on-site, Birmingham). Lead the pastoral team for Year 9 alongside a reduced teaching load.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Bellows Academy is hiring a Head of Year 9 (on-site, Birmingham). Lead the pastoral team for Year 9 alongside a reduced teaching load.\n\nWhat you'll need: pastoral care, behaviour management, safeguarding and parent communication.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-018",
@@ -280,7 +280,7 @@
    "hour"
   ],
   "days_ago": 3,
-  "description": "Coho Nursery is hiring a Early Years Practitioner (on-site, Leeds). Level 3 practitioner for the pre-school room.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Coho Nursery is hiring a Early Years Practitioner (on-site, Leeds). Level 3 practitioner for the pre-school room.\n\nWhat you'll need: teaching qualification, lesson planning, classroom management and differentiation.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-019",
@@ -296,7 +296,7 @@
    "year"
   ],
   "days_ago": 2,
-  "description": "Contoso is hiring a Software Engineer (hybrid, London). Build services for the payments platform in Python and Go.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Contoso is hiring a Software Engineer (hybrid, London). Build services for the payments platform in Python and Go.\n\nWhat you'll need: java, go, C# and SQL.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-020",
@@ -312,7 +312,7 @@
    "year"
   ],
   "days_ago": 1,
-  "description": "Relecloud is hiring a Senior Backend Engineer (Python) (remote, Remote (UK)). Own APIs used by thousands of small businesses; fully remote within the UK.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Relecloud is hiring a Senior Backend Engineer (Python) (remote, Remote (UK)). Own APIs used by thousands of small businesses; fully remote within the UK.\n\nWhat you'll need: SQL, react, node.js and AWS.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-021",
@@ -328,7 +328,7 @@
    "year"
   ],
   "days_ago": 4,
-  "description": "Litware is hiring a Frontend Developer - React (hybrid, Manchester). Ship features in a React and TypeScript codebase with a design system.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Litware is hiring a Frontend Developer - React (hybrid, Manchester). Ship features in a React and TypeScript codebase with a design system.\n\nWhat you'll need: AWS, docker, kubernetes and git.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-022",
@@ -344,7 +344,7 @@
    "year"
   ],
   "days_ago": 6,
-  "description": "Proseware is hiring a Staff Software Engineer (hybrid, New York, NY). Set technical direction for the data platform team.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Proseware is hiring a Staff Software Engineer (hybrid, New York, NY). Set technical direction for the data platform team.\n\nWhat you'll need: git, CI/CD, REST APIs and system design.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-023",
@@ -360,7 +360,7 @@
    "year"
   ],
   "days_ago": 3,
-  "description": "Fabrikam is hiring a Graduate Software Engineer (hybrid, Edinburgh). Two-year graduate programme with rotations across teams.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Fabrikam is hiring a Graduate Software Engineer (hybrid, Edinburgh). Two-year graduate programme with rotations across teams.\n\nWhat you'll need: system design, automated testing, python and javaScript.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-024",
@@ -376,7 +376,7 @@
    "year"
   ],
   "days_ago": 5,
-  "description": "Tailspin Toys is hiring a DevOps Engineer (hybrid, Berlin). Run Kubernetes clusters and the CI pipeline for an online store.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Tailspin Toys is hiring a DevOps Engineer (hybrid, Berlin). Run Kubernetes clusters and the CI pipeline for an online store.\n\nWhat you'll need: javaScript, typeScript, java and go.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-025",
@@ -392,7 +392,7 @@
    "year"
   ],
   "days_ago": 2,
-  "description": "Wingtip Toys is hiring a Full Stack Developer (remote, Remote). Work from anywhere on a TypeScript and Node.js product.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Wingtip Toys is hiring a Full Stack Developer (remote, Remote). Work from anywhere on a TypeScript and Node.js product.\n\nWhat you'll need: go, C#, SQL and react.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-026",
@@ -408,7 +408,7 @@
    "year"
   ],
   "days_ago": 3,
-  "description": "Woodgrove Bank is hiring a Data Analyst (hybrid, Leeds). Turn customer data into dashboards and insight for the lending team.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Woodgrove Bank is hiring a Data Analyst (hybrid, Leeds). Turn customer data into dashboards and insight for the lending team.\n\nWhat you'll need: machine learning, data visualisation, power BI and tableau.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-027",
@@ -424,7 +424,7 @@
    "year"
   ],
   "days_ago": 4,
-  "description": "Trey Research is hiring a Data Scientist (hybrid, Cambridge). Build models that help plan clinical trials.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Trey Research is hiring a Data Scientist (hybrid, Cambridge). Build models that help plan clinical trials.\n\nWhat you'll need: tableau, spark, dbt and airflow.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-028",
@@ -440,7 +440,7 @@
    "year"
   ],
   "days_ago": 2,
-  "description": "Relecloud is hiring a Machine Learning Engineer (hybrid, London). Take models from notebooks to production services.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Relecloud is hiring a Machine Learning Engineer (hybrid, London). Take models from notebooks to production services.\n\nWhat you'll need: airflow, A/B testing, LLMs and cloud data platforms.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-029",
@@ -456,7 +456,7 @@
    "year"
   ],
   "days_ago": 7,
-  "description": "Humongous Insurance is hiring a Graduate Data Analyst (on-site, Birmingham). Join the analytics graduate scheme; SQL training provided.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Humongous Insurance is hiring a Graduate Data Analyst (on-site, Birmingham). Join the analytics graduate scheme; SQL training provided.\n\nWhat you'll need: cloud data platforms, python, SQL and R.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-030",
@@ -472,7 +472,7 @@
    "year"
   ],
   "days_ago": 5,
-  "description": "VanArsdel is hiring a Senior Data Engineer (hybrid, Amsterdam). Design the pipelines behind a pricing platform.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "VanArsdel is hiring a Senior Data Engineer (hybrid, Amsterdam). Design the pipelines behind a pricing platform.\n\nWhat you'll need: R, pandas, scikit-learn and pyTorch.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-031",
@@ -488,7 +488,7 @@
    "year"
   ],
   "days_ago": 3,
-  "description": "Proseware is hiring a AI Engineer (remote, Remote (Canada)). Build LLM-powered features for customer support tools.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Proseware is hiring a AI Engineer (remote, Remote (Canada)). Build LLM-powered features for customer support tools.\n\nWhat you'll need: pyTorch, statistics, machine learning and data visualisation.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-032",
@@ -504,7 +504,7 @@
    "year"
   ],
   "days_ago": 4,
-  "description": "Northwind Traders is hiring a Management Accountant (hybrid, Leeds). Own month-end, forecasting and the management pack for two divisions.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Northwind Traders is hiring a Management Accountant (hybrid, Leeds). Own month-end, forecasting and the management pack for two divisions.\n\nWhat you'll need: variance analysis, xero, SAP and sage.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-033",
@@ -520,7 +520,7 @@
    "year"
   ],
   "days_ago": 3,
-  "description": "Woodgrove Bank is hiring a Financial Analyst (hybrid, London). FP&A role partnering with the retail banking team.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Woodgrove Bank is hiring a Financial Analyst (hybrid, London). FP&A role partnering with the retail banking team.\n\nWhat you'll need: sage, power BI, ACCA and ACA.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-034",
@@ -536,7 +536,7 @@
    "year"
   ],
   "days_ago": 6,
-  "description": "Coho Accountants is hiring a Audit Senior (hybrid, Manchester). Run audits for owner-managed businesses and coach trainees.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Coho Accountants is hiring a Audit Senior (hybrid, Manchester). Run audits for owner-managed businesses and coach trainees.\n\nWhat you'll need: ACA, CIMA, tax compliance and excel.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-035",
@@ -552,7 +552,7 @@
    "year"
   ],
   "days_ago": 2,
-  "description": "Wide World Importers is hiring a Accounts Payable Clerk (on-site, Sydney, NSW). Process supplier invoices and payment runs.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Wide World Importers is hiring a Accounts Payable Clerk (on-site, Sydney, NSW). Process supplier invoices and payment runs.\n\nWhat you'll need: excel, financial modelling, management accounts and month-end close.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-036",
@@ -568,7 +568,7 @@
    "year"
   ],
   "days_ago": 8,
-  "description": "Coho Accountants is hiring a Tax Associate (hybrid, Dublin). Corporate tax compliance for a portfolio of clients.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Coho Accountants is hiring a Tax Associate (hybrid, Dublin). Corporate tax compliance for a portfolio of clients.\n\nWhat you'll need: month-end close, reconciliations, IFRS and US GAAP.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-037",
@@ -584,7 +584,7 @@
    "year"
   ],
   "days_ago": 3,
-  "description": "Fourth Coffee is hiring a Marketing Executive (hybrid, Bristol). Plan campaigns for a growing coffee brand across email and social.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Fourth Coffee is hiring a Marketing Executive (hybrid, Bristol). Plan campaigns for a growing coffee brand across email and social.\n\nWhat you'll need: brand strategy, market research, marketing automation and canva.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-038",
@@ -600,7 +600,7 @@
    "year"
   ],
   "days_ago": 2,
-  "description": "Adventure Works is hiring a Digital Marketing Manager (remote, Remote (UK)). Lead paid search and paid social for an outdoor gear retailer.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Adventure Works is hiring a Digital Marketing Manager (remote, Remote (UK)). Lead paid search and paid social for an outdoor gear retailer.\n\nWhat you'll need: canva, SEO, PPC and google Analytics.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-039",
@@ -616,7 +616,7 @@
    "year"
   ],
   "days_ago": 5,
-  "description": "Lucerne Publishing is hiring a Content Writer (hybrid, London). Write guides and articles for a learning platform.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Lucerne Publishing is hiring a Content Writer (hybrid, London). Write guides and articles for a learning platform.\n\nWhat you'll need: google Analytics, google Ads, meta Ads and content strategy.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-040",
@@ -632,7 +632,7 @@
    "year"
   ],
   "days_ago": 4,
-  "description": "Tailspin Toys is hiring a Social Media Executive (hybrid, Manchester). Run the brand's social channels and community.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Tailspin Toys is hiring a Social Media Executive (hybrid, Manchester). Run the brand's social channels and community.\n\nWhat you'll need: content strategy, copywriting, email marketing and hubSpot.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-041",
@@ -648,7 +648,7 @@
    "year"
   ],
   "days_ago": 6,
-  "description": "Litware is hiring a Lead Generation Executive (on-site, Leeds). Book meetings for the sales team through calls and email.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Litware is hiring a Lead Generation Executive (on-site, Leeds). Book meetings for the sales team through calls and email.\n\nWhat you'll need: prospecting, cold calling, lead qualification and HubSpot.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-042",
@@ -664,7 +664,7 @@
    "year"
   ],
   "days_ago": 2,
-  "description": "Relecloud is hiring a Account Executive (hybrid, London). Close new business with mid-sized companies; uncapped commission.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Relecloud is hiring a Account Executive (hybrid, London). Close new business with mid-sized companies; uncapped commission.\n\nWhat you'll need: presentation skills, zendesk, complaint handling and prospecting.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-043",
@@ -680,7 +680,7 @@
    "year"
   ],
   "days_ago": 3,
-  "description": "Litware is hiring a Customer Success Manager (hybrid, Dublin). Look after a portfolio of 40 customer accounts.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Litware is hiring a Customer Success Manager (hybrid, Dublin). Look after a portfolio of 40 customer accounts.\n\nWhat you'll need: prospecting, cold calling, pipeline management and negotiation.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-044",
@@ -696,7 +696,7 @@
    "year"
   ],
   "days_ago": 1,
-  "description": "Humongous Insurance is hiring a Customer Service Advisor (on-site, Glasgow). Help customers by phone and chat; full training given.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Humongous Insurance is hiring a Customer Service Advisor (on-site, Glasgow). Help customers by phone and chat; full training given.\n\nWhat you'll need: negotiation, account management, salesforce and hubSpot.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-045",
@@ -712,7 +712,7 @@
    "year"
   ],
   "days_ago": 5,
-  "description": "Adventure Works Cycles is hiring a Sales Executive (on-site, Chicago, IL). Sell to independent bike shops across the Midwest.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Adventure Works Cycles is hiring a Sales Executive (on-site, Chicago, IL). Sell to independent bike shops across the Midwest.\n\nWhat you'll need: hubSpot, lead qualification, customer onboarding and renewals.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-046",
@@ -728,7 +728,7 @@
    "year"
   ],
   "days_ago": 3,
-  "description": "Wide World Importers is hiring a Operations Coordinator (on-site, Birmingham). Keep orders, suppliers and the warehouse in step.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Wide World Importers is hiring a Operations Coordinator (on-site, Birmingham). Keep orders, suppliers and the warehouse in step.\n\nWhat you'll need: process improvement, lean, six Sigma and inventory management.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-047",
@@ -744,7 +744,7 @@
    "year"
   ],
   "days_ago": 6,
-  "description": "Northwind Traders is hiring a Buyer (hybrid, Leeds). Buy for the homeware range and negotiate with suppliers.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Northwind Traders is hiring a Buyer (hybrid, Leeds). Buy for the homeware range and negotiate with suppliers.\n\nWhat you'll need: inventory management, procurement, supplier management and ERP systems.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-048",
@@ -760,7 +760,7 @@
    "year"
   ],
   "days_ago": 4,
-  "description": "Fabrikam Engineering is hiring a Project Manager (hybrid, Manchester). Deliver office fit-out projects from brief to handover.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Fabrikam Engineering is hiring a Project Manager (hybrid, Manchester). Deliver office fit-out projects from brief to handover.\n\nWhat you'll need: ERP systems, SAP, excel and project management.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-049",
@@ -776,7 +776,7 @@
    "year"
   ],
   "days_ago": 2,
-  "description": "Wide World Importers is hiring a Warehouse Supervisor (on-site, Nottingham). Supervise a shift of fifteen in a busy distribution centre.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Wide World Importers is hiring a Warehouse Supervisor (on-site, Nottingham). Supervise a shift of fifteen in a busy distribution centre.\n\nWhat you'll need: project management, PRINCE2, logistics planning and health and safety.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-050",
@@ -792,7 +792,7 @@
    "year"
   ],
   "days_ago": 7,
-  "description": "Woodgrove Bank is hiring a Executive Assistant (hybrid, London). Support two directors with diaries, travel and board papers.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Woodgrove Bank is hiring a Executive Assistant (hybrid, London). Support two directors with diaries, travel and board papers.\n\nWhat you'll need: health and safety, stakeholder management, data analysis and process improvement.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-051",
@@ -808,7 +808,7 @@
    "year"
   ],
   "days_ago": 3,
-  "description": "Fabrikam Engineering is hiring a Civil Engineer (hybrid, Birmingham). Design drainage and highways schemes; support towards chartership.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Fabrikam Engineering is hiring a Civil Engineer (hybrid, Birmingham). Design drainage and highways schemes; support towards chartership.\n\nWhat you'll need: autoCAD, solidWorks, revit and CAD.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-052",
@@ -824,7 +824,7 @@
    "year"
   ],
   "days_ago": 5,
-  "description": "Adventure Works Cycles is hiring a Graduate Mechanical Engineer (on-site, Coventry). Design and test bike components in the product team.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Adventure Works Cycles is hiring a Graduate Mechanical Engineer (on-site, Coventry). Design and test bike components in the product team.\n\nWhat you'll need: CAD, finite element analysis, MATLAB and technical drawings.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-053",
@@ -840,7 +840,7 @@
    "year"
   ],
   "days_ago": 4,
-  "description": "Fabrikam Engineering is hiring a Electrical Engineer (on-site, Munich). Electrical design for industrial automation projects.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Fabrikam Engineering is hiring a Electrical Engineer (on-site, Munich). Electrical design for industrial automation projects.\n\nWhat you'll need: technical drawings, project engineering, health and safety and CDM regulations.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-054",
@@ -856,7 +856,7 @@
    "year"
   ],
   "days_ago": 6,
-  "description": "Fabrikam Engineering is hiring a CAD Technician (hybrid, Glasgow). Produce drawings in AutoCAD and Revit for building projects.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Fabrikam Engineering is hiring a CAD Technician (hybrid, Glasgow). Produce drawings in AutoCAD and Revit for building projects.\n\nWhat you'll need: CDM regulations, eurocodes, PLC programming and root cause analysis.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-055",
@@ -872,7 +872,7 @@
    "year"
   ],
   "days_ago": 9,
-  "description": "Alpine Legal LLP is hiring a Trainee Solicitor (hybrid, London). Two-year training contract with seats in corporate, property and disputes.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Alpine Legal LLP is hiring a Trainee Solicitor (hybrid, London). Two-year training contract with seats in corporate, property and disputes.\n\nWhat you'll need: employment law, corporate law, property law and conveyancing.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-056",
@@ -888,7 +888,7 @@
    "year"
   ],
   "days_ago": 3,
-  "description": "Alpine Legal LLP is hiring a Paralegal - Commercial Property (hybrid, Manchester). Support the property team with leases and completions.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Alpine Legal LLP is hiring a Paralegal - Commercial Property (hybrid, Manchester). Support the property team with leases and completions.\n\nWhat you'll need: conveyancing, data protection (GDPR), regulatory compliance and legal research.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-057",
@@ -904,7 +904,7 @@
    "year"
   ],
   "days_ago": 5,
-  "description": "Alpine Legal LLP is hiring a Senior Associate Solicitor - Employment (hybrid, Leeds). Advise employers on tribunal claims and restructures.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Alpine Legal LLP is hiring a Senior Associate Solicitor - Employment (hybrid, Leeds). Advise employers on tribunal claims and restructures.\n\nWhat you'll need: legal research, drafting, contract review and due diligence.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-058",
@@ -920,7 +920,7 @@
    "year"
   ],
   "days_ago": 4,
-  "description": "Woodgrove Bank is hiring a Compliance Officer (hybrid, Edinburgh). Monitor conduct risk across the savings business.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Woodgrove Bank is hiring a Compliance Officer (hybrid, Edinburgh). Monitor conduct risk across the savings business.\n\nWhat you'll need: financial modelling, management accounts, month-end close and reconciliations.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-059",
@@ -936,7 +936,7 @@
    "year"
   ],
   "days_ago": 2,
-  "description": "Fourth Coffee Kitchen is hiring a Sous Chef (on-site, Bristol). Second in command in a 60-cover all-day restaurant.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Fourth Coffee Kitchen is hiring a Sous Chef (on-site, Bristol). Second in command in a 60-cover all-day restaurant.\n\nWhat you'll need: visual merchandising, upselling, team leadership and rota planning.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-060",
@@ -952,7 +952,7 @@
    "year"
   ],
   "days_ago": 3,
-  "description": "Coho Winery Restaurant is hiring a Chef de Partie (on-site, Edinburgh). Run the larder section; tips shared fairly.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Coho Winery Restaurant is hiring a Chef de Partie (on-site, Edinburgh). Run the larder section; tips shared fairly.\n\nWhat you'll need: rota planning, health and safety, bar service and barista skills.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-061",
@@ -968,7 +968,7 @@
    "hour"
   ],
   "days_ago": 1,
-  "description": "Fourth Coffee is hiring a Barista (on-site, Manchester). Make great coffee and look after regulars; training provided.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Fourth Coffee is hiring a Barista (on-site, Manchester). Make great coffee and look after regulars; training provided.\n\nWhat you'll need: barista skills, allergen awareness, customer service and food hygiene certificate.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-062",
@@ -984,7 +984,7 @@
    "year"
   ],
   "days_ago": 4,
-  "description": "Alpine Ski House is hiring a Hotel Receptionist (on-site, Edinburgh). Front desk for a 90-room city hotel, rotating shifts.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Alpine Ski House is hiring a Hotel Receptionist (on-site, Edinburgh). Front desk for a 90-room city hotel, rotating shifts.\n\nWhat you'll need: food hygiene certificate, cash handling, EPOS and till systems and food preparation.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-063",
@@ -1000,7 +1000,7 @@
    "year"
   ],
   "days_ago": 6,
-  "description": "Tailspin Toys is hiring a Store Manager (on-site, Melbourne, VIC). Run a flagship toy store and a team of twenty.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Tailspin Toys is hiring a Store Manager (on-site, Melbourne, VIC). Run a flagship toy store and a team of twenty.\n\nWhat you'll need: food preparation, stock control, visual merchandising and upselling.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-064",
@@ -1016,7 +1016,7 @@
    "hour"
   ],
   "days_ago": 2,
-  "description": "Tailspin Toys is hiring a Retail Assistant (on-site, Leeds). Help customers on the shop floor; weekend availability needed.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Tailspin Toys is hiring a Retail Assistant (on-site, Leeds). Help customers on the shop floor; weekend availability needed.\n\nWhat you'll need: upselling, team leadership, rota planning and health and safety.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-065",
@@ -1032,7 +1032,7 @@
    "year"
   ],
   "days_ago": 3,
-  "description": "Litware is hiring a Product Designer (hybrid, London). Design end-to-end flows for a B2B scheduling product.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Litware is hiring a Product Designer (hybrid, London). Design end-to-end flows for a B2B scheduling product.\n\nWhat you'll need: jira, product analytics, adobe Creative Cloud and figma.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-066",
@@ -1048,7 +1048,7 @@
    "year"
   ],
   "days_ago": 2,
-  "description": "Relecloud is hiring a Product Manager (remote, Remote (UK)). Own the onboarding journey for new small-business customers.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Relecloud is hiring a Product Manager (remote, Remote (UK)). Own the onboarding journey for new small-business customers.\n\nWhat you'll need: figma, user research, prototyping and wireframing.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-067",
@@ -1064,7 +1064,7 @@
    "year"
   ],
   "days_ago": 5,
-  "description": "Lucerne Publishing is hiring a UX Researcher (hybrid, Paris). Plan and run research with readers and authors.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Lucerne Publishing is hiring a UX Researcher (hybrid, Paris). Plan and run research with readers and authors.\n\nWhat you'll need: wireframing, design systems, usability testing and accessibility (WCAG).\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  },
  {
   "id": "demo-068",
@@ -1080,6 +1080,6 @@
    "year"
   ],
   "days_ago": 4,
-  "description": "Fourth Coffee is hiring a Graphic Designer (hybrid, Bristol). Packaging and campaign design for a coffee brand.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+  "description": "Fourth Coffee is hiring a Graphic Designer (hybrid, Bristol). Packaging and campaign design for a coffee brand.\n\nWhat you'll need: accessibility (WCAG), roadmapping, stakeholder management and agile.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  }
 ]

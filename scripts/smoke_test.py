@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Checks a running Job Hunter end to end, the way a person would use it:
 signs in by email (reading the link from Mailpit), goes through the setup,
-waits for the worker to run the first job search and checks what it found,
+waits for the worker to run the first job search and checks what it found
+and how it was scored (simulated, with no API key),
 checks a few job titles, edits the target roles, checks the API door
 refuses what it should, signs out. Needs the worker running.
 
@@ -192,6 +193,29 @@ def main() -> int:
     first = matches["items"][0]
     status, _, body = browser.json("PATCH", f"/api/backend/jobs/{first['id']}", {"state": "saved"})
     check("a job can be saved", status == 200 and [i["id"] for i in view("saved")["items"]] == [first["id"]], body)
+    deadline = time.monotonic() + 90
+    while any((i["score"] or {}).get("status") == "queued" for i in view("matches")["items"]) and time.monotonic() < deadline:
+        time.sleep(1)
+    scored = view("matches")["items"]
+    check("the matches were scored in the background", all((i["score"] or {}).get("status") == "done" for i in scored),
+          [i["score"] for i in scored])
+    ai = json.loads(browser.get("/api/backend/me/ai")[2])
+    check("with the simulated scorer when there's no API key", ai["provider"] == "simulated" and all(i["score"]["simulated"] for i in scored)
+          and ai["scores_used"] >= len(scored), ai)
+    best = [i["score"]["overall"] for i in json.loads(browser.get("/api/backend/jobs?sort=fit")[2])["items"]]
+    check("best fit comes first", best == sorted(best, reverse=True), best)
+    lead = next(i for i in view("filtered")["items"] if i["job"]["title"] == "Lead Staff Nurse - Band 7")
+    status, _, body = browser.request("POST", f"/api/backend/jobs/{lead['id']}/score")
+    check("a job can be scored on request", status == 202 and json.loads(body)["status"] == "queued", body)
+    deadline = time.monotonic() + 60
+    detail = {}
+    while time.monotonic() < deadline:
+        detail = json.loads(browser.get(f"/api/backend/jobs/{lead['id']}")[2])["score"]
+        if detail["status"] != "queued":
+            break
+        time.sleep(1)
+    check("and the score explains itself", detail.get("status") == "done" and len(detail["dimensions"]) == 4
+          and all(d["reason"] for d in detail["dimensions"]), detail)
     status, _, page = browser.get("/jobs")
     check("the jobs page lists them", status == 200 and "Staff Nurse - Acute Medicine" in page and "Search now" in page, status)
     status, _, page = browser.get("/jobs/searches")

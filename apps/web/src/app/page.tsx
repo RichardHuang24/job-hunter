@@ -1,17 +1,18 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
+import AiCard from "@/components/AiCard";
 import Card from "@/components/Card";
+import FitBadge from "@/components/FitBadge";
 import { ErrorBanner } from "@/components/Feedback";
 import TitleCheck from "@/components/TitleCheck";
 import { isActive, runSummary, salaryRange, since } from "@/lib/jobs";
 import { formatSalary, labelOf, listOf } from "@/lib/profile";
 import { backendGet } from "@/lib/session";
-import type { JobList, Me, Presets, Search } from "@/lib/types";
+import type { AiStatus, JobList, Me, Presets, Search } from "@/lib/types";
 
 // What the app will do, in the order it arrives (docs/roadmap.md).
 const COMING = [
-  { title: "Ranking", body: "Scores each posting against your profile and explains the fit." },
   { title: "Applications", body: "Tracks where every application stands." },
   { title: "CV workbench", body: "Keeps your CV content in one place and builds a tailored PDF per job." },
 ];
@@ -26,11 +27,12 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
 }
 
 export default async function DashboardPage() {
-  const [me, presets, jobs, searches] = await Promise.all([
+  const [me, presets, jobs, searches, ai] = await Promise.all([
     backendGet<Me>("/me"),
     backendGet<Presets>("/presets"),
-    backendGet<JobList>("/jobs?view=matches&limit=5"),
+    backendGet<JobList>("/jobs?view=matches&sort=fit&limit=5"),
     backendGet<Search[]>("/searches"),
+    backendGet<AiStatus>("/me/ai"),
   ]);
   if (!me) return <ErrorBanner message="The API isn't answering. Check that it's running (see the README), then reload." />;
   const profile = me.profile;
@@ -57,7 +59,7 @@ export default async function DashboardPage() {
       <div className="grid items-start gap-4 lg:grid-cols-[3fr_2fr]">
         <div className="flex flex-col gap-4">
           <Card
-            title="Latest matches"
+            title="Best matches"
             subtitle={
               latest
                 ? isActive(latest)
@@ -80,8 +82,9 @@ export default async function DashboardPage() {
             {jobs && jobs.items.length > 0 ? (
               <ul className="flex flex-col divide-y divide-hairline">
                 {jobs.items.map((item) => (
-                  <li key={item.id} className="flex flex-wrap items-baseline justify-between gap-x-4 py-2 first:pt-0 last:pb-0">
-                    <span className="min-w-0">
+                  <li key={item.id} className="flex items-center gap-3 py-2 first:pt-0 last:pb-0">
+                    <FitBadge score={item.score} size="sm" />
+                    <span className="min-w-0 flex-1">
                       <span className="text-sm font-medium">{item.job.title}</span>
                       <span className="text-sm text-ink-secondary"> · {[item.job.company, item.job.location].filter(Boolean).join(" · ")}</span>
                     </span>
@@ -126,6 +129,8 @@ export default async function DashboardPage() {
           <TitleCheck />
         </div>
 
+        <div className="flex flex-col gap-4">
+        {ai && <AiCard ai={ai} />}
         <Card title="Coming next" subtitle="Each of these joins the menu when it’s ready.">
           <ol className="flex flex-col divide-y divide-hairline">
             {COMING.map((item, index) => (
@@ -141,6 +146,7 @@ export default async function DashboardPage() {
             ))}
           </ol>
         </Card>
+        </div>
       </div>
     </div>
   );

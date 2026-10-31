@@ -35,3 +35,11 @@ def search(session: Session, task: Task) -> dict[str, Any]:
     from app.search.runs import run_task
 
     return run_task(session, task.payload["run_id"])
+
+
+@handler("score")
+def score(session: Session, task: Task) -> dict[str, Any]:
+    """Scores a batch of jobs with AI (app/scoring/service.py)."""
+    from app.scoring.service import run_task
+
+    return run_task(session, task.payload["score_ids"])

@@ -37,6 +37,60 @@ class CheckRead(BaseModel):
     detail: str
 
 
+class ScoreBrief(BaseModel):
+    status: str  # queued, done, failed
+    overall: int | None  # 0-100
+    band: str  # "Strong fit"... (presets/scoring.toml)
+    simulated: bool  # made by the simulated scorer, not Claude
+    stale: bool  # the profile, roles or posting changed since
+
+
+class DimensionRead(BaseModel):
+    key: str
+    label: str
+    weight: int  # percent
+    score: int
+    reason: str
+
+
+class EvidenceRead(BaseModel):
+    requirement: str  # quoted from the posting
+    verified: bool  # the quote was found in the posting
+    detail: str = ""
+    note: str = ""
+    kind: str = ""  # required / nice_to_have, for gaps
+
+
+class ScoreRead(ScoreBrief):
+    advice: str
+    provider: str  # anthropic, simulated
+    model: str
+    dimensions: list[DimensionRead]
+    summary: str
+    matched: list[EvidenceRead]
+    missing: list[EvidenceRead]
+    risks: list[str]
+    unclear: list[str]
+    error: str
+    error_code: str  # limit, auth, rate_limited, refusal...
+    cost_usd: float
+    requested_at: UtcDatetime
+    scored_at: UtcDatetime | None
+
+
+class AiStatus(BaseModel):
+    provider: str  # anthropic, simulated
+    model: str
+    effort: str
+    auto_score: bool
+    month: str  # 2026-10
+    scores_used: int
+    scores_limit: int
+    queued: int
+    cost_usd: float
+    budget_usd: float
+
+
 class UserJobRead(BaseModel):
     id: str
     state: str  # new, saved, hidden
@@ -46,10 +100,12 @@ class UserJobRead(BaseModel):
     checks: list[CheckRead]
     first_seen_at: UtcDatetime
     job: JobRead
+    score: ScoreBrief | None
 
 
 class UserJobDetail(UserJobRead):
     job: JobDetail
+    score: ScoreRead | None
 
 
 class JobCounts(BaseModel):

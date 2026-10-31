@@ -19,12 +19,19 @@ its own license:
 | [SQLAlchemy](https://www.sqlalchemy.org), [Alembic](https://alembic.sqlalchemy.org) | Database models, migrations | MIT |
 | [psycopg](https://www.psycopg.org) | API's Postgres driver | LGPL-3.0 |
 | [PyJWT](https://pyjwt.readthedocs.io) | Checking API tokens | MIT |
+| [Anthropic Python SDK](https://github.com/anthropics/anthropic-sdk-python) | AI scoring | Apache-2.0 |
 | [PostgreSQL](https://www.postgresql.org) | Database | PostgreSQL License |
 | [Caddy](https://caddyserver.com) | HTTPS in production | Apache-2.0 |
 | [Mailpit](https://mailpit.axllent.org) | Catching email in development | MIT |
 
 The exact versions are in `apps/web/package-lock.json` and
 `apps/api/requirements.txt`.
+
+## Services
+
+| Service | Used for | Needed |
+| --- | --- | --- |
+| [Anthropic API](https://www.anthropic.com/api) (Claude) | AI scoring - your profile and the posting are sent; see [ai-scoring.md](ai-scoring.md) | Only when `ANTHROPIC_API_KEY` is set |
 
 ## Job data
 

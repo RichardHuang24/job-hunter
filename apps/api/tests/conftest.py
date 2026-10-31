@@ -23,6 +23,7 @@ SECRET = "test-secret-" + "x" * 40
 def _settings(monkeypatch):
     monkeypatch.setenv("BACKEND_JWT_SECRET", SECRET)
     monkeypatch.setenv("ENVIRONMENT", "test")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "")  # tests never call the real API
     get_settings.cache_clear()
     yield
     get_settings.cache_clear()

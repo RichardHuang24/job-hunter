@@ -19,6 +19,7 @@ from app.db.models import Job, SavedSearch, SearchRun, User, UserJob
 from app.presets import get_catalog
 from app.search import store
 from app.search.matching import Matcher
+from app.scoring.service import queue_after_run
 from app.search.queries import build_queries
 from app.sources import Source, enabled_sources
 from app.tasks import queue
@@ -106,6 +107,7 @@ def run_search(db: Session, run: SearchRun, sources: list[Source] | None = None,
     seen_prints = {job.fingerprint for job in db.scalars(
         select(Job).join(UserJob, UserJob.job_id == Job.id).where(UserJob.user_id == user.id))}
     new = 0
+    fresh: list[UserJob] = []
     verdicts: Counter[str] = Counter()
     for job in jobs:
         user_job = have.get(job.id)
@@ -116,16 +118,19 @@ def run_search(db: Session, run: SearchRun, sources: list[Source] | None = None,
             db.add(user_job)
             have[job.id] = user_job
             seen_prints.add(job.fingerprint)
+            fresh.append(user_job)
             new += 1
         user_job.last_seen_at = now
         matcher.apply(user_job, job, now)
         verdicts[user_job.verdict] += 1
 
     search.last_run_at = now
+    db.flush()
+    scoring = queue_after_run(db, user, fresh)
     return {
         "queries": len(queries), "truncated": truncated, "found": len(found), "new": new,
         "matches": verdicts["match"], "flagged": verdicts["flagged"], "filtered": verdicts["filtered"],
-        "by_source": dict(by_source), "errors": errors,
+        "scoring": scoring, "by_source": dict(by_source), "errors": errors,
     }
 
 

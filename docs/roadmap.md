@@ -44,10 +44,16 @@ end-to-end smoke test in CI.
 Still to come: real job boards, each added once its terms are cleared
 ([third-party.md](third-party.md)).
 
-## 3. Ranking
+## 3. Ranking - done
 
-- Scoring each posting against the profile, with the reasons.
-- AI-assisted matching with a per-user budget.
+- Every new match and flagged job is scored 0-100 for fit, in the
+  background, with a reason for each of four dimensions weighted by the
+  industry preset, requirements quoted from the posting (and checked to be
+  there), gaps, risks and what the posting doesn't say.
+- Claude through the Anthropic API when a key is set; a free, clearly
+  labelled simulated scorer when not ([ai-scoring.md](ai-scoring.md)).
+- A monthly allowance per user (scores and dollars), a usage ledger with
+  the cost of every call, and "best fit first" sorting.
 
 ## 4. Applications
 

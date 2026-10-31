@@ -14,7 +14,7 @@ from __future__ import annotations
 import datetime as dt
 import uuid
 
-from sqlalchemy import JSON, BigInteger, Boolean, DateTime, ForeignKey, Index, Integer, String, Text, UniqueConstraint, false, text
+from sqlalchemy import JSON, BigInteger, Boolean, DateTime, Float, ForeignKey, Index, Integer, String, Text, UniqueConstraint, false, text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -256,6 +256,55 @@ class UserJob(Base):
     updated_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
 
     job: Mapped[Job] = relationship()
+    score: Mapped["JobScore | None"] = relationship(back_populates="user_job", cascade="all, delete-orphan")
+
+
+SCORE_STATUSES = ("queued", "done", "failed")
+
+
+class JobScore(Base):
+    """How well a job fits its user, scored by Claude or the simulator
+    (app/scoring). One per UserJob; scoring again replaces it."""
+
+    __tablename__ = "job_scores"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    user_job_id: Mapped[str] = mapped_column(ForeignKey("user_jobs.id", ondelete="CASCADE"), unique=True)
+    status: Mapped[str] = mapped_column(String(8), default="queued")
+    provider: Mapped[str] = mapped_column(String(16), default="")  # anthropic / simulated
+    model: Mapped[str] = mapped_column(String(64), default="")
+    overall: Mapped[int | None] = mapped_column(Integer, nullable=True)  # 0-100, weighted by the industry preset
+    band: Mapped[str] = mapped_column(String(32), default="")  # presets/scoring.toml
+    dimensions: Mapped[list[dict]] = mapped_column(JSON, default=list)  # [{key, label, weight, score, reason}]
+    analysis: Mapped[dict] = mapped_column(JSON, default=dict)  # summary, matched, missing, risks, unclear
+    inputs_hash: Mapped[str] = mapped_column(String(32), default="")  # what was scored; differs once out of date
+    error: Mapped[str] = mapped_column(Text, default="")
+    error_code: Mapped[str] = mapped_column(String(16), default="")
+    cost_usd: Mapped[float] = mapped_column(Float, default=0.0)
+    requested_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
+    scored_at: Mapped[dt.datetime | None] = mapped_column(UtcDateTime, nullable=True)
+
+    user_job: Mapped[UserJob] = relationship(back_populates="score")
+
+
+class AiUsage(Base):
+    """Every AI call, for the monthly limits and the bill."""
+
+    __tablename__ = "ai_usage"
+    __table_args__ = (Index("ix_ai_usage_user_month", "user_id", "created_at"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    kind: Mapped[str] = mapped_column(String(16), default="score")
+    provider: Mapped[str] = mapped_column(String(16))
+    model: Mapped[str] = mapped_column(String(64))
+    input_tokens: Mapped[int] = mapped_column(Integer, default=0)
+    output_tokens: Mapped[int] = mapped_column(Integer, default=0)
+    cache_read_tokens: Mapped[int] = mapped_column(Integer, default=0)
+    cache_write_tokens: Mapped[int] = mapped_column(Integer, default=0)
+    cost_usd: Mapped[float] = mapped_column(Float, default=0.0)
+    created_at: Mapped[dt.datetime] = mapped_column(UtcDateTime, default=_utcnow)
 
 
 TASK_STATUSES = ("queued", "running", "succeeded", "failed")

@@ -11,10 +11,11 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from app.auth import current_user
-from app.db.models import Job, User, UserJob
+from app.db.models import Job, JobScore, User, UserJob
 from app.db.session import get_db
 from app.presets import get_catalog
-from app.schemas.jobs import JobList, JobPatch, UserJobDetail, UserJobRead
+from app.schemas.jobs import JobList, JobPatch, ScoreRead, UserJobDetail, UserJobRead
+from app.scoring import service as scoring
 from app.sources import SOURCES
 
 router = APIRouter(prefix="/jobs", tags=["jobs"])
@@ -37,11 +38,14 @@ def _job(job: Job, detail: bool = False) -> dict:
     return out
 
 
-def _read(user_job: UserJob, job: Job, labels: dict[str, str], detail: bool = False) -> dict:
+def _read(user_job: UserJob, job: Job, labels: dict[str, str], context: scoring.Context, detail: bool = False) -> dict:
+    score = user_job.score
+    digest = context.request(user_job, job)[1] if score is not None else None
     return {
         "id": user_job.id, "state": user_job.state, "verdict": user_job.verdict, "role": user_job.role,
         "level": {"key": user_job.level, "label": labels.get(user_job.level, user_job.level)},
         "checks": user_job.checks, "first_seen_at": user_job.first_seen_at, "job": _job(job, detail),
+        "score": (scoring.full if detail else scoring.brief)(score, digest),
     }
 
 
@@ -50,9 +54,11 @@ def _labels() -> dict[str, str]:
 
 
 @router.get("", response_model=JobList)
-def list_jobs(view: View = "matches", q: str = Query("", max_length=100), limit: int = 50, offset: int = 0,
-              user: User = Depends(current_user), db: Session = Depends(get_db)) -> dict:
-    mine = select(UserJob, Job).join(Job, UserJob.job_id == Job.id).where(UserJob.user_id == user.id)
+def list_jobs(view: View = "matches", q: str = Query("", max_length=100), sort: Literal["recent", "fit"] = "recent",
+              limit: int = 50, offset: int = 0, user: User = Depends(current_user), db: Session = Depends(get_db)) -> dict:
+    """sort=fit puts the best AI scores first; jobs not scored yet come last."""
+    mine = (select(UserJob, Job).join(Job, UserJob.job_id == Job.id)
+            .outerjoin(JobScore, JobScore.user_job_id == UserJob.id).where(UserJob.user_id == user.id))
     if view in VERDICT:
         mine = mine.where(UserJob.verdict == VERDICT[view], UserJob.state != "hidden")
     else:
@@ -61,8 +67,10 @@ def list_jobs(view: View = "matches", q: str = Query("", max_length=100), limit:
         like = f"%{q.strip()}%"
         mine = mine.where(or_(Job.title.ilike(like), Job.company.ilike(like), Job.location.ilike(like)))
     total = db.scalar(select(func.count()).select_from(mine.subquery()))
-    rows = db.execute(mine.order_by(UserJob.first_seen_at.desc(), Job.posted_at.desc().nulls_last(), Job.id)
-                      .limit(min(max(limit, 1), 200)).offset(max(offset, 0))).all()
+    order = [UserJob.first_seen_at.desc(), Job.posted_at.desc().nulls_last(), Job.id]
+    if sort == "fit":
+        order.insert(0, JobScore.overall.desc().nulls_last())
+    rows = db.execute(mine.order_by(*order).limit(min(max(limit, 1), 200)).offset(max(offset, 0))).all()
 
     grouped = db.execute(select(UserJob.verdict, UserJob.state, func.count()).where(UserJob.user_id == user.id)
                          .group_by(UserJob.verdict, UserJob.state)).all()
@@ -74,8 +82,8 @@ def list_jobs(view: View = "matches", q: str = Query("", max_length=100), limit:
         if state == "saved":
             counts["saved"] += n
         counts[{"match": "matches", "flagged": "flagged", "filtered": "filtered"}[verdict]] += n
-    labels = _labels()
-    return {"items": [_read(uj, job, labels) for uj, job in rows], "total": total, "counts": counts}
+    labels, context = _labels(), scoring.Context.of(user)
+    return {"items": [_read(uj, job, labels, context) for uj, job in rows], "total": total, "counts": counts}
 
 
 def _mine(db: Session, user: User, user_job_id: str) -> tuple[UserJob, Job]:
@@ -88,7 +96,7 @@ def _mine(db: Session, user: User, user_job_id: str) -> tuple[UserJob, Job]:
 @router.get("/{user_job_id}", response_model=UserJobDetail)
 def get_job(user_job_id: str, user: User = Depends(current_user), db: Session = Depends(get_db)) -> dict:
     user_job, job = _mine(db, user, user_job_id)
-    return _read(user_job, job, _labels(), detail=True)
+    return _read(user_job, job, _labels(), scoring.Context.of(user), detail=True)
 
 
 @router.patch("/{user_job_id}", response_model=UserJobRead)
@@ -98,4 +106,20 @@ def patch_job(user_job_id: str, payload: JobPatch, user: User = Depends(current_
     user_job.state = payload.state
     user_job.updated_at = dt.datetime.now(dt.UTC)
     db.commit()
-    return _read(user_job, job, _labels())
+    return _read(user_job, job, _labels(), scoring.Context.of(user))
+
+
+@router.post("/{user_job_id}/score", response_model=ScoreRead, status_code=202)
+def score_job(user_job_id: str, user: User = Depends(current_user), db: Session = Depends(get_db)) -> dict:
+    """Queues an AI score (or a fresh one) for this job; the worker makes it.
+    Poll GET /jobs/{id} until score.status is no longer "queued"."""
+    user_job, job = _mine(db, user, user_job_id)
+    if user_job.score is not None and user_job.score.status == "queued":
+        raise HTTPException(status_code=409, detail="This job is already being scored.")
+    try:
+        scoring.queue(db, user, [user_job], asked=True)
+    except scoring.LimitReached as exc:
+        raise HTTPException(status_code=429, detail="This month's AI scoring allowance is used up.") from exc
+    db.commit()
+    db.refresh(user_job)
+    return scoring.full(user_job.score, scoring.Context.of(user).request(user_job, job)[1])

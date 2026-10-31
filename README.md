@@ -7,9 +7,9 @@ Find, rank and track jobs, and build a tailored CV for each one - for any
 industry, not just tech. Self-hosted, multi-user, open source.
 
 > **Status: early development.** Accounts, onboarding, profiles with
-> industry presets, and job search with deal-breaker checks work today -
-> searching built-in sample jobs until real job boards are added. Ranking,
-> the applications tracker and the CV workbench come next; see the
+> industry presets, job search with deal-breaker checks, and AI fit scoring
+> work today - searching built-in sample jobs until real job boards are
+> added. The applications tracker and the CV workbench come next; see the
 > [roadmap](docs/roadmap.md).
 
 ## What works today
@@ -28,6 +28,10 @@ industry, not just tech. Self-hosted, multi-user, open source.
   background or on demand. Every job is checked against your deal-breakers -
   role, level, arrangement, location, work permit, salary - and filed under
   Matches, Flagged or Filtered out, with the reasons. Save or hide as you go.
+- **AI fit scores**: each match scored 0-100 by Claude, with a reason per
+  dimension, requirements quoted from the posting (and checked to be there),
+  gaps and risks; best fit first. Without an Anthropic API key a free,
+  clearly labelled simulated scorer stands in ([docs/ai-scoring.md](docs/ai-scoring.md)).
 - **Pluggable job sources**, each declaring its countries and whether its
   terms allow commercial use ([docs/job-sources.md](docs/job-sources.md)).
   Built-in sample jobs make everything work on the first run.

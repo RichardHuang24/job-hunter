@@ -25,9 +25,9 @@ flowchart LR
 | --- | --- | --- |
 | `web` | Pages, sign-in, and the only door to the API | `apps/web` |
 | `api` | Every feature's logic and data, per user | `apps/api/app` |
-| `worker` | Runs searches (and later AI scoring and PDF builds) from the queue, and queues daily searches | `apps/api/app/worker.py` |
+| `worker` | Runs searches and AI scoring (and later PDF builds) from the queue, and queues daily searches | `apps/api/app/worker.py` |
 | `migrate` | Brings the schema up to date, then exits; the others wait for it | `apps/api/alembic` |
-| `db` | Postgres: users, sessions, profiles, searches, jobs, tasks - everything | |
+| `db` | Postgres: users, sessions, profiles, searches, jobs, scores, tasks - everything | |
 | `mailpit` | Development only: catches outgoing email | |
 | `caddy` | Production only: HTTPS in front of `web` | `deploy/Caddyfile` |
 
@@ -114,8 +114,21 @@ Changing the profile or the target roles re-judges every job the user has.
 Daily searches are queued by the worker itself (`app/search/schedule.py`,
 with `SKIP LOCKED` so several workers never queue the same search twice).
 
+## AI scoring
+
+After a search, the run queues a `score` task for its new matches and
+flagged jobs; **Score this job** queues one on its own. The worker builds a
+request per job (`app/scoring/prompt.py`) - the person's profile as a cached
+system prompt, the posting and its checks in the user turn - and sends it to
+Claude, or to the simulator when there's no API key
+(`app/scoring/providers.py`). The answer's quotes are checked against the
+posting, the overall score is weighted by the industry preset, and the
+result is stored in `job_scores`, one per user job. Every call is recorded
+in `ai_usage`, which the monthly allowance is checked against before each
+call. Details: [ai-scoring.md](ai-scoring.md).
+
 ## Where the rest goes
 
-See [roadmap.md](roadmap.md). AI scoring, the applications tracker, the CV
-workbench and billing all follow the same rules: data scoped to the user,
+See [roadmap.md](roadmap.md). The applications tracker, the CV workbench
+and billing all follow the same rules: data scoped to the user,
 slow work on the worker, every call through the API.

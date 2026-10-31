@@ -151,7 +151,48 @@ export type UserJob = {
   checks: Check[];
   first_seen_at: string;
   job: JobPosting;
+  score: ScoreBrief | Score | null;
 };
 
 export type JobCounts = { matches: number; flagged: number; filtered: number; saved: number; hidden: number };
 export type JobList = { items: UserJob[]; total: number; counts: JobCounts };
+
+export type ScoreBrief = {
+  status: "queued" | "done" | "failed";
+  overall: number | null;
+  band: string;
+  simulated: boolean;
+  stale: boolean;
+};
+
+export type Evidence = { requirement: string; verified: boolean; detail: string; note: string; kind: string };
+
+export type Score = ScoreBrief & {
+  advice: string;
+  provider: string;
+  model: string;
+  dimensions: { key: string; label: string; weight: number; score: number; reason: string }[];
+  summary: string;
+  matched: Evidence[];
+  missing: Evidence[];
+  risks: string[];
+  unclear: string[];
+  error: string;
+  error_code: string;
+  cost_usd: number;
+  requested_at: string;
+  scored_at: string | null;
+};
+
+export type AiStatus = {
+  provider: "anthropic" | "simulated";
+  model: string;
+  effort: string;
+  auto_score: boolean;
+  month: string;
+  scores_used: number;
+  scores_limit: number;
+  queued: number;
+  cost_usd: number;
+  budget_usd: number;
+};

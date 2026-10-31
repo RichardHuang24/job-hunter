@@ -6,7 +6,7 @@ import type { JobCounts, JobList as Jobs, Search } from "@/lib/types";
 import JobList from "./JobList";
 import RunPanel from "./RunPanel";
 
-type Params = { view?: string; q?: string; limit?: string };
+type Params = { view?: string; q?: string; limit?: string; sort?: string };
 
 function href(params: Params): string {
   const query = new URLSearchParams(Object.entries(params).filter(([, v]) => v) as [string, string][]).toString();
@@ -18,7 +18,8 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
   const view = (VIEWS.find((v) => v.key === params.view) ?? VIEWS[0]).key;
   const q = (params.q ?? "").slice(0, 100);
   const limit = Math.min(Math.max(Number(params.limit) || 50, 50), 200);
-  const query = new URLSearchParams({ view, q, limit: String(limit) });
+  const sort = params.sort === "fit" ? "fit" : undefined;
+  const query = new URLSearchParams({ view, q, limit: String(limit), sort: sort ?? "recent" });
   const [jobs, searches] = await Promise.all([backendGet<Jobs>(`/jobs?${query}`), backendGet<Search[]>("/searches")]);
   if (!jobs || !searches) return <ErrorBanner message="The API isn't answering. Check that it's running (see the README), then reload." />;
   const current = VIEWS.find((v) => v.key === view)!;
@@ -45,7 +46,7 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
             return (
               <Link
                 key={v.key}
-                href={href({ view: v.key === "matches" ? undefined : v.key, q })}
+                href={href({ view: v.key === "matches" ? undefined : v.key, q, sort })}
                 aria-current={on ? "page" : undefined}
                 className={`shrink-0 border-b-2 px-3 pb-2.5 text-sm transition-colors ${
                   on ? "border-foreground font-medium text-ink" : "border-transparent text-ink-secondary hover:text-ink"
@@ -56,8 +57,25 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
             );
           })}
         </nav>
-        <form action="/jobs" className="pb-2.5">
+        <div className="flex flex-wrap items-center gap-3 pb-2.5">
+        <nav aria-label="Sort" className="flex rounded-lg border border-edge p-0.5 text-sm">
+          {[
+            { key: undefined, label: "Newest" },
+            { key: "fit", label: "Best fit" },
+          ].map((option) => (
+            <Link
+              key={option.label}
+              href={href({ view: view === "matches" ? undefined : view, q, sort: option.key })}
+              aria-current={sort === option.key ? "true" : undefined}
+              className={`rounded-md px-2.5 py-1 ${sort === option.key ? "bg-ink/[0.08] font-medium text-ink" : "text-ink-secondary hover:text-ink"}`}
+            >
+              {option.label}
+            </Link>
+          ))}
+        </nav>
+        <form action="/jobs" className="w-full sm:w-auto">
           {view !== "matches" && <input type="hidden" name="view" value={view} />}
+          {sort && <input type="hidden" name="sort" value={sort} />}
           <label htmlFor="job-filter" className="sr-only">
             Filter by title, company or place
           </label>
@@ -66,9 +84,10 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
             name="q"
             defaultValue={q}
             placeholder="Filter by title, company or place"
-            className="h-9 w-full rounded-lg border border-edge bg-surface px-3 text-sm sm:w-72"
+            className="h-9 w-full rounded-lg border border-edge bg-surface px-3 text-sm sm:w-64"
           />
         </form>
+        </div>
       </div>
 
       {searches.length === 0 ? (
@@ -87,7 +106,7 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
         <>
           <JobList key={`${view}|${q}`} initial={jobs.items} view={view} />
           {jobs.total > jobs.items.length && (
-            <Link href={href({ view: view === "matches" ? undefined : view, q, limit: String(limit + 50) })} className="self-center text-sm underline underline-offset-2">
+            <Link href={href({ view: view === "matches" ? undefined : view, q, sort, limit: String(limit + 50) })} className="self-center text-sm underline underline-offset-2">
               Show more ({jobs.total - jobs.items.length} left)
             </Link>
           )}

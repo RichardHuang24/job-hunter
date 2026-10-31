@@ -1,13 +1,14 @@
 import Link from "next/link";
+import AiCard from "@/components/AiCard";
 import { ErrorBanner } from "@/components/Feedback";
 import TitleCheck from "@/components/TitleCheck";
 import { backendGet } from "@/lib/session";
-import type { Me, Presets } from "@/lib/types";
+import type { AiStatus, Me, Presets } from "@/lib/types";
 import ProfileForm from "./ProfileForm";
 import TargetsEditor from "./TargetsEditor";
 
 export default async function SettingsPage() {
-  const [me, presets] = await Promise.all([backendGet<Me>("/me"), backendGet<Presets>("/presets")]);
+  const [me, presets, ai] = await Promise.all([backendGet<Me>("/me"), backendGet<Presets>("/presets"), backendGet<AiStatus>("/me/ai")]);
   if (!me || !presets) return <ErrorBanner message="The API isn't answering. Check that it's running (see the README), then reload." />;
   return (
     <div className="flex flex-col gap-8">
@@ -27,6 +28,7 @@ export default async function SettingsPage() {
         <div className="flex flex-col gap-6 lg:sticky lg:top-20">
           <TargetsEditor initial={me.targets} industryKey={me.profile?.industry ?? ""} />
           <TitleCheck />
+          {ai && <AiCard ai={ai} />}
         </div>
       </div>
     </div>
