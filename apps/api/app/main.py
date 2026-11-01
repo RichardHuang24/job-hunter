@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.api.routes import admin, applications, billing, cv, health, jobs, me, presets, privacy, searches, sources
+from app.api.routes import admin, applications, billing, cv, demo, health, jobs, me, presets, privacy, searches, sources
 from app.auth import check_secret
 from app.config import get_settings
 from app.observability import RequestLog, init_sentry, setup_logging
@@ -38,3 +38,4 @@ app.include_router(cv.router)
 app.include_router(billing.router)
 app.include_router(privacy.router)
 app.include_router(admin.router)
+app.include_router(demo.router)

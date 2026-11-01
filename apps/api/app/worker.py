@@ -28,6 +28,7 @@ from pathlib import Path
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.config import get_settings
+from app import demo
 from app.db.models import Task
 from app.db.session import get_sessionmaker
 from app.observability import init_sentry, setup_logging
@@ -151,6 +152,8 @@ def serve(sessions: sessionmaker[Session], worker: str, stopping: Callable[[], b
                 with sessions() as session:
                     if queued := schedule_due(session):
                         log.info("Queued %d daily search(es)", queued)
+                    if settings.demo_mode:
+                        demo.expire(session)  # demo accounts last a day
             except Exception:  # noqa: BLE001 - scheduling tries again next time
                 log.exception("Couldn't schedule daily searches")
         try:

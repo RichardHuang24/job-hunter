@@ -204,6 +204,33 @@ def delete_account(page: Page, web: str, email: str) -> None:
     step("deleting the account removes it and signs out")
 
 
+def demo_tour(page: Page, web: str) -> dict:
+    """DEMO_MODE=true: try Job Hunter as a fictional person, from the sign-in page."""
+    page.goto(f"{web}/signin")
+    expect(page.get_by_role("heading", name="Try Job Hunter")).to_be_visible()
+    expect(page.get_by_role("button", name=re.compile("^Try as "))).to_have_count(3)
+    expect(page.get_by_label("Email")).to_have_count(0)  # no real accounts on a demo site
+    step("the demo's sign-in page offers three fictional people")
+    page.get_by_role("button", name="Try as Jo").click()
+    page.wait_for_url(f"{web}/")
+    expect(page.get_by_role("heading", name="Welcome, Jo Example")).to_be_visible()
+    expect(page.get_by_text(re.compile("^A demo: the people, jobs and companies are made up"))).to_be_visible()
+    expect(page.get_by_text("Panel interview with the ward manager")).to_be_visible()
+    step("trying as Jo lands on a dashboard with her next steps")
+    page.get_by_role("link", name="Jobs", exact=True).click()
+    expect(page.get_by_text("Senior Staff Nurse - Band 6", exact=True)).to_be_visible()
+    expect(page.get_by_title("Scoring")).to_have_count(0)
+    expect(page.get_by_role("link", name=re.compile(r"^Saved\s+1"))).to_be_visible()
+    page.get_by_role("link", name="Applications", exact=True).click()
+    expect(page.get_by_role("link", name=re.compile(r"^Interviewing\s+1"))).to_be_visible()
+    expect(page.get_by_role("link", name=re.compile(r"^Closed\s+1"))).to_be_visible()
+    page.get_by_role("link", name="CV", exact=True).click()
+    expect(page.get_by_label("Job title").first).to_have_value("Staff Nurse - Acute Medicine")
+    expect(page.get_by_role("link", name="Download")).to_be_visible(timeout=120_000)
+    step("her jobs are scored, her applications under way, and her CV PDF made")
+    return page.context.storage_state()
+
+
 def check_layouts(browser, web: str, state: dict, errors: list[str]) -> None:
     for scheme, name, size in (("light", "phone", {"width": 390, "height": 844}),
                                ("dark", "phone", {"width": 390, "height": 844}),
@@ -225,6 +252,7 @@ def main() -> int:
     parser.add_argument("--web", default="http://localhost:3420")
     parser.add_argument("--mailpit", default="http://localhost:8025")
     parser.add_argument("--shots", default="browser-test", help="where to save a screenshot on failure")
+    parser.add_argument("--demo", action="store_true", help="test a demo site (DEMO_MODE=true) instead")
     args = parser.parse_args()
     web = args.web.rstrip("/")
     errors: list[str] = []
@@ -235,10 +263,16 @@ def main() -> int:
         page.on("console", lambda m: m.type == "error" and errors.append(m.text))
         page.on("pageerror", lambda e: errors.append(str(e)))
         try:
-            email = f"browser-{uuid.uuid4().hex[:8]}@example.com"
-            state = run(page, web, args.mailpit, errors, email)
-            check_layouts(browser, web, state, errors)
-            delete_account(page, web, email)
+            if args.demo:
+                state = demo_tour(page, web)
+                check_layouts(browser, web, state, errors)
+                me = page.request.get(f"{web}/api/backend/me").json()
+                delete_account(page, web, me["email"])
+            else:
+                email = f"browser-{uuid.uuid4().hex[:8]}@example.com"
+                state = run(page, web, args.mailpit, errors, email)
+                check_layouts(browser, web, state, errors)
+                delete_account(page, web, email)
             if errors:
                 raise AssertionError("errors in the browser: " + " | ".join(errors))
         except Exception as exc:  # noqa: BLE001 - report it, keep a picture, fail

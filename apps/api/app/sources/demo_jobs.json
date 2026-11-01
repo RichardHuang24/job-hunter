@@ -1081,5 +1081,165 @@
   ],
   "days_ago": 4,
   "description": "Fourth Coffee is hiring a Graphic Designer (hybrid, Bristol). Packaging and campaign design for a coffee brand.\n\nWhat you'll need: accessibility (WCAG), roadmapping, stakeholder management and agile.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-069",
+  "title": "Data Analyst - Marketing",
+  "company": "Fourth Coffee",
+  "location": "Remote (UK)",
+  "country": "GB",
+  "arrangement": "remote",
+  "salary": [
+   36000,
+   40000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 2,
+  "description": "Fourth Coffee is hiring a Data Analyst - Marketing (remote, Remote (UK)). Measure what works across email, social and the app, and help the marketing team decide where to spend.\n\nWhat you'll need: SQL, python, A/B testing and data visualisation.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-070",
+  "title": "Junior Data Scientist",
+  "company": "Humongous Insurance",
+  "location": "Leeds",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   34000,
+   38000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 5,
+  "description": "Humongous Insurance is hiring a Junior Data Scientist (hybrid, Leeds). Build your first production models - pricing and claims - with a friendly team and a training budget.\n\nWhat you'll need: python, pandas, statistics and machine learning.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-071",
+  "title": "Senior Data Analyst",
+  "company": "Woodgrove Bank",
+  "location": "Leeds",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   48000,
+   55000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 4,
+  "description": "Woodgrove Bank is hiring a Senior Data Analyst (hybrid, Leeds). Lead the analytics for the savings products and mentor two analysts.\n\nWhat you'll need: SQL, power BI, statistics and stakeholder management.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-072",
+  "title": "Data Analyst (Fixed Term)",
+  "company": "Lucerne Publishing",
+  "location": "Leeds",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   30000,
+   32000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 7,
+  "description": "Lucerne Publishing is hiring a Data Analyst (Fixed Term) (onsite, Leeds). A 12-month contract to clean up reader data and report on subscriptions, in the Leeds office.\n\nWhat you'll need: SQL, excel and data visualisation.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-073",
+  "title": "Backend Engineer - Python",
+  "company": "Contoso",
+  "location": "London",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   65000,
+   80000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 2,
+  "description": "Contoso is hiring a Backend Engineer - Python (hybrid, London). Build the services behind a booking platform used by 3,000 venues; two days a week in the office.\n\nWhat you'll need: python, SQL, docker and REST APIs.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-074",
+  "title": "Full Stack Engineer",
+  "company": "Adventure Works",
+  "location": "Remote (UK)",
+  "country": "GB",
+  "arrangement": "remote",
+  "salary": [
+   60000,
+   72000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 3,
+  "description": "Adventure Works is hiring a Full Stack Engineer (remote, Remote (UK)). Own features end to end on a cycling app, from the API to the React front end.\n\nWhat you'll need: TypeScript, react, python and AWS.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-075",
+  "title": "Lead Software Engineer",
+  "company": "Woodgrove Bank",
+  "location": "London",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   95000,
+   110000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 6,
+  "description": "Woodgrove Bank is hiring a Lead Software Engineer (hybrid, London). Lead a team of six building the bank's mobile back end.\n\nWhat you'll need: system design, java, AWS and leadership.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-076",
+  "title": "Software Engineer - Payments",
+  "company": "Proseware",
+  "location": "London",
+  "country": "GB",
+  "arrangement": "onsite",
+  "salary": [
+   70000,
+   82000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 1,
+  "description": "Proseware is hiring a Software Engineer - Payments (onsite, London). Work on card payments in a small team, five days a week in the office.\n\nWhat you'll need: go, SQL, kafka and REST APIs.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-077",
+  "title": "Junior Software Engineer",
+  "company": "Litware",
+  "location": "London",
+  "country": "GB",
+  "arrangement": "hybrid",
+  "salary": [
+   35000,
+   40000,
+   "GBP",
+   "year"
+  ],
+  "days_ago": 8,
+  "description": "Litware is hiring a Junior Software Engineer (hybrid, London). A first role on the platform team, with a mentor and a learning budget.\n\nWhat you'll need: python, git and SQL.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
+ },
+ {
+  "id": "demo-078",
+  "title": "Software Engineer (Contract)",
+  "company": "Tailspin Toys",
+  "location": "Remote (UK)",
+  "country": "GB",
+  "arrangement": "remote",
+  "salary": [
+   450,
+   550,
+   "GBP",
+   "day"
+  ],
+  "days_ago": 4,
+  "description": "Tailspin Toys is hiring a Software Engineer (Contract) (remote, Remote (UK)). Six months on the online shop's checkout, outside IR35.\n\nWhat you'll need: TypeScript, node.js and AWS.\n\nThis is a sample posting from Job Hunter's demo data. The employer is fictional."
  }
 ]

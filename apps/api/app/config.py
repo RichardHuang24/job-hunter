@@ -99,6 +99,12 @@ class Settings(BaseSettings):
     privacy_controller: str = ""  # a person's or company's name
     privacy_contact: str = ""  # an email address
 
+    # Demo mode (app/demo.py): the sign-in page offers fictional people to try
+    # Job Hunter as, each a fresh account deleted after DEMO_ACCOUNT_HOURS.
+    demo_mode: bool = False
+    demo_account_hours: int = 24
+    demo_accounts_per_hour: int = 300  # at most, across everyone
+
     # Where the industry and market presets are. Empty: the presets/ folder
     # found above the code (the repo's, or /app/presets in Docker).
     presets_dir: str = ""

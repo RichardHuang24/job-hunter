@@ -185,6 +185,14 @@ jobs:
           python -m playwright install --with-deps --only-shell chromium
       - name: The same, in a real browser
         run: python3 scripts/browser_test.py
+      - name: Demo mode - restart as a demo site, and try it as a fictional person
+        run: |
+          DEMO_MODE=true docker compose up -d api worker web
+          for _ in $(seq 1 90); do
+            curl -fsS http://localhost:8420/demo 2>/dev/null | grep -q '"enabled":true' && curl -fsS -o /dev/null http://localhost:3420/signin && break
+            sleep 2
+          done
+          python3 scripts/browser_test.py --demo
       - name: Screenshot of a failure
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
