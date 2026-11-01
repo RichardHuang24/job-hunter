@@ -7,7 +7,9 @@ and exports applications as CSV, downloads all the user's data, builds a CV PDF 
 LaTeX and downloads it from storage, checks a few job titles, edits the
 target roles, checks the API door refuses what it should, signs out. Needs
 the worker running. With SMOKE_STRIPE_WEBHOOK_SECRET set (and billing on),
-it also sends Stripe's webhook a signed event and a forged one.
+it also sends Stripe's webhook a signed event and a forged one; with
+SMOKE_ADMIN_EMAIL (one of ADMIN_EMAILS), it signs in as that admin and checks
+the admin page.
 
     docker compose up --build -d
     python3 scripts/smoke_test.py            # defaults suit docker-compose.yml
@@ -30,6 +32,7 @@ import re
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 import uuid
 import zipfile
@@ -117,6 +120,15 @@ def form_with(page: str, text: str) -> dict:
         if text in form["text"]:
             return form
     raise AssertionError(f"no form with {text!r} on the page")
+
+
+def forget_mail(mailpit: str, address: str) -> None:
+    """Deletes earlier emails to an address, so an old (used) sign-in link isn't picked up."""
+    query = urllib.parse.quote(f"to:{address}")
+    try:
+        urllib.request.urlopen(urllib.request.Request(f"{mailpit}/api/v1/search?query={query}", method="DELETE"), timeout=10)
+    except urllib.error.URLError:
+        pass
 
 
 def sign_in_link(mailpit: str, address: str, timeout: float = 30) -> str:
@@ -309,6 +321,24 @@ def main() -> int:
           and any(n.startswith("cv/") for n in exported["names"]), (status, exported.get("names")))
     status, _, _ = browser.json("DELETE", "/api/backend/me", {"confirm": "not-me@example.com"})
     check("deleting the account needs your email typed", status == 400 and browser.get("/api/backend/me")[0] == 200, status)
+
+    check("the admin page is closed to everyone else", browser.get("/api/backend/admin/overview")[0] == 403
+          and browser.get("/admin")[0] == 404 and not json.loads(browser.get("/api/backend/me")[2])["is_admin"])
+    admin_email = os.environ.get("SMOKE_ADMIN_EMAIL", "")
+    if admin_email:
+        admin = Client(args.web)
+        forget_mail(args.mailpit.rstrip("/"), admin_email)
+        admin.submit("/signin", form_with(admin.get("/signin")[2], "sign-in link"), {"email": admin_email})
+        admin.get(sign_in_link(args.mailpit.rstrip("/"), admin_email))
+        status, _, body = admin.get("/api/backend/admin/overview")
+        overview = json.loads(body) if status == 200 else {}
+        check("an admin sees people, AI costs per person, sources and the queue", status == 200
+              and overview["people"]["total"] >= 2 and any(u["email"] == address for u in overview["ai"]["by_user"])
+              and any(s["key"] == "demo" and s["runs"] >= 1 and s["failed"] == 0 for s in overview["sources"])
+              and any(k["kind"] == "search" for k in overview["queue"]["by_kind"]), body[:300])
+        status, _, page = admin.get("/admin")
+        check("and the admin page shows them", status == 200 and "AI costs this month" in page and address in page
+              and "Job sources, last 7 days" in page and "Task queue" in page, status)
 
     status, headers, _ = browser.get("/onboarding")
     check("the setup now leads to settings", status == 307 and "/settings" in headers.get("location", ""), status)

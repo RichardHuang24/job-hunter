@@ -30,6 +30,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from app.config import get_settings
 from app.db.models import Task
 from app.db.session import get_sessionmaker
+from app.observability import init_sentry, setup_logging
 from app.search.recheck import queue_recheck
 from app.search.schedule import schedule_due
 from app.tasks import queue
@@ -64,17 +65,21 @@ def run_one(sessions: sessionmaker[Session], worker: str, lease_seconds: int) ->
         if task is None:
             return False
         handler = HANDLERS.get(task.kind)
+        fields = {"task_id": task.id, "kind": task.kind, "user_id": task.user_id, "attempt": task.attempts}
+        started = time.perf_counter()
         try:
             if handler is None:
                 raise LookupError(f"No handler for task kind '{task.kind}'")
             result = handler(session, task)
         except Exception as exc:  # noqa: BLE001 - any failure is recorded on the task, and retried
             session.rollback()
-            log.exception("Task %s (%s) failed", task.id, task.kind)
+            log.exception("Task %s failed", task.kind, extra={
+                **fields, "outcome": "failed", "duration_ms": round((time.perf_counter() - started) * 1000)})
             queue.fail(session, task, f"{type(exc).__name__}: {exc}")
         else:
             queue.succeed(session, task, result)
-            log.info("Task %s (%s) succeeded", task.id, task.kind)
+            log.info("Task %s succeeded", task.kind, extra={
+                **fields, "outcome": "succeeded", "duration_ms": round((time.perf_counter() - started) * 1000)})
         return True
 
 
@@ -103,7 +108,7 @@ def main() -> None:
     args = parser.parse_args()
     if args.alive:
         sys.exit(0 if alive(heartbeat_file(), get_settings().task_lease_seconds + 60) else 1)
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+    setup_logging()
     if args.check:
         ok = check(get_sessionmaker(), args.timeout)
         print("A worker answered." if ok else f"No worker answered within {args.timeout:g} s.")
@@ -118,6 +123,7 @@ def main() -> None:
 
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
+    init_sentry("worker")
     log.info("Worker %s started", worker)
     serve(get_sessionmaker(), worker, lambda: stopping)
 

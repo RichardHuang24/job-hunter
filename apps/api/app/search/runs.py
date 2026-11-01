@@ -83,17 +83,23 @@ def run_search(db: Session, run: SearchRun, sources: list[Source] | None = None,
     errors: list[dict] = []
     found: dict[tuple[str, str], tuple[str, object]] = {}
     by_source: Counter[str] = Counter()
+    # Per source: queries asked, postings back, and the error if it failed (the admin page's error rates).
+    asked: dict[str, dict] = {}
 
     for source in _sources_for(search, sources if sources is not None else enabled_sources()):
         for query in queries:
             if not source.covers(query):
                 continue
+            stats = asked.setdefault(source.key, {"queries": 0, "postings": 0, "error": ""})
+            stats["queries"] += 1
             try:
                 postings = source.search(query)
             except Exception as exc:  # noqa: BLE001 - one source failing doesn't stop the others
-                log.warning("Source %s failed on %r: %s", source.key, query.term, exc)
+                log.warning("Source %s failed: %s", source.key, exc)
                 errors.append({"source": source.key, "message": f"{type(exc).__name__}: {exc}"[:300]})
+                stats["error"] = errors[-1]["message"]
                 break
+            stats["postings"] += len(postings)
             for posting in postings:
                 if (source.key, posting.source_id) not in found:
                     found[(source.key, posting.source_id)] = (source.key, posting)
@@ -130,7 +136,7 @@ def run_search(db: Session, run: SearchRun, sources: list[Source] | None = None,
     return {
         "queries": len(queries), "truncated": truncated, "found": len(found), "new": new,
         "matches": verdicts["match"], "flagged": verdicts["flagged"], "filtered": verdicts["filtered"],
-        "scoring": scoring, "by_source": dict(by_source), "errors": errors,
+        "scoring": scoring, "by_source": dict(by_source), "sources": asked, "errors": errors,
     }
 
 

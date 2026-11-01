@@ -106,6 +106,12 @@ export default async function PrivacyPage() {
           )}
           <li>{devMail ? "Sign-in emails are caught on this server (it's set up for testing)." : `Sign-in emails are sent through ${host}, which sees your email address.`}</li>
           <li>{facts?.storage ? `CV PDFs are stored with ${facts.storage}.` : "CV PDFs are stored on this server."}</li>
+          {facts?.error_reports && (
+            <li>
+              <strong className="font-medium text-ink">Sentry</strong> receives a report when something breaks: the error, without your details, what you sent or
+              what you typed.
+            </li>
+          )}
           {facts?.billing && (
             <li>
               <strong className="font-medium text-ink">Stripe</strong> handles payments; card details go to Stripe, never to this site.

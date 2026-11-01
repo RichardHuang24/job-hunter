@@ -10,3 +10,4 @@ anthropic>=2.3,<3
 httpx2>=2.16,<3
 boto3>=1.43,<2
 stripe>=16,<17
+sentry-sdk>=2.73,<3

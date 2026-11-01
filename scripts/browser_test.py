@@ -139,6 +139,12 @@ def run(page: Page, web: str, mailpit: str, errors: list[str], email: str | None
     page.get_by_role("button", name="Check", exact=True).click()
     expect(page.get_by_text("Would be included")).to_be_visible()
     step("the searches and settings pages work")
+    seen = len(errors)
+    page.goto(f"{web}/admin")
+    expect(page.get_by_text("This page could not be found.")).to_be_visible()
+    errors[seen:] = [e for e in errors[seen:] if "404" not in e]  # Chrome logs the 404 this visit expects
+    expect(page.get_by_role("link", name="Admin")).to_have_count(0)
+    step("the admin page doesn't exist for people who aren't admins")
 
     page.get_by_role("link", name="Applications", exact=True).click()
     page.wait_for_url("**/applications")

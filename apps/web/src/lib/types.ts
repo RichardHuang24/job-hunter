@@ -38,6 +38,7 @@ export type Me = {
   id: number;
   email: string | null;
   name: string | null;
+  is_admin: boolean;
   profile: Profile | null;
   targets: Target[];
 };
@@ -268,4 +269,42 @@ export type PrivacyFacts = {
   storage: string; // "" = on this server
   billing: boolean;
   cv_files_kept: number;
+  error_reports: boolean; // errors go to Sentry
+};
+
+export type AdminSource = {
+  key: string;
+  label: string;
+  enabled: boolean;
+  runs: number;
+  failed: number;
+  postings: number;
+  error_rate: number | null;
+  last_error: string;
+  last_error_at: string | null;
+  last_ok_at: string | null;
+  last_recheck: Record<string, number | string> | null;
+};
+
+export type AdminOverview = {
+  generated_at: string;
+  people: { total: number; set_up: number; new_7_days: number };
+  ai: {
+    month: string;
+    scores: number;
+    cost_usd: number;
+    by_model: { model: string; scores: number; cost_usd: number }[];
+    by_user: { user_id: number; email: string; scores: number; cost_usd: number; input_tokens: number; output_tokens: number; budget_used: number | null }[];
+    people_scoring: number;
+    scores_per_person: number;
+    budget_per_person_usd: number;
+  };
+  sources: AdminSource[];
+  queue: {
+    by_kind: { kind: string; queued: number; running: number; succeeded_24h: number; failed_24h: number }[];
+    waiting_seconds: number;
+    stuck: number;
+    recent_failures: { kind: string; error: string; at: string | null; user_id: number | null; attempts: number }[];
+  };
+  cv_pdfs: { done_7_days: number; failed_7_days: number; queued: number };
 };

@@ -61,6 +61,9 @@ industry, not just tech. Self-hosted, multi-user, open source.
 - **Privacy built in**: a public privacy page stating what this server does
   with people's data, a one-click ZIP of everything kept about you, and
   account deletion that removes it all ([docs/privacy.md](docs/privacy.md)).
+- **An admin page** for whoever runs it: people, AI costs per person, each
+  job source's error rate and the task queue - plus JSON logs and optional
+  error reports to Sentry ([docs/admin.md](docs/admin.md)).
 - **Billing groundwork**, off by default: a switch and Stripe's signed
   webhook, for the hosted version ([docs/billing.md](docs/billing.md)).
 

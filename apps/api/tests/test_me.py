@@ -27,7 +27,7 @@ def _other(sessions) -> User:
 
 def test_me_without_a_profile_yet(client, user):
     assert client.get("/me", headers=auth(user.id)).json() == {
-        "id": user.id, "email": "alex@example.com", "name": "Alex Example", "profile": None, "targets": [],
+        "id": user.id, "email": "alex@example.com", "name": "Alex Example", "is_admin": False, "profile": None, "targets": [],
     }
 
 
@@ -135,7 +135,7 @@ def test_one_user_never_sees_or_changes_another_users_data(client, sessions, use
     other = _other(sessions)
     client.post("/me/onboarding", headers=auth(user.id), json={**NURSE_PROFILE, "roles": ["registered-nurse"]})
     assert client.get("/me", headers=auth(other.id)).json() == {
-        "id": other.id, "email": "sam@example.com", "name": None, "profile": None, "targets": []}
+        "id": other.id, "email": "sam@example.com", "name": None, "is_admin": False, "profile": None, "targets": []}
     client.put("/me/targets", headers=auth(other.id), json=[{"label": "Chef", "titles": ["chef"]}])
     mine = client.get("/me", headers=auth(user.id)).json()["targets"]
     assert [t["label"] for t in mine] == ["Registered nurse"]

@@ -85,6 +85,9 @@ terms are cleared ([third-party.md](third-party.md)).
 - Done: privacy - a public privacy page drawn from the deployment's own
   settings, a download of everything kept about you, account deletion
   ([privacy.md](privacy.md)).
+- Done: running it - an admin page (people, AI costs per person, job
+  sources' error rates, the task queue), JSON logs, and error reports to
+  Sentry when it's set up ([admin.md](admin.md)).
 - Done: billing's switch (off by default) and Stripe's signed webhook,
   recording each event once; the Stripe CLI for development
   ([billing.md](billing.md)).

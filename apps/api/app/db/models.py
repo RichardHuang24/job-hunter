@@ -44,6 +44,8 @@ class User(Base):
     email: Mapped[str | None] = mapped_column(String(255), nullable=True, unique=True)
     email_verified: Mapped[dt.datetime | None] = mapped_column("emailVerified", UtcDateTime, nullable=True)
     image: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # Not Auth.js's: the database fills it in when Auth.js adds the user.
+    created_at: Mapped[dt.datetime | None] = mapped_column(UtcDateTime, nullable=True, server_default=func.now())
 
     profile: Mapped["Profile | None"] = relationship(back_populates="user", cascade="all, delete-orphan")
     targets: Mapped[list["ProfileTarget"]] = relationship(

@@ -167,4 +167,5 @@ def facts(settings: Settings | None = None) -> dict:
         "ai_provider": ai["provider"], "ai_model": ai["model"],
         "sources": [{"label": s.label, "homepage": s.homepage} for s in enabled_sources(settings) if not s.demo],
         "storage": storage, "billing": settings.billing_enabled, "cv_files_kept": settings.cv_files_kept,
+        "error_reports": bool(settings.sentry_dsn),
     }

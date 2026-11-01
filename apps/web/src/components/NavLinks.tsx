@@ -12,11 +12,12 @@ const LINKS = [
   { href: "/settings", label: "Settings" },
 ];
 
-export default function NavLinks() {
+export default function NavLinks({ admin = false }: { admin?: boolean }) {
   const pathname = usePathname();
+  const links = admin ? [...LINKS, { href: "/admin", label: "Admin" }] : LINKS;
   return (
     <nav aria-label="Main" className="flex min-w-0 gap-0.5 overflow-x-auto text-sm [scrollbar-width:none]">
-      {LINKS.map((link) => {
+      {links.map((link) => {
         const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
         return (
           <Link

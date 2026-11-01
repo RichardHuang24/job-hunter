@@ -128,3 +128,4 @@ def test_the_privacy_facts(client, monkeypatch):
     assert [s["label"] for s in s3["sources"]] == ["Himalayas", "Jobicy"]
     assert facts(Settings(storage_backend="s3", s3_endpoint_url="http://storage:7070"))["storage"] == ""  # the stack's own
     assert facts(Settings(storage_backend="s3", s3_endpoint_url=""))["storage"] == "Amazon S3"
+    assert not stated["error_reports"] and facts(Settings(sentry_dsn="https://public@sentry.example.com/1"))["error_reports"]

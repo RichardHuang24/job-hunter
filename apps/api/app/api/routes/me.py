@@ -9,7 +9,7 @@ from fastapi import APIRouter, Depends, HTTPException, Response
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from app.auth import current_user
+from app.auth import current_user, is_admin
 from app.db import profiles
 from app.db.models import SavedSearch
 from app.db.models import Profile, User
@@ -43,7 +43,7 @@ class DeleteConfirm(BaseModel):
 
 def _me(user: User) -> MeRead:
     return MeRead(
-        id=user.id, email=user.email, name=user.name,
+        id=user.id, email=user.email, name=user.name, is_admin=is_admin(user),
         profile=ProfileRead.model_validate(user.profile) if user.profile else None,
         targets=[TargetRead.model_validate(t) for t in user.targets],
     )

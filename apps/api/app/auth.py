@@ -7,10 +7,10 @@ module verifies that token. Anything without a valid one is a 401.
 from __future__ import annotations
 
 import jwt
-from fastapi import Depends, Header, HTTPException
+from fastapi import Depends, Header, HTTPException, Request
 from sqlalchemy.orm import Session
 
-from app.config import Settings, get_settings
+from app.config import Settings, admins, get_settings
 from app.db.models import User
 from app.db.session import get_db
 
@@ -42,6 +42,7 @@ def user_id_from_token(token: str, settings: Settings) -> int:
 
 
 def current_user(
+    request: Request,
     authorization: str = Header(default=""),
     db: Session = Depends(get_db),
     settings: Settings = Depends(get_settings),
@@ -52,4 +53,16 @@ def current_user(
     user = db.get(User, user_id_from_token(token, settings))
     if user is None:
         raise HTTPException(status_code=401, detail="Not signed in.")
+    request.state.user_id = user.id  # for the request log (app/observability.py)
+    return user
+
+
+def is_admin(user: User, settings: Settings | None = None) -> bool:
+    return bool(user.email) and user.email.casefold() in admins(settings)
+
+
+def admin_user(user: User = Depends(current_user), settings: Settings = Depends(get_settings)) -> User:
+    """The signed-in user, if their email is in ADMIN_EMAILS; otherwise 403."""
+    if not is_admin(user, settings):
+        raise HTTPException(status_code=403, detail="Only admins can see this.")
     return user

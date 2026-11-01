@@ -22,6 +22,7 @@ its own license:
 | [httpx2](https://pypi.org/project/httpx2/) | Calling job sources | BSD-3-Clause |
 | [boto3](https://github.com/boto/boto3) | File storage over the S3 API | Apache-2.0 |
 | [Stripe Python library](https://github.com/stripe/stripe-python) | Checking Stripe webhook signatures | MIT |
+| [Sentry Python SDK](https://github.com/getsentry/sentry-python) (`sentry-sdk`) | Error reports, only when `SENTRY_DSN` is set | MIT |
 | [TeX Live](https://tug.org/texlive/): LuaLaTeX, fontspec, geometry, xcolor, hyperref | Building CV PDFs (installed from Debian in the API image) | LPPL-1.3c and GPL-2.0-or-later, per package |
 | [Lato](https://www.latofonts.com) (`fonts-lato`) | The CV font, embedded in each PDF | OFL-1.1 |
 | [DejaVu fonts](https://dejavu-fonts.github.io) (`fonts-dejavu-core`) | Characters Lato lacks, in CV PDFs | Bitstream Vera license |
@@ -42,6 +43,7 @@ The exact versions are in `apps/web/package-lock.json` and
 | --- | --- | --- |
 | [Anthropic API](https://www.anthropic.com/api) (Claude) | AI scoring - your profile and the posting are sent; see [ai-scoring.md](ai-scoring.md) | Only when `ANTHROPIC_API_KEY` is set |
 | [Himalayas API](https://himalayas.app/api), [Jobicy API](https://jobicy.com/jobs-rss-feed) | Remote job listings - only the search terms and countries are sent, never anything about a person | When `JOB_SOURCES` includes them |
+| [Sentry](https://sentry.io), or a self-hosted Sentry or GlitchTip | Error reports - the error and its stack trace, without user details, request data or local variables ([admin.md](admin.md)) | Only when `SENTRY_DSN` is set |
 | [Stripe](https://stripe.com) | Billing - Stripe sends events to the webhook; nothing about a person is sent to Stripe yet | Only when `BILLING_ENABLED=true` |
 | Cloudflare R2, AWS S3 or another S3-compatible service | Keeping generated files (CV PDFs) instead of the built-in file store | Only when `S3_*` point there |
 

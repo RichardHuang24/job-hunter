@@ -128,9 +128,10 @@ jobs:
       - run: scripts/setup-env.sh
       - name: Use the sample jobs, so the run is predictable and calls no job board
         run: sed -i 's/^JOB_SOURCES=.*/JOB_SOURCES=demo/' .env
-      - name: Turn billing on with a test webhook secret, so the webhook is checked too
+      - name: Turn billing on with a test webhook secret, and make an admin, so both are checked too
         run: |
           sed -i 's/^BILLING_ENABLED=.*/BILLING_ENABLED=true/; s/^STRIPE_WEBHOOK_SECRET=.*/STRIPE_WEBHOOK_SECRET=whsec_ci_only_not_secret/' .env
+          sed -i 's/^ADMIN_EMAILS=.*/ADMIN_EMAILS=admin@example.com/' .env
       - name: The production setup and the billing profile are valid
         run: |
           docker compose -f docker-compose.yml -f deploy/docker-compose.prod.yml config --quiet
@@ -159,6 +160,20 @@ jobs:
         run: python3 scripts/smoke_test.py
         env:
           SMOKE_STRIPE_WEBHOOK_SECRET: whsec_ci_only_not_secret
+          SMOKE_ADMIN_EMAIL: admin@example.com
+      - name: The API and the worker log JSON lines, with no query strings
+        run: |
+          docker compose logs --no-log-prefix api worker > logs.txt
+          python3 - <<'PY'
+          import json
+          lines = [json.loads(l) for l in open("logs.txt") if l.startswith("{")]
+          requests = [l for l in lines if l.get("logger") == "job_hunter.requests"]
+          tasks = [l for l in lines if l.get("logger") == "job_hunter.worker" and l.get("task_id")]
+          assert requests and all({"request_id", "route", "status", "duration_ms"} <= set(l) for l in requests), requests[:2]
+          assert tasks and all({"kind", "outcome", "duration_ms"} <= set(l) for l in tasks), tasks[:2]
+          assert not any("?" in l["route"] for l in requests)
+          print(f"{len(lines)} JSON lines: {len(requests)} requests, {len(tasks)} tasks")
+          PY
       - name: The worker runs tasks
         run: docker compose exec -T worker python -m app.worker --check --timeout 30
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0

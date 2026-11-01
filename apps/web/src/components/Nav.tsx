@@ -2,6 +2,12 @@ import Link from "next/link";
 import { auth, signOut } from "@/auth";
 import NavLinks from "./NavLinks";
 
+/** Whether to show the Admin link. The API decides who's an admin (ADMIN_EMAILS); this only hides a link. */
+function isAdmin(email: string | null | undefined): boolean {
+  const admins = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
+  return Boolean(email) && admins.includes(email!.toLowerCase());
+}
+
 /** The top bar: stays at the top while the page scrolls. Links only once signed in. */
 export default async function Nav() {
   const session = await auth();
@@ -19,7 +25,7 @@ export default async function Nav() {
         </Link>
         {session?.user && (
           <>
-            <NavLinks />
+            <NavLinks admin={isAdmin(session.user.email)} />
             <form
               className="ml-auto flex items-center gap-3 text-sm"
               action={async () => {

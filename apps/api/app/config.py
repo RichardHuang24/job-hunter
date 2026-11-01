@@ -15,6 +15,19 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     environment: str = "development"  # development | test | production
+    app_version: str = "0.1.0"
+
+    # Who can open the admin page (/admin): email addresses, comma-separated.
+    admin_emails: str = ""
+
+    # Logs (app/observability.py): "json" for log collectors (the Docker
+    # default), "text" for reading in a terminal.
+    log_format: str = "text"
+    log_level: str = "INFO"
+    # Error reports to Sentry (or self-hosted Sentry / GlitchTip). Empty: off,
+    # and nothing is sent anywhere.
+    sentry_dsn: str = ""
+    sentry_traces_sample_rate: float = 0.0  # 0: errors only, no performance tracing
     database_url: str = "postgresql+psycopg://jobhunter:jobhunter@localhost:5432/jobhunter"
 
     # The web app signs a short-lived token for each request it forwards to the
@@ -94,3 +107,9 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
+
+
+def admins(settings: Settings | None = None) -> set[str]:
+    """ADMIN_EMAILS as a set of lower-case addresses."""
+    settings = settings or get_settings()
+    return {e.strip().casefold() for e in settings.admin_emails.split(",") if e.strip()}

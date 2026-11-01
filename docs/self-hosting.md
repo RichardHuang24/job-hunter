@@ -116,3 +116,7 @@ docker compose -f docker-compose.yml -f deploy/docker-compose.prod.yml logs -f w
 ```
 
 If the database restarts, the worker waits and carries on by itself.
+
+Logs are JSON lines; the admin page (`/admin`, for the addresses in
+`ADMIN_EMAILS`) shows AI costs, job sources' error rates and the queue; and
+`SENTRY_DSN` sends errors to Sentry - see [admin.md](admin.md).

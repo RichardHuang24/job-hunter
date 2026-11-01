@@ -274,6 +274,7 @@ class MeRead(BaseModel):
     id: int
     email: str | None
     name: str | None
+    is_admin: bool = False  # in ADMIN_EMAILS: can open /admin
     profile: ProfileRead | None
     targets: list[TargetRead]
 

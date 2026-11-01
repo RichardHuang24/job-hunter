@@ -162,6 +162,14 @@ on, Stripe's signed webhook events are recorded once each in
 `billing_events` (`app/billing.py`); plans and checkout come with the hosted
 version. Details: [billing.md](billing.md).
 
+## Running it
+
+Each request gets an id and one JSON log line (route, status, time, account
+number); each task gets one too. With `SENTRY_DSN` set, errors go to Sentry
+with everything personal stripped. The admin page - for `ADMIN_EMAILS` -
+reads people, AI costs, job sources' error rates and the queue straight from
+the database. Details: [admin.md](admin.md).
+
 ## Where the rest goes
 
 See [roadmap.md](roadmap.md). Tailored CVs, more job boards and
