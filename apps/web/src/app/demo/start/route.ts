@@ -12,8 +12,13 @@ import { DEMO_EMAIL_DOMAIN, demoMode, sameOrigin, sessionCookieName, StartLimite
 const limiter = new StartLimiter(20, 60 * 60 * 1000); // per address, per hour
 const HOURS = Number(process.env.DEMO_ACCOUNT_HOURS || 24);
 
-function back(request: NextRequest, error: string): NextResponse {
-  return NextResponse.redirect(new URL(`/signin?error=${encodeURIComponent(error)}`, request.url), 303);
+/** A redirect with a relative Location, so it works whatever address the server sees (0.0.0.0 in Docker, web:3000 behind Caddy). */
+function to(path: string): NextResponse {
+  return new NextResponse(null, { status: 303, headers: { location: path } });
+}
+
+function back(error: string): NextResponse {
+  return to(`/signin?error=${encodeURIComponent(error)}`);
 }
 
 export async function POST(request: NextRequest) {
@@ -22,7 +27,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ detail: "Start the demo from its sign-in page." }, { status: 403 });
   }
   const address = (request.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() || "unknown";
-  if (!limiter.allow(address)) return back(request, "DemoBusy");
+  if (!limiter.allow(address)) return back("DemoBusy");
   const person = String((await request.formData()).get("person") ?? "");
 
   const token = randomBytes(32).toString("hex");
@@ -37,7 +42,7 @@ export async function POST(request: NextRequest) {
     await pool.query('INSERT INTO sessions ("userId", expires, "sessionToken") VALUES ($1, $2, $3)', [userId, expires, token]);
   } catch (error) {
     console.error("Couldn't make a demo account:", error);
-    return back(request, "DemoFailed");
+    return back("DemoFailed");
   }
 
   const seeded = await backendFetch(userId, "/demo/seed", {
@@ -47,11 +52,11 @@ export async function POST(request: NextRequest) {
   }).catch(() => null);
   if (!seeded || seeded.status !== 204) {
     await pool.query("DELETE FROM users WHERE id = $1", [userId]).catch(() => undefined);
-    return back(request, seeded?.status === 429 ? "DemoBusy" : "DemoFailed");
+    return back(seeded?.status === 429 ? "DemoBusy" : "DemoFailed");
   }
 
   const secure = (process.env.AUTH_URL ?? request.url).startsWith("https:");
-  const response = NextResponse.redirect(new URL("/", request.url), 303);
+  const response = to("/");
   response.cookies.set(sessionCookieName(secure), token, { httpOnly: true, sameSite: "lax", path: "/", secure, expires });
   return response;
 }
