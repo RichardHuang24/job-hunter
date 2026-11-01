@@ -1,7 +1,8 @@
 """The browser test: a new person goes through Job Hunter in a real browser
 (headless Chromium) - sign in by email, set up, see their jobs scored, look
-at one, save one, check the settings - and every page is checked for errors
-and for fitting a phone screen in light and dark.
+at one, save one, track an application, make a CV PDF, download their
+data and delete their account - and every page is checked for errors and
+for fitting a phone screen in light and dark.
 
 Run it against a running stack with the sample jobs (JOB_SOURCES=demo), as
 CI does after `docker compose up`:
@@ -23,11 +24,12 @@ import sys
 import time
 import urllib.request
 import uuid
+import zipfile
 from pathlib import Path
 
 from playwright.sync_api import Page, expect, sync_playwright
 
-PAGES = ("/", "/jobs", "/jobs?sort=fit", "/jobs/searches", "/applications", "/cv", "/settings")
+PAGES = ("/", "/jobs", "/jobs?sort=fit", "/jobs/searches", "/applications", "/cv", "/settings", "/privacy")
 
 
 def step(label: str) -> None:
@@ -47,8 +49,12 @@ def sign_in_link(mailpit: str, address: str) -> str:
     raise AssertionError(f"no sign-in email for {address} reached Mailpit")
 
 
-def run(page: Page, web: str, mailpit: str, errors: list[str]) -> dict:
-    email = f"browser-{uuid.uuid4().hex[:8]}@example.com"
+def run(page: Page, web: str, mailpit: str, errors: list[str], email: str | None = None) -> dict:
+    email = email or f"browser-{uuid.uuid4().hex[:8]}@example.com"
+    page.goto(f"{web}/privacy")
+    expect(page.get_by_role("heading", name="Your rights")).to_be_visible()
+    expect(page.get_by_role("link", name="Source code (AGPL-3.0)")).to_be_visible()
+    step("signed out, the privacy page is open to all")
     page.goto(f"{web}/jobs")
     page.wait_for_url("**/signin**")
     step("signed out, a page sends you to sign in")
@@ -171,6 +177,27 @@ def run(page: Page, web: str, mailpit: str, errors: list[str]) -> dict:
     return page.context.storage_state()
 
 
+def delete_account(page: Page, web: str, email: str) -> None:
+    page.goto(f"{web}/settings")
+    with page.expect_download() as info:
+        page.get_by_role("link", name="Download my data").click()
+    with zipfile.ZipFile(info.value.path()) as archive:
+        data = json.loads(archive.read("data.json"))
+        assert data["account"]["email"] == email and data["applications"] and data["cv"], list(data)
+        assert any(name.startswith("cv/") for name in archive.namelist()), archive.namelist()
+    step("my data downloads as a ZIP, with my CV PDFs")
+    page.get_by_role("button", name="Delete my account...").click()
+    delete = page.get_by_role("button", name="Delete everything")
+    expect(delete).to_be_disabled()
+    page.get_by_label(re.compile("Type your email address")).fill(email)
+    delete.click()
+    page.wait_for_url("**/signin?deleted=1")
+    expect(page.get_by_text("Your account and everything in it have been deleted.")).to_be_visible()
+    page.goto(f"{web}/jobs")
+    page.wait_for_url("**/signin**")
+    step("deleting the account removes it and signs out")
+
+
 def check_layouts(browser, web: str, state: dict, errors: list[str]) -> None:
     for scheme, name, size in (("light", "phone", {"width": 390, "height": 844}),
                                ("dark", "phone", {"width": 390, "height": 844}),
@@ -202,11 +229,10 @@ def main() -> int:
         page.on("console", lambda m: m.type == "error" and errors.append(m.text))
         page.on("pageerror", lambda e: errors.append(str(e)))
         try:
-            state = run(page, web, args.mailpit, errors)
+            email = f"browser-{uuid.uuid4().hex[:8]}@example.com"
+            state = run(page, web, args.mailpit, errors, email)
             check_layouts(browser, web, state, errors)
-            page.get_by_role("button", name="Sign out").click()
-            page.wait_for_url("**/signin**")
-            step("signing out goes back to sign in")
+            delete_account(page, web, email)
             if errors:
                 raise AssertionError("errors in the browser: " + " | ".join(errors))
         except Exception as exc:  # noqa: BLE001 - report it, keep a picture, fail

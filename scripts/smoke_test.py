@@ -3,7 +3,7 @@
 signs in by email (reading the link from Mailpit), goes through the setup,
 waits for the worker to run the first job search and checks what it found
 and how it was scored (simulated, with no API key), tracks an application
-and exports applications as CSV, builds a CV PDF with
+and exports applications as CSV, downloads all the user's data, builds a CV PDF with
 LaTeX and downloads it from storage, checks a few job titles, edits the
 target roles, checks the API door refuses what it should, signs out. Needs
 the worker running. With SMOKE_STRIPE_WEBHOOK_SECRET set (and billing on),
@@ -23,6 +23,7 @@ import argparse
 import hashlib
 import hmac
 import html
+import io
 import json
 import os
 import re
@@ -31,6 +32,7 @@ import time
 import urllib.error
 import urllib.request
 import uuid
+import zipfile
 from html.parser import HTMLParser
 from http.cookiejar import CookieJar
 
@@ -58,6 +60,15 @@ class Client:
 
     def get(self, path: str):
         return self.request("GET", path)
+
+    def request_bytes(self, method: str, path: str):
+        """(status, lower-cased headers, body bytes) - for files."""
+        req = urllib.request.Request(self.base + path, method=method)
+        try:
+            with self.opener.open(req, timeout=30) as response:
+                return response.status, {k.lower(): v for k, v in response.headers.items()}, response.read()
+        except urllib.error.HTTPError as error:
+            return error.code, {k.lower(): v for k, v in error.headers.items()}, error.read()
 
     def json(self, method: str, path: str, payload: dict):
         return self.request(method, path, json.dumps(payload).encode(), {"content-type": "application/json"})
@@ -146,6 +157,9 @@ def main() -> int:
     check("signed out, pages redirect to sign-in", status == 307 and "/signin" in headers.get("location", ""), status)
     check("signed out, the API door is shut", browser.get("/api/backend/me")[0] == 401)
     check("signed out, the app icon still loads", browser.get("/icon.svg")[0] == 200)
+    status, _, page = browser.get("/privacy")
+    check("signed out, the privacy page is open to all", status == 200 and "Your rights" in page
+          and "Information Commissioner" in page and "Source code (AGPL-3.0)" in page, status)
 
     status, _, page = browser.get("/signin")
     check("the sign-in page renders", status == 200 and "Sign in" in page, status)
@@ -284,6 +298,18 @@ def main() -> int:
         status, _, _ = api.request("POST", "/billing/webhook", event,
                                    {"content-type": "application/json", "stripe-signature": f"t={at},v1={'0' * 64}"})
         check("and a forged one is refused", status == 400, status)
+    status, headers, archive = browser.request_bytes("GET", "/api/backend/me/export")
+    exported = {}
+    if status == 200:
+        with zipfile.ZipFile(io.BytesIO(archive)) as zipped:
+            exported = {"names": zipped.namelist(), "data": json.loads(zipped.read("data.json"))}
+    check("my data downloads as a ZIP", status == 200 and headers.get("content-type") == "application/zip"
+          and {"README.txt", "data.json", "applications.csv"} <= set(exported.get("names", []))
+          and exported["data"]["account"]["email"] == address and exported["data"]["applications"]
+          and any(n.startswith("cv/") for n in exported["names"]), (status, exported.get("names")))
+    status, _, _ = browser.json("DELETE", "/api/backend/me", {"confirm": "not-me@example.com"})
+    check("deleting the account needs your email typed", status == 400 and browser.get("/api/backend/me")[0] == 200, status)
+
     status, headers, _ = browser.get("/onboarding")
     check("the setup now leads to settings", status == 307 and "/settings" in headers.get("location", ""), status)
 

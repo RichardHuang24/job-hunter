@@ -6,6 +6,7 @@ import { backendGet } from "@/lib/session";
 import type { AiStatus, Me, Presets } from "@/lib/types";
 import ProfileForm from "./ProfileForm";
 import TargetsEditor from "./TargetsEditor";
+import YourData from "./YourData";
 
 export default async function SettingsPage() {
   const [me, presets, ai] = await Promise.all([backendGet<Me>("/me"), backendGet<Presets>("/presets"), backendGet<AiStatus>("/me/ai")]);
@@ -29,6 +30,7 @@ export default async function SettingsPage() {
           <TargetsEditor initial={me.targets} industryKey={me.profile?.industry ?? ""} />
           <TitleCheck />
           {ai && <AiCard ai={ai} />}
+          {me.email && <YourData email={me.email} />}
         </div>
       </div>
     </div>

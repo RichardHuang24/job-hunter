@@ -34,6 +34,8 @@ x-api: &api
     S3_BUCKET: ${S3_BUCKET:-job-hunter}
     S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:-${STORAGE_ACCESS_KEY:?run scripts/setup-env.sh first}}
     S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:-${STORAGE_SECRET_KEY:?run scripts/setup-env.sh first}}
+    PRIVACY_CONTROLLER: ${PRIVACY_CONTROLLER:-}
+    PRIVACY_CONTACT: ${PRIVACY_CONTACT:-}
     BILLING_ENABLED: ${BILLING_ENABLED:-false}
     STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
     STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
@@ -115,6 +117,7 @@ services:
       AUTH_GITHUB_SECRET: ${AUTH_GITHUB_SECRET:-}
       AUTH_GOOGLE_ID: ${AUTH_GOOGLE_ID:-}
       AUTH_GOOGLE_SECRET: ${AUTH_GOOGLE_SECRET:-}
+      SOURCE_URL: ${SOURCE_URL:-https://github.com/RichardHuang24/job-hunter}
     ports:
       - "127.0.0.1:3420:3000"
     depends_on:

@@ -82,6 +82,9 @@ terms are cleared ([third-party.md](third-party.md)).
 
 ## 6. Hosted version
 
+- Done: privacy - a public privacy page drawn from the deployment's own
+  settings, a download of everything kept about you, account deletion
+  ([privacy.md](privacy.md)).
 - Done: billing's switch (off by default) and Stripe's signed webhook,
   recording each event once; the Stripe CLI for development
   ([billing.md](billing.md)).

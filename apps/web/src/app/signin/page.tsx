@@ -11,7 +11,7 @@ const ERRORS: Record<string, string> = {
 
 export default async function SignInPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   if ((await auth())?.user) redirect("/");
-  const { error, callbackUrl } = await searchParams;
+  const { error, callbackUrl, deleted } = await searchParams;
   const redirectTo = callbackUrl?.startsWith("/") ? callbackUrl : "/";
   const email = signInOptions.find((option) => option.type === "email");
   const oauth = signInOptions.filter((option) => option.type !== "email");
@@ -22,6 +22,11 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
         <h1 className="text-3xl font-semibold tracking-tight">Sign in</h1>
         <p className="mt-2 text-[15px] text-ink-secondary">Find, rank and track jobs, and build your CV - for any industry.</p>
       </div>
+      {deleted && (
+        <p role="status" className="rounded-lg border border-edge bg-surface px-4 py-3 text-sm">
+          Your account and everything in it have been deleted.
+        </p>
+      )}
       {error && (
         <p role="alert" className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-300">
           {ERRORS[error] ?? "Couldn't sign you in. Try again."}

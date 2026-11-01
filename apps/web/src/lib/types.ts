@@ -257,3 +257,15 @@ export type Application = {
 export type ApplicationCounts = { active: number; closed: number; by_status: Record<string, number> };
 
 export type ApplicationList = { items: Application[]; total: number; counts: ApplicationCounts };
+
+export type PrivacyFacts = {
+  controller: string;
+  contact: string;
+  configured: boolean;
+  ai_provider: "anthropic" | "simulated";
+  ai_model: string;
+  sources: { label: string; homepage: string }[];
+  storage: string; // "" = on this server
+  billing: boolean;
+  cv_files_kept: number;
+};

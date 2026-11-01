@@ -81,6 +81,11 @@ class Settings(BaseSettings):
     stripe_secret_key: str = ""
     stripe_webhook_secret: str = ""
 
+    # The privacy page (/privacy): who runs this Job Hunter and how to reach
+    # them about personal data - the "controller" under UK and EU GDPR.
+    privacy_controller: str = ""  # a person's or company's name
+    privacy_contact: str = ""  # an email address
+
     # Where the industry and market presets are. Empty: the presets/ folder
     # found above the code (the repo's, or /app/presets in Docker).
     presets_dir: str = ""

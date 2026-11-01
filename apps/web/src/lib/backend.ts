@@ -26,3 +26,13 @@ export async function backendFetch(userId: string, path: string, init: RequestIn
   if (!headers.has("accept")) headers.set("accept", "application/json");
   return fetch(`${BACKEND_URL}${path}`, { ...init, headers, cache: "no-store" });
 }
+
+/** The few API answers that aren't about anyone (the privacy page's facts): no token. */
+export async function backendPublic<T>(path: string): Promise<T | null> {
+  try {
+    const response = await fetch(`${BACKEND_URL}${path}`, { headers: { accept: "application/json" }, cache: "no-store" });
+    return response.ok ? ((await response.json()) as T) : null;
+  } catch {
+    return null;
+  }
+}

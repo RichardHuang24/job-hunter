@@ -5,7 +5,8 @@ from __future__ import annotations
 
 import datetime as dt
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, Response
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.auth import current_user
@@ -34,6 +35,10 @@ from app.schemas.me import (
 )
 
 router = APIRouter(prefix="/me", tags=["me"])
+
+
+class DeleteConfirm(BaseModel):
+    confirm: str  # the account's email address, typed again
 
 
 def _me(user: User) -> MeRead:
@@ -133,3 +138,25 @@ def get_ai(user: User = Depends(current_user), db: Session = Depends(get_db)) ->
             "month": dt.datetime.now(dt.UTC).strftime("%Y-%m"), "scores_used": used,
             "scores_limit": settings.ai_scores_per_month, "queued": scoring.queued_count(db, user.id),
             "cost_usd": round(spent, 4), "budget_usd": settings.ai_budget_usd_per_month}
+
+
+@router.get("/export", response_class=Response, responses={200: {"content": {"application/zip": {}}}})
+def export_my_data(user: User = Depends(current_user), db: Session = Depends(get_db)) -> Response:
+    """Everything kept about you, as a ZIP (app/privacy.py)."""
+    from app import privacy
+
+    name = f"job-hunter-my-data-{dt.date.today().isoformat()}.zip"
+    return Response(privacy.export_zip(db, user), media_type="application/zip",
+                    headers={"Content-Disposition": f'attachment; filename="{name}"', "Cache-Control": "private, no-store"})
+
+
+@router.delete("", status_code=204)
+def delete_my_account(payload: DeleteConfirm, user: User = Depends(current_user), db: Session = Depends(get_db)) -> Response:
+    """Deletes the account and everything in it. Send your email address as
+    `confirm`, so it can't happen by accident."""
+    from app import privacy
+
+    if not user.email or payload.confirm.strip().casefold() != user.email.casefold():
+        raise HTTPException(status_code=400, detail="Type your email address exactly to confirm.")
+    privacy.delete_account(db, user)
+    return Response(status_code=204)

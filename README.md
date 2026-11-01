@@ -58,6 +58,9 @@ industry, not just tech. Self-hosted, multi-user, open source.
 - **One command to run it all** with Docker Compose - no keys needed, every
   service health-checked, on Intel/AMD and ARM - and a production setup with
   automatic HTTPS for a single VPS.
+- **Privacy built in**: a public privacy page stating what this server does
+  with people's data, a one-click ZIP of everything kept about you, and
+  account deletion that removes it all ([docs/privacy.md](docs/privacy.md)).
 - **Billing groundwork**, off by default: a switch and Stripe's signed
   webhook, for the hosted version ([docs/billing.md](docs/billing.md)).
 
