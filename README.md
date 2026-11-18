@@ -48,6 +48,9 @@ Open <http://localhost:3420> and enter a job title. Sample job data is made
 up; your CV starts blank. Each demo account is deleted after a day. To run a public demo site
 for others, see [docs/demo.md](docs/demo.md).
 
+For sharing the project, see the [LinkedIn launch draft](docs/linkedin-launch.md),
+[share image](docs/images/general-share.png) and [verified general-demo release](docs/general-demo-release.md).
+
 ## Features
 
 **Know what you're after**

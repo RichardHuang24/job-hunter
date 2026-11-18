@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "measured_at": "2026-11-18T20:32:21.161957+00:00",
+  "origin": "https://jobs.richardhuang.dev",
+  "user_agent": "LinkedInBot/1.0",
+  "metadata_in_head": {
+    "og:title": "Job Hunter \u2014 Your next role. Your own workspace.",
+    "og:description": "Enter a job title to explore the interactive project. Your CV starts blank. Sample jobs, simulated scores and independent visitor workspaces.",
+    "og:url": "https://jobs.richardhuang.dev",
+    "og:site_name": "Job Hunter",
+    "og:image": "https://jobs.richardhuang.dev/opengraph-image?da33a5747e76b610",
+    "og:image:type": "image/png",
+    "og:image:width": "1200",
+    "og:image:height": "630",
+    "og:image:alt": "Job Hunter \u2014 enter a target role, explore matches and build your own CV. Public project demo.",
+    "og:type": "website",
+    "twitter:card": "summary_large_image"
+  },
+  "scope": "Public link preview verified; no LinkedIn post was sent."
+}

@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "origin": "https://jobs.richardhuang.dev",
+  "measured_at": "2026-11-18T20:26:24.045745+00:00",
+  "checks": [
+    "Public homepage without authentication",
+    "Public LinkedIn image and metadata",
+    "Cross-origin start rejected",
+    "Custom role with blank CV and tracker",
+    "User-authored CV saves across reload",
+    "Real PDF generated and downloaded",
+    "Separate browser contexts isolate profiles, CVs and PDF files",
+    "Unlisted title starts a custom workspace",
+    "Responsive CV at 390, 768 and 1440px",
+    "Only the test visitor workspaces deleted"
+  ],
+  "browser_errors": []
+}

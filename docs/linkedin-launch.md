@@ -33,3 +33,7 @@ data products and practical AI integrations.
 The public URL has Open Graph title, description and a 1200 × 630 project image.
 Private CV, settings, application and API routes remain protected. The launch
 copy is a draft for the owner to post; no LinkedIn account action is automated.
+
+- [Download the share image](images/general-share.png)
+- [Actual public entry screenshot](images/general-entry.png)
+- [Verified release and limitations](general-demo-release.md)

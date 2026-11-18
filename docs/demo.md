@@ -34,7 +34,8 @@ job, applications at different stages with their history, and a CV with its
 PDF. They can use everything: search again, score jobs, track applications,
 edit the CV and make PDFs, download their data, delete the account.
 
-Every person, job and company in it is made up. Demo accounts use addresses
+The optional sample profiles, jobs and companies are fictional. Custom
+workspaces contain only the details visitors enter. Demo accounts use addresses
 at `demo.invalid`, which can't receive email, and are deleted - files and
 all - `DEMO_ACCOUNT_HOURS` (24) after they were made. A banner on every page
 says so.
@@ -61,7 +62,7 @@ docker compose -f docker-compose.yml -f deploy/docker-compose.prod.yml up -d --b
 ```
 
 The production setup asks for `EMAIL_SERVER`, but a demo site sends no
-email - the email sign-in is hidden - so any SMTP address will do.
+email - email and OAuth providers are disabled in demo mode - so any SMTP address will do.
 
 To show real Claude scores instead of simulated ones, set
 `ANTHROPIC_API_KEY` and keep each visitor's allowance small, for example
