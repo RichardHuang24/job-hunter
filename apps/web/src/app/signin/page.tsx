@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { auth, signIn, signInOptions } from "@/auth";
 import { backendPublic } from "@/lib/backend";
 import { demoMode } from "@/lib/demo";
+import Welcome from "@/components/Welcome";
 
 // Auth.js error codes -> what to tell the person.
 const ERRORS: Record<string, string> = {
@@ -43,6 +44,7 @@ function DemoChoice({ demo }: { demo: Demo }) {
 export default async function SignInPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   if ((await auth())?.user) redirect("/");
   const { error, callbackUrl, deleted } = await searchParams;
+  if (demoMode()) return <Welcome error={error} deleted={deleted} />;
   const redirectTo = callbackUrl?.startsWith("/") ? callbackUrl : "/";
   const demo = demoMode() ? await backendPublic<Demo>("/demo") : null;
   const email = demo ? undefined : signInOptions.find((option) => option.type === "email");

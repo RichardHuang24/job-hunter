@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
+import { auth } from "@/auth";
+import Welcome from "@/components/Welcome";
+import { demoMode } from "@/lib/demo";
 import AiCard from "@/components/AiCard";
 import Card from "@/components/Card";
 import FitBadge from "@/components/FitBadge";
@@ -10,7 +13,7 @@ import { isActive, runSummary, salaryRange, since } from "@/lib/jobs";
 import { formatSalary, labelOf, listOf } from "@/lib/profile";
 import { backendGet } from "@/lib/session";
 import { due, STATUS_LABELS } from "@/lib/applications";
-import type { AiStatus, ApplicationList, JobList, Me, Presets, Search } from "@/lib/types";
+import type { AiStatus, ApplicationList, Cv, JobList, Me, Presets, Search } from "@/lib/types";
 
 // What the app will do, in the order it arrives (docs/roadmap.md).
 const COMING = [
@@ -76,13 +79,15 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
 }
 
 export default async function DashboardPage() {
-  const [me, presets, jobs, searches, ai, applications] = await Promise.all([
+  if (demoMode() && !(await auth())?.user) return <Welcome />;
+  const [me, presets, jobs, searches, ai, applications, cv] = await Promise.all([
     backendGet<Me>("/me"),
     backendGet<Presets>("/presets"),
     backendGet<JobList>("/jobs?view=matches&sort=fit&limit=5"),
     backendGet<Search[]>("/searches"),
     backendGet<AiStatus>("/me/ai"),
     backendGet<ApplicationList>("/applications?view=active&sort=next_step&limit=4"),
+    backendGet<Cv>("/cv"),
   ]);
   if (!me) return <ErrorBanner message="The API isn't answering. Check that it's running (see the README), then reload." />;
   const profile = me.profile;
@@ -100,11 +105,16 @@ export default async function DashboardPage() {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight">Welcome, {name}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight break-words">{me.name === "Guest" ? `${me.targets[0]?.label || "Your"} workspace` : `Welcome, ${name}`}</h1>
         <p className="mt-2 text-[15px] text-ink-secondary">
           {[profile.headline, labelOf(presets?.industries, profile.industry), labelOf(presets?.markets, profile.market)].filter(Boolean).join(" · ")}
         </p>
       </div>
+
+      {me.name === "Guest" && cv && !cv.content.name && <Card title="Make this workspace yours" subtitle="Your target role is ready. Your CV and application history start empty.">
+        <div className="flex flex-wrap gap-3"><Link href="/cv" className="rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background">Fill in my CV →</Link><Link href="/settings" className="rounded-lg border border-edge px-4 py-2 text-sm">Refine my preferences</Link><Link href={jobs?.counts.flagged ? "/jobs?view=flagged" : "/jobs"} className="rounded-lg border border-edge px-4 py-2 text-sm">Explore sample jobs</Link></div>
+        <p className="mt-3 text-xs text-ink-secondary">Eligibility or missing information may flag a job for review. Add your own skills and work preferences in Settings; CV edits are kept separately.</p>
+      </Card>}
 
       <div className="grid items-start gap-4 lg:grid-cols-[3fr_2fr]">
         <div className="flex flex-col gap-4">

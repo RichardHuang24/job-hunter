@@ -61,7 +61,7 @@ export default async function PrivacyPage() {
 
       <Section title="What's kept, and why">
         <ul className="list-disc pl-5">
-          <li>Your email address and name - to sign you in by emailed link.</li>
+          <li>{facts?.demo_mode ? "A generated visitor ID and a session cookie. You do not need to give an email address to enter; contact details are optional CV fields." : "Your email address and name - to sign you in by emailed link."}</li>
           <li>Your profile: field, target roles, levels, skills, languages, places, work arrangements, where you can work, the salary you want - to find jobs and check them against what you want.</li>
           <li>Your saved searches, the jobs found for you, what you saved or hid, and each job&apos;s fit score.</li>
           <li>Your applications: their status, dates, next steps and notes.</li>
@@ -133,8 +133,9 @@ export default async function PrivacyPage() {
       </Section>
 
       <Section title="How long it's kept">
+        {facts?.demo_mode && <p>Your temporary visitor workspace expires after {facts.demo_account_hours ?? 24} hours. The cleanup worker deletes the account and its data, including CV PDFs. Export your work before it expires. Signing out removes browser access; it does not extend the workspace lifetime.</p>}
         <p>
-          Until you delete it. Deleting your account removes everything above straight away, files included; backups the site keeps may hold a copy until they expire. Shared job
+          {facts?.demo_mode ? "You can also delete it sooner in Settings." : "Until you delete it."} Deleting your account removes everything above straight away, files included; backups the site keeps may hold a copy until they expire. Shared job
           postings stay, without anything of yours.
         </p>
       </Section>
@@ -155,7 +156,7 @@ export default async function PrivacyPage() {
         </ul>
       </Section>
 
-      <p className="text-sm text-ink-muted">This notice describes Job Hunter as of 1 November 2026, and what this site is set up to do.</p>
+      <p className="text-sm text-ink-muted">This notice describes Job Hunter as of 18 November 2026, and what this site is set up to do.</p>
     </article>
   );
 }

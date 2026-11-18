@@ -11,15 +11,16 @@ import Google from "next-auth/providers/google";
 import Nodemailer from "next-auth/providers/nodemailer";
 import PostgresAdapter from "@auth/pg-adapter";
 import { pool } from "@/lib/db";
+import { demoMode } from "@/lib/demo";
 
 const providers: Provider[] = [];
-if (process.env.EMAIL_SERVER) {
+if (!demoMode() && process.env.EMAIL_SERVER) {
   providers.push(
     Nodemailer({ server: process.env.EMAIL_SERVER, from: process.env.EMAIL_FROM ?? "Job Hunter <no-reply@localhost>" }),
   );
 }
-if (process.env.AUTH_GITHUB_ID && process.env.AUTH_GITHUB_SECRET) providers.push(GitHub);
-if (process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET) providers.push(Google);
+if (!demoMode() && process.env.AUTH_GITHUB_ID && process.env.AUTH_GITHUB_SECRET) providers.push(GitHub);
+if (!demoMode() && process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET) providers.push(Google);
 
 /** The sign-in options to show, without their secrets. */
 export const signInOptions = providers.map((provider) => {
@@ -34,7 +35,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: { signIn: "/signin", verifyRequest: "/signin/check-email" },
   callbacks: {
     // proxy.ts: pages need a signed-in user; Auth.js sends anyone else to /signin.
-    authorized: ({ auth: session }) => Boolean(session?.user),
+    authorized: ({ auth: session, request }) => (demoMode() && request.nextUrl.pathname === "/") || Boolean(session?.user),
     session: ({ session, user }) => {
       // Postgres hands the id back as a number; the API token names it as a string.
       session.user.id = String(user.id);

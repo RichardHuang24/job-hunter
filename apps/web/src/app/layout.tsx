@@ -14,7 +14,10 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
   title: "Job Hunter",
-  description: "Find, rank and track jobs, and build your CV - for any industry.",
+  description: "Start with your target role. Explore opportunities, track applications and build your own CV in an independent demo workspace.",
+  metadataBase: new URL(process.env.AUTH_URL || "http://localhost:3420"),
+  openGraph: { title: "Job Hunter — Your next role. Your own workspace.", description: "Enter a job title to explore the interactive project. Your CV starts blank. Sample jobs, simulated scores and independent visitor workspaces.", type: "website", url: "/", siteName: "Job Hunter" },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -23,7 +26,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="flex min-h-full flex-col">
         {demoMode() && (
           <p className="bg-foreground px-4 py-2 text-center text-sm text-background">
-            A demo: the people, jobs and companies are made up, and demo accounts are deleted after a day.{" "}
+            Public demo · Fictional sample jobs · Simulated scores · Independent workspaces expire after {Number(process.env.DEMO_ACCOUNT_HOURS || 24)} hours.{" "}
             <a href={SOURCE_URL} className="underline underline-offset-2">
               Run your own
             </a>

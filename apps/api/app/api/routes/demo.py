@@ -6,7 +6,7 @@ from __future__ import annotations
 import datetime as dt
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.orm import Session
 
 from app import demo
@@ -20,6 +20,11 @@ router = APIRouter(prefix="/demo", tags=["demo"])
 
 class SeedWrite(BaseModel):
     person: str
+
+
+class RoleWrite(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    job_title: str = Field(min_length=2, max_length=80)
 
 
 @router.get("")
@@ -40,5 +45,18 @@ def seed(payload: SeedWrite, user: User = Depends(current_user), db: Session = D
         raise HTTPException(status_code=429, detail="The demo is busy - try again in a few minutes.")
     try:
         demo.seed(db, user, payload.person, settings=settings)
+    except demo.DemoError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.post("/role", status_code=204)
+def start_role(payload: RoleWrite, user: User = Depends(current_user), db: Session = Depends(get_db)) -> None:
+    settings = get_settings()
+    if not settings.demo_mode:
+        raise HTTPException(status_code=404, detail="This isn't a demo site.")
+    if demo.recent_accounts(db, dt.datetime.now(dt.UTC)) > settings.demo_accounts_per_hour:
+        raise HTTPException(status_code=429, detail="The demo is busy - try again in a few minutes.")
+    try:
+        demo.start_role(db, user, payload.job_title, settings)
     except demo.DemoError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc

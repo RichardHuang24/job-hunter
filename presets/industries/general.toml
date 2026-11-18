@@ -1,0 +1,15 @@
+label = "Other / custom role"
+description = "Your own target role, without assumptions about your industry, experience or skills."
+skills = []
+
+[scoring]
+skills = 30
+experience = 30
+culture = 15
+career = 25
+
+[[roles]]
+key = "custom"
+label = "Custom role"
+titles = ["custom role"]
+search = ["custom role"]

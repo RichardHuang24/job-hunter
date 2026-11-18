@@ -1,7 +1,25 @@
 # A demo site
 
-Demo mode turns a Job Hunter into a public site anyone can try without
-signing up. The sign-in page offers three fictional people:
+Demo mode turns Job Hunter into a public site anyone can try without signing up.
+The public homepage starts with one question: **What role are you looking for?**
+Entering a title creates an independent visitor account with that target role,
+a queued sample search, an empty application tracker and a completely blank CV.
+No name, email, employer, skills or work history is invented for the visitor.
+Known role names can supply matching title synonyms; unlisted roles use the
+general preset. Settings remains available for location, eligibility and skills.
+
+The public deployment uses fictional sample jobs and simulated scores, clearly
+labelled on the homepage and inside the workspace. A title outside the sample
+dataset may return no matches; the app does not fabricate postings. CV edits are
+separate from the search profile. Visitors can save a CV, generate a PDF,
+export their data and delete their workspace.
+
+Each workspace expires after `DEMO_ACCOUNT_HOURS` (24 by default). Export work
+you want to keep; this is a temporary project demo, not a permanent account
+service. Email and OAuth providers are disabled in demo mode.
+
+The optional **Prefer a ready-made walkthrough?** section still offers three
+fictional people, each with an explicit sample CV and applications:
 
 | Person | Who | Arrives with |
 | --- | --- | --- |

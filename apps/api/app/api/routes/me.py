@@ -154,9 +154,10 @@ def export_my_data(user: User = Depends(current_user), db: Session = Depends(get
 def delete_my_account(payload: DeleteConfirm, user: User = Depends(current_user), db: Session = Depends(get_db)) -> Response:
     """Deletes the account and everything in it. Send your email address as
     `confirm`, so it can't happen by accident."""
-    from app import privacy
+    from app import privacy, demo
 
-    if not user.email or payload.confirm.strip().casefold() != user.email.casefold():
+    visitor_confirm = demo.is_demo_user(user) and payload.confirm.strip().upper() == "DELETE"
+    if not visitor_confirm and (not user.email or payload.confirm.strip().casefold() != user.email.casefold()):
         raise HTTPException(status_code=400, detail="Type your email address exactly to confirm.")
     privacy.delete_account(db, user)
     return Response(status_code=204)

@@ -7,7 +7,7 @@ import { randomBytes, randomUUID } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 import { backendFetch } from "@/lib/backend";
 import { pool } from "@/lib/db";
-import { DEMO_EMAIL_DOMAIN, demoMode, sameOrigin, sessionCookieName, StartLimiter } from "@/lib/demo";
+import { DEMO_EMAIL_DOMAIN, demoMode, jobTitle, sameOrigin, sessionCookieName, StartLimiter } from "@/lib/demo";
 
 const limiter = new StartLimiter(20, 60 * 60 * 1000); // per address, per hour
 const HOURS = Number(process.env.DEMO_ACCOUNT_HOURS || 24);
@@ -28,27 +28,30 @@ export async function POST(request: NextRequest) {
   }
   const address = (request.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() || "unknown";
   if (!limiter.allow(address)) return back("DemoBusy");
-  const person = String((await request.formData()).get("person") ?? "");
+  let form: FormData;
+  try { form = await request.formData(); } catch { return back("InvalidRole"); }
+  const person = String(form.get("person") ?? "");
+  const title = jobTitle(form.get("job_title"));
+  if ((!person && !title) || (person && form.has("job_title")) || (person && !["nurse", "analyst", "engineer"].includes(person))) return back("InvalidRole");
 
   const token = randomBytes(32).toString("hex");
   const expires = new Date(Date.now() + HOURS * 3600 * 1000);
   let userId: string;
   try {
-    const user = await pool.query<{ id: number }>("INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id", [
-      "Demo",
-      `demo-${randomUUID().slice(0, 12)}@${DEMO_EMAIL_DOMAIN}`,
-    ]);
+    const user = await pool.query<{ id: number }>(
+      'WITH visitor AS (INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id) INSERT INTO sessions ("userId", expires, "sessionToken") SELECT id, $3, $4 FROM visitor RETURNING "userId" AS id',
+      ["Guest", `demo-${randomUUID()}@${DEMO_EMAIL_DOMAIN}`, expires, token],
+    );
     userId = String(user.rows[0].id);
-    await pool.query('INSERT INTO sessions ("userId", expires, "sessionToken") VALUES ($1, $2, $3)', [userId, expires, token]);
   } catch (error) {
     console.error("Couldn't make a demo account:", error);
     return back("DemoFailed");
   }
 
-  const seeded = await backendFetch(userId, "/demo/seed", {
+  const seeded = await backendFetch(userId, title ? "/demo/role" : "/demo/seed", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ person }),
+    body: JSON.stringify(title ? { job_title: title } : { person }),
   }).catch(() => null);
   if (!seeded || seeded.status !== 204) {
     await pool.query("DELETE FROM users WHERE id = $1", [userId]).catch(() => undefined);

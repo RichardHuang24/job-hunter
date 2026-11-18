@@ -31,10 +31,12 @@ Self-hosted, multi-user and open source.
 
 ## Try it
 
-The quickest way to see everything is **demo mode**: one command, then pick
-a fictional person to be - a nurse, a data analyst or a software engineer -
-and you arrive with jobs found and scored, applications in progress and a
-CV, no sign-up needed.
+**Public demo: [jobs.richardhuang.dev](https://jobs.richardhuang.dev).**
+Enter a target job title to open your own temporary workspace, with an empty
+CV and application tracker. Add your own details and generate a CV PDF. No
+sign-up is required. Workspaces are independent and expire after 24 hours;
+export anything you want to keep. Jobs are fictional samples and scores are
+simulated. An optional ready-made walkthrough provides fictional profiles.
 
 ```sh
 git clone https://github.com/RichardHuang24/job-hunter.git && cd job-hunter
@@ -42,8 +44,8 @@ git clone https://github.com/RichardHuang24/job-hunter.git && cd job-hunter
 DEMO_MODE=true JOB_SOURCES=demo docker compose up --build
 ```
 
-Open <http://localhost:3420> and choose someone. Everything you see is made
-up, and each demo account is deleted after a day. To run a public demo site
+Open <http://localhost:3420> and enter a job title. Sample job data is made
+up; your CV starts blank. Each demo account is deleted after a day. To run a public demo site
 for others, see [docs/demo.md](docs/demo.md).
 
 ## Features

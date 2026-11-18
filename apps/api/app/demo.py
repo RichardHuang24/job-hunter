@@ -29,7 +29,8 @@ from app.db import profiles
 from app.db.models import ApplicationEvent, Job, SavedSearch, SearchRun, Task, User, UserJob
 from app.presets import get_catalog
 from app.schemas.applications import ApplicationCreate
-from app.schemas.me import OnboardingWrite
+from app.schemas.me import OnboardingWrite, ProfileWrite, TargetWrite
+from app.matching.titles import normalize
 from app.scoring import service as scoring
 from app.scoring.providers import NotConfigured, get_scorer
 from app.search import runs
@@ -258,6 +259,35 @@ def seed(db: Session, user: User, key: str, now: dt.datetime | None = None,
     cv_service.queue_pdf(db, user)
     db.commit()
     log.info("Set up a demo account as %s", key, extra={"user_id": user.id})
+
+
+def start_role(db: Session, user: User, title: str, settings: Settings | None = None) -> None:
+    """A visitor's own role, empty CV and application tracker; no invented biography."""
+    settings = settings or get_settings()
+    if not settings.demo_mode or not is_demo_user(user) or user.profile is not None:
+        raise DemoError("Only a new visitor workspace can be set up.")
+    title = " ".join(title.split())
+    if not 2 <= len(title) <= 80 or not any(c.isalnum() for c in title):
+        raise DemoError("Enter a job title between 2 and 80 characters.")
+    industry_key, aliases = "general", [title]
+    # An exact known role can supply title synonyms, never a person's skills or CV.
+    for industry in get_catalog().industries.values():
+        matched = next((r for r in industry.roles if normalize(title) in r.titles or normalize(title) == normalize(r.label)), None)
+        if matched and industry.key != "general":
+            industry_key, aliases = industry.key, list(dict.fromkeys([title, *matched.titles]))
+            break
+    profile = profiles.save_profile(db, user, ProfileWrite(industry=industry_key, market="remote", headline=title))
+    profiles.replace_targets(db, user, [TargetWrite(label=title, titles=aliases, search=[title])])
+    profiles.finish_onboarding(profile)
+    user.name = "Guest"
+    cv_service.save(db, user, CvContent())
+    now = dt.datetime.now(dt.UTC)
+    search = SavedSearch(user_id=user.id, created_at=now, updated_at=now, next_run_at=now + EVERY,
+                         **{**runs.suggestion(user), "name": title, "daily": False, "include_remote": True})
+    user.searches.append(search)
+    db.flush()
+    runs.start_run(db, search, trigger="onboarding")
+    db.commit()
 
 
 def expire(db: Session, now: dt.datetime | None = None, settings: Settings | None = None) -> int:

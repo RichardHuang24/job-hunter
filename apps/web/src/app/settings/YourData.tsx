@@ -10,6 +10,7 @@ export default function YourData({ email }: { email: string }) {
   const [typed, setTyped] = useState("");
   const [open, setOpen] = useState(false);
   const id = useId();
+  const confirmation = email.endsWith("@demo.invalid") ? "DELETE" : email;
   return (
     <Card title="Your data" subtitle="Everything kept about you is yours: take a copy, or delete it all.">
       <div className="flex flex-col gap-4">
@@ -31,14 +32,14 @@ export default function YourData({ email }: { email: string }) {
                 This deletes your account and everything in it - profile, jobs, applications, CV and PDFs - straight away. It can&apos;t be undone.
               </p>
               <label htmlFor={id} className="text-sm font-medium text-ink-secondary">
-                Type your email address ({email}) to confirm
+                Type {confirmation === "DELETE" ? "DELETE" : `your email address (${email})`} to confirm
               </label>
               <input id={id} name="confirm" value={typed} onChange={(e) => setTyped(e.target.value)} autoComplete="off" className={INPUT} />
               {state.error && <p className="text-sm text-red-700 dark:text-red-400">{state.error}</p>}
               <div className="flex gap-2">
                 <button
                   type="submit"
-                  disabled={pending || typed.trim().toLowerCase() !== email.toLowerCase()}
+                  disabled={pending || typed.trim().toLowerCase() !== confirmation.toLowerCase()}
                   className="h-9 rounded-lg bg-red-700 px-3.5 text-sm font-medium text-white hover:bg-red-800 disabled:opacity-40"
                 >
                   {pending ? "Deleting..." : "Delete everything"}

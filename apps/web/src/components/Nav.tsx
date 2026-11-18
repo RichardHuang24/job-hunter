@@ -33,7 +33,7 @@ export default async function Nav() {
                 await signOut({ redirectTo: "/signin" });
               }}
             >
-              <span className="hidden max-w-48 truncate text-ink-secondary md:inline">{session.user.email}</span>
+              <span className="hidden max-w-48 truncate text-ink-secondary md:inline">{session.user.email?.endsWith("@demo.invalid") ? "Private visitor workspace" : session.user.email}</span>
               <button type="submit" className="rounded-lg px-2 py-1.5 whitespace-nowrap text-ink-secondary hover:bg-ink/[0.04] hover:text-ink sm:px-2.5">
                 Sign out
               </button>

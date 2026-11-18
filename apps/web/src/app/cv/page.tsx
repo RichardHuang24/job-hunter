@@ -14,6 +14,7 @@ export default async function CvPage() {
           Your CV, kept as plain facts - and a PDF made from it whenever you want one.
         </p>
       </div>
+      {!cv.content.name && !cv.content.experience.length && <p className="rounded-xl border border-edge bg-surface p-4 text-sm text-ink-secondary">Your CV starts blank. Add your own name, contact details, experience and education below. Nothing is copied from another visitor.</p>}
       <CvEditor initial={cv} levels={presets.language_levels} />
     </div>
   );

@@ -7,6 +7,12 @@ export function demoMode(): boolean {
   return process.env.DEMO_MODE === "true";
 }
 
+export function jobTitle(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const title = value.trim().replace(/\s+/g, " ");
+  return title.length >= 2 && title.length <= 80 && /[\p{L}\p{N}]/u.test(title) ? title : null;
+}
+
 /** Auth.js's session cookie: __Secure- prefixed when the site is on https. */
 export function sessionCookieName(secure: boolean): string {
   return `${secure ? "__Secure-" : ""}authjs.session-token`;

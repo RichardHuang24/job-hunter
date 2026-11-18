@@ -260,6 +260,8 @@ export type ApplicationCounts = { active: number; closed: number; by_status: Rec
 export type ApplicationList = { items: Application[]; total: number; counts: ApplicationCounts };
 
 export type PrivacyFacts = {
+  demo_mode?: boolean;
+  demo_account_hours?: number;
   controller: string;
   contact: string;
   configured: boolean;

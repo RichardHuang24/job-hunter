@@ -4,5 +4,5 @@
 export { auth as proxy } from "@/auth";
 
 export const config = {
-  matcher: ["/((?!api/auth|api/backend|signin|privacy|demo/start|_next/static|_next/image|favicon.ico|icon.svg).*)"],
+  matcher: ["/((?!api/auth|api/backend|signin|privacy|demo/start|opengraph-image|robots.txt|_next/static|_next/image|favicon.ico|icon.svg).*)"],
 };

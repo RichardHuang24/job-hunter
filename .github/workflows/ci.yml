@@ -193,6 +193,7 @@ jobs:
             sleep 2
           done
           python3 scripts/browser_test.py --demo
+          python3 scripts/visitor_browser_test.py
       - name: Screenshot of a failure
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

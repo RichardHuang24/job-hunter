@@ -1,6 +1,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { sameOrigin, sessionCookieName, StartLimiter } from "./demo.ts";
+import { jobTitle, sameOrigin, sessionCookieName, StartLimiter } from "./demo.ts";
+
+test("visitor roles are normalized and validated before creating an account", () => {
+  assert.equal(jobTitle("  Data   Analyst "), "Data Analyst");
+  assert.equal(jobTitle("数据分析师"), "数据分析师");
+  for (const value of [null, "", " ", "x", "---", "a".repeat(81), { name: "file" }]) assert.equal(jobTitle(value), null);
+});
 
 test("the session cookie's name", () => {
   assert.equal(sessionCookieName(false), "authjs.session-token");
