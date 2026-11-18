@@ -202,8 +202,8 @@ export default function CvEditor({ initial, levels }: { initial: Cv; levels: Pre
 
   const button = "h-10 rounded-xl px-5 text-sm font-medium disabled:opacity-50";
   return (
-    <div className="grid items-start gap-6 lg:grid-cols-[3fr_2fr]">
-      <Card title="Your CV" subtitle={saved ? "Saved. Changes here don't touch your profile." : "Started from your profile - save it to keep it."}>
+    <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+      <Card className="min-w-0" title="Your CV" subtitle={saved ? "Saved. Changes here don't touch your profile." : "Started from your profile - save it to keep it."}>
         <div className="flex flex-col gap-6">
           <Section title="About you">
             <div className="grid gap-3 sm:grid-cols-2">
@@ -271,7 +271,7 @@ export default function CvEditor({ initial, levels }: { initial: Cv; levels: Pre
       <Card
         title="PDF"
         subtitle="A clean one- or two-page CV, made from what's saved here."
-        className="order-first lg:sticky lg:top-20 lg:order-none"
+        className="order-first min-w-0 lg:sticky lg:top-20 lg:order-none"
         action={
           <button type="button" onClick={makePdf} disabled={busy || building} className={`${button} shrink-0 bg-foreground text-background hover:opacity-90`}>
             {building ? "Making..." : changed ? "Save and make PDF" : "Make PDF"}

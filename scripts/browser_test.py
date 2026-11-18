@@ -208,10 +208,10 @@ def demo_tour(page: Page, web: str) -> dict:
     """DEMO_MODE=true: try Job Hunter as a fictional person, from the sign-in page."""
     page.goto(f"{web}/signin")
     expect(page.get_by_role("heading", name=re.compile("Your next role"))).to_be_visible()
+    page.get_by_text("Prefer a ready-made walkthrough?", exact=True).click()
     expect(page.get_by_role("button", name=re.compile("^Try as "))).to_have_count(3)
     expect(page.get_by_label("Email")).to_have_count(0)  # no real accounts on a demo site
     step("the demo's sign-in page offers three fictional people")
-    page.get_by_text("Prefer a ready-made walkthrough?", exact=True).click()
     page.get_by_role("button", name="Try as Jo").click()
     page.wait_for_url(f"{web}/")
     expect(page.get_by_role("heading", name="Welcome, Jo Example")).to_be_visible()

@@ -55,6 +55,9 @@ def main():
             assert len(response.body()) > 10_000
             assert page.request.post(origin + "/demo/start", form={"job_title": "Data Analyst"}, headers={"Origin": "https://other.example"}).status == 403
             page.screenshot(path=str(out / "public-entry.png"), full_page=True)
+            page.set_viewport_size({"width": 390, "height": 844})
+            assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+            page.screenshot(path=str(out / "public-entry-mobile.png"), full_page=True)
             public.close()
             checks += ["Public homepage without authentication", "Public LinkedIn image and metadata", "Cross-origin start rejected"]
 
