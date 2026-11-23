@@ -1,6 +1,6 @@
 # The API, the worker and the database migrations: one image, three commands
 # (docker-compose.yml). Build from the repo root. Runs on amd64 and arm64.
-FROM python:3.12-slim
+FROM python:3.15-slim
 
 # TEXMFVAR: LuaLaTeX's font cache, built below as the app user.
 ENV PYTHONDONTWRITEBYTECODE=1 \
